@@ -17,10 +17,13 @@ export default defineComponent({
         
         const display = ref<Boolean>(false)
         const setDis = () => {
-            display.value = true
-            setTimeout(() => {
-                display.value = false
-            }, 1200)
+            return new Promise((resolve) => {
+                display.value = true
+                setTimeout(() => {
+                    display.value = false
+                    resolve(display.value)
+                }, 1200)
+            })
         }
         return { display, setDis }
     }

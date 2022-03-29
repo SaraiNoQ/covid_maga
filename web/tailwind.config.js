@@ -18,6 +18,9 @@ module.exports = {
         }
       }
     },
+    fontFamily: {
+      'go': ['Google Sans','Noto Sans Myanmar UI']
+    }
   },
   variants: {},
   plugins: [

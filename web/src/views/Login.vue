@@ -1,14 +1,20 @@
 <template>
-    <!-- <div class="absolute top-4 bg-red-100 rounded-lg py-5 px-6 mb-3 text-base text-red-700 scale-0
-      inline-flex items-center justify-center alert-message" role="alert"
-      :class=" {'transition-all duration-400 transform-gpu scale-100 ease-out': loginFail } ">
-      <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="w-4 h-4 mr-2 fill-current" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-        <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path>
-      </svg>
-      A simple danger alert - check it out! 
-    </div> -->
+    <!-- alert -->
     <alert-message message="login fail! Please check your email or password." type="error" ref="alertRef"/>
     <alert-message message="Login success! Please waiting..." type="success" ref="successRef"/>
+
+    <!-- dialog -->
+    <!-- <el-dialog v-model="dialogTableVisible" title="Reset Your Account">
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogTableVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="dialogTableVisible = false"
+            >Confirm</el-button
+          >
+        </span>
+      </template>
+    </el-dialog> -->
+
     <section class="h-screen">
       
       <div class="px-6 h-full text-gray-800">
@@ -114,7 +120,8 @@
                     >Remember me</label
                   >
                 </div>
-                <a href="#!" class="text-gray-800">Forgot password?</a>
+                <!-- <a href="#!" class="text-gray-800">Forgot password?</a> -->
+                <forget-password/>
               </div>
     
               <div class="text-center lg:text-left">
@@ -148,9 +155,11 @@ import useValidate from '@vuelidate/core'
 import { required, email, minLength } from '@vuelidate/validators'
 
 import AlertMessage from '../components/AlertMessage.vue'
+import ForgetPassword from '../components/ForgetPassword.vue'
+import ForgetPassword from '../components/forgetPassword.vue'
 
 export default defineComponent({
-    components: {AlertMessage},
+    components: { AlertMessage, ForgetPassword },
     setup() {
       const router = useRouter()
       const state = reactive({
@@ -171,25 +180,30 @@ export default defineComponent({
       const alertRef = ref<any>(null)
       const successRef = ref<any>(null)
       const clickLogin = async () => {
-        successRef.value.setDis()
-        setTimeout(() => {   
-          router.push('/home')
-        },1000)
+        await successRef.value.setDis()
+        router.push('/home')
       }
+      const loginFail = () => {
+        alertRef.value.setDis()
+      }
+      
       return {state,
         v$,
         alertRef,
         successRef,
         clickLogin,
+        loginFail,
       }
     },
     methods: {
-        submitLogin () {
-            this.v$.$validate()
-            if (!this.v$.$error) {
-              this.clickLogin()
-            }
+      submitLogin () {
+        this.v$.$validate()
+        if (!this.v$.$error) {
+          this.clickLogin()
+        } else {
+          this.loginFail()
         }
+      }
     }
 })
 </script>
