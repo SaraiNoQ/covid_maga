@@ -1,0 +1,34 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "web-server",
+  "main": "main,js",
+  "scripts": {
+    "test": "test",
+    "dev": "nodemon main.js",
+    "lf": "eslint --fix --ext .js --ext .jsx --ext .vue ./"
+  },
+  "keywords": [
+    "koa.js"
+  ],
+  "author": "SaraiNoQ",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/router": "^10.1.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.13.4",
+    "koa-body": "^4.2.0",
+    "koa-parameter": "^3.0.1",
+    "koa-static": "^5.0.0",
+    "mysql2": "^2.3.3",
+    "sequelize": "^7.0.0-alpha2.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0",
+    "eslint": "^8.11.0",
+    "eslint-plugin-vue": "^8.5.0"
+  }
+}

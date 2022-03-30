@@ -15,6 +15,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "@vuelidate/core": "^2.0.0-alpha.38",
     "@vuelidate/validators": "^2.0.0-alpha.28",
+    "axios": "^0.26.1",
     "element-plus": "^2.1.7",
     "postcss-import": "^14.1.0",
     "tw-elements": "^1.0.0-alpha11",

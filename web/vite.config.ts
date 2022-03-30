@@ -26,5 +26,22 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
+  },
+  server: {
+    proxy: {
+      '/api': {
+         // 目标地址
+        target: 'http://localhost:5015',
+        // 发送请求头中host会设置成target
+        changeOrigin: true,
+        // 重写请求地址
+        rewrite: (path) => path.replace(/^\/api/, '/')
+      },
+      '/url': {
+        target: 'http://localhost:5015',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/url/, '/')
+      }
+    }
   }
 })

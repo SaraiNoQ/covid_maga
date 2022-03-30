@@ -9,7 +9,8 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"]
+    "lib": ["esnext", "dom"],
+    "noImplicitAny": false
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/components/SideBar.js", "src/components/SideBar.js", "src/plugins/svgBuilder.js"],
   "references": [{ "path": "./tsconfig.node.json" }]

@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed top-2 rounded-lg py-5 px-6 mb-3 text-base  scale-0 inline-flex items-center justify-center alert-message"
+    <div class="fixed top-2 rounded-lg py-5 px-6 mb-3 text-lg scale-0 inline-flex items-center justify-center alert-message"
       :class=" { 'transition-all duration-400 transform-gpu scale-100 ease-out': display,
       'bg-red-100 text-red-700': $props.type === 'error',
       'bg-green-100 text-green-700': $props.type === 'success',
@@ -22,7 +22,7 @@ export default defineComponent({
                 setTimeout(() => {
                     display.value = false
                     resolve(display.value)
-                }, 1200)
+                }, 1300)
             })
         }
         return { display, setDis }

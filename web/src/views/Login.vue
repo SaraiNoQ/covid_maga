@@ -1,6 +1,6 @@
 <template>
     <!-- alert -->
-    <alert-message message="login fail! Please check your email or password." type="error" ref="alertRef"/>
+    <alert-message :message="loginErrorInfo" type="error" ref="alertRef"/>
     <alert-message message="Login success! Please waiting..." type="success" ref="successRef"/>
 
     <!-- dialog -->
@@ -129,14 +129,15 @@
                   type="button"
                   class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
                   @click="submitLogin()"
+                  :class="{'cursor-not-allowed': loginDisabled}"
                 >
                   Login
                 </button>
                 <p class="text-sm font-semibold mt-2 pt-1 mb-0">
                   Don't have an account?
                   <a
-                    href="#!"
-                    class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
+                    @click="gotoRegister"
+                    class="text-red-600 hover:text-red-700 focus:text-red-700 cursor-pointer transition duration-200 ease-in-out"
                     >Register</a
                   >
                 </p>
@@ -149,24 +150,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive, ref } from 'vue'
+import { defineComponent, computed, reactive, ref, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import useValidate from '@vuelidate/core'
 import { required, email, minLength } from '@vuelidate/validators'
 
 import AlertMessage from '../components/AlertMessage.vue'
 import ForgetPassword from '../components/ForgetPassword.vue'
-import ForgetPassword from '../components/forgetPassword.vue'
 
 export default defineComponent({
     components: { AlertMessage, ForgetPassword },
     setup() {
       const router = useRouter()
+      const store = useStore()
+
       const state = reactive({
           email: '',
           password: ''
       })
-
       // 使用computed使得validation组件获得动态响应的值
       const rules = computed(() => {
         return {
@@ -174,17 +176,39 @@ export default defineComponent({
           password: { required, minLength: minLength(6) }
         }
       })
-
       const v$ = useValidate(rules, state)
 
       const alertRef = ref<any>(null)
       const successRef = ref<any>(null)
+      const loginErrorInfo = ref<string>('login fail! Please check your email or password.')
+      const { proxy } = getCurrentInstance()
+      const loginDisabled = ref<Boolean>(false)
       const clickLogin = async () => {
-        await successRef.value.setDis()
-        router.push('/home')
+        if (loginDisabled.value) { return }
+        
+        loginDisabled.value = true
+        const formData = new FormData()
+        formData.append('user_name', state.email)
+        formData.append('password', state.password)
+        const res = await proxy.$axios.post('/login', formData)
+        // console.log('loging', res.success ? res.success : res.error);
+        if (res.success) {
+          // 设置token
+          store.commit('setToken', res.success.result.token)
+          router.push('/home')
+        } else {
+          loginErrorInfo.value = res.error.data.message
+          await alertRef.value.setDis()
+        }
+        console.log('zaizhe');
+        loginDisabled.value = false
       }
-      const loginFail = () => {
-        alertRef.value.setDis()
+      // const loginFail = () => {
+      //   alertRef.value.setDis()
+      // }
+
+      const gotoRegister = () => {
+        router.push('/register')
       }
       
       return {state,
@@ -192,7 +216,9 @@ export default defineComponent({
         alertRef,
         successRef,
         clickLogin,
-        loginFail,
+        gotoRegister,
+        loginErrorInfo,
+        loginDisabled
       }
     },
     methods: {
@@ -200,8 +226,6 @@ export default defineComponent({
         this.v$.$validate()
         if (!this.v$.$error) {
           this.clickLogin()
-        } else {
-          this.loginFail()
         }
       }
     }

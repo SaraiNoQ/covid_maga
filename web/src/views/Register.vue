@@ -1,4 +1,7 @@
 <template>
+  <!-- alert -->
+  <alert-message :message="regist.fail" type="error" ref="errorRef"/>
+  <alert-message :message="regist.success" type="success" ref="successRef"/>
   <section class="h-full gradient-form bg-gray-200 md:h-screen">
     <div class="container py-12 px-6 h-full mx-auto">
       <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
@@ -18,7 +21,7 @@
                     <form>
                         <div class="mb-4">
                             <div class="form-floating xl:w-108">
-                                <input type="text" class="form-control
+                                <input v-model="state.nickName" type="text" class="form-control
                                 block
                                 w-full
                                 px-3
@@ -32,13 +35,14 @@
                                 transition
                                 ease-in-out
                                 m-0
-                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="floatingInput" placeholder="name@example.com">
+                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                :class="{'border-red-600': v$.nickName.$error}" id="floatingInput" placeholder="name@example.com">
                                 <label for="floatingInput" class="text-gray-700">Nickname</label>
                             </div>
                         </div>
                         <div class="mb-4">
                             <div class="form-floating xl:w-108">
-                                <input type="email" class="form-control
+                                <input v-model="state.account" type="email" class="form-control
                                 block
                                 w-full
                                 px-3
@@ -52,15 +56,16 @@
                                 transition
                                 ease-in-out
                                 m-0
-                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="floatingInput" placeholder="name@example.com">
+                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                :class="{'border-red-600': v$.account.$error}" id="floatingInput" placeholder="name@example.com">
                                 <label for="floatingInput" class="text-gray-700">Account</label>
                             </div>
-                            <div class="text-gray-500 flex ml-2.5 mt-1 text-xs">Please use your email</div>
+                            <div class="text-gray-500 flex ml-2.5 mt-1 text-xs" :class="{'text-red-600': v$.account.$error}">Please use your email</div>
                         </div>
                         <div class="mb-4">
                             <div class="flex mb-[-8px]">
                                 <div class="form-floating mr-2 xl:w-96">
-                                    <input :type="passwdType" class="form-control
+                                    <input v-model="state.password" :type="passwdType" class="form-control
                                     block
                                     w-full
                                     px-3
@@ -73,12 +78,13 @@
                                     transition
                                     ease-in-out
                                     m-0
-                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="floatingInput" placeholder="name@example.com">
+                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                    :class="{'border-red-600': v$.password.$error}" id="floatingInput" placeholder="name@example.com">
                                     <label for="floatingInput" class="text-gray-700">Password</label>
                                 </div>
                                 
                                 <div class="form-floating mb-3 xl:w-96">
-                                    <input :type="passwdType" class="form-control
+                                    <input v-model="state.confirm" :type="passwdType" class="form-control
                                     block
                                     w-full
                                     px-3
@@ -91,11 +97,12 @@
                                     transition
                                     ease-in-out
                                     m-0
-                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="floatingInput" placeholder="name@example.com">
+                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                    :class="{'border-red-600': v$.confirm.$error}" id="floatingInput" placeholder="name@example.com">
                                     <label for="floatingInput" class="text-gray-700">Confirm</label>
                                 </div>
                             </div>
-                            <div class="text-gray-500 ml-2.5 flex text-xs">Use 8 or more characters</div>
+                            <div class="text-gray-500 ml-2.5 flex text-xs" :class="{'text-red-600': v$.password.$error && v$.confirm.$error}">Use 8 or more characters</div>
                         </div>
 
                         <!-- show password -->
@@ -112,6 +119,7 @@
                             <div class="flex justify-between items-center">
                                 <button type="button" class="inline-block h-12 px-6 py-1 mr-2 text-blue-600 text-sm font-medium m-[-16px]
                                 tracking-widest rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                                @click="router.push('/')"
                                 >Sign in instead</button>
 
                                 <button
@@ -120,6 +128,7 @@
                                 data-mdb-ripple="true"
                                 data-mdb-ripple-color="light"
                                 style="background: linear-gradient(to right,#ee7724,#d8363a,#dd3675,#b44593);"
+                                @click="submitNext"
                                 >
                                 Next
                                 </button>
@@ -140,10 +149,8 @@
                 <div class="text-white px-4 py-6 md:p-12 md:mx-6">
                     <h4 class="text-xl font-semibold mb-6">Welcome to my COVID_19 manage project</h4>
                     <p class="text-sm">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat.
+                    base on Koa.js and Vue.js!!!<br/>
+                    You could learn more information on https://github.com/SaraiNoQ/covid_maga 
                     </p>
                 </div>
                 </div>
@@ -156,26 +163,94 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, getCurrentInstance, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+import useValidate from '@vuelidate/core'
+import { required, email, minLength, sameAs } from '@vuelidate/validators'
+
+import AlertMessage from '../components/AlertMessage.vue'
 
 export default defineComponent({
+    components: { AlertMessage },
     setup() {
-        const option1 = ref<Boolean>(false)
+        const router = useRouter()
 
+        const errorRef = ref<any>(null)
+        const successRef = ref<any>(null)
+        const regist = reactive({
+            fail: '',
+            success: ''
+        })
+
+        const state = reactive({
+          nickName: '',
+          account: '',
+          password: '',
+          confirm: ''
+        })
+        const rules = computed(() => {
+        return {
+            nickName: { required },
+            account: { required, email },
+            password: { required, minLength: minLength(8) },
+            confirm: { sameAs: sameAs(state.password) }
+          }
+        })
+        const v$ = useValidate(rules, state)
+
+        // 显示是否展示密码明文
+        const option1 = ref<Boolean>(false)
         const changeCheck = () => {
             option1.value = !option1.value
-            console.log(option1.value);
         }
-
         const passwdType = computed(() => {
             if (option1.value) return 'text'
             else return 'password'
         })
+
+        const registFail = (error) => {
+            regist.fail = error.data.message
+            errorRef.value.setDis()
+        }
+        
+        const { proxy } = getCurrentInstance()
+        const register = async () => {
+            const formData = new FormData()
+            formData.append('nick_name', state.nickName)
+            formData.append('user_name', state.account)
+            formData.append('password', state.password)
+            const res = await proxy.$axios.post('/register', formData)
+            console.log('register:', res.success ? res.success : res.error);
+            if (res.success) {
+                regist.success = 'regist success!'
+                await successRef.value.setDis()
+                router.push('/')
+            } else {
+                registFail(res.error)
+            }
+        }
+
         return {
+            errorRef,
+            successRef,
+            regist,
+            v$,
             passwdType,
             option1,
-            changeCheck
+            changeCheck,
+            router,
+            state,
+            register
         }
     },
+    methods: {
+        submitNext() {
+            this.v$.$validate()
+            if (!this.v$.$error) {
+                this.register()
+            }
+        }
+    }
 })
 </script>
