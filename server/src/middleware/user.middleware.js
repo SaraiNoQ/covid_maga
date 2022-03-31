@@ -50,6 +50,7 @@ const userVertifier = async (ctx, next) => {
 }
 
 const vertifyLogin = async (ctx, next) => {
+	console.log('enter get!')
 	const { user_name, password } = ctx.request.body
 	// 1. user exited?
 	const res = await getUser({ user_name })
@@ -68,6 +69,9 @@ const vertifyLogin = async (ctx, next) => {
 	// 2. password is right?
 	if (!bcrypt.compareSync(password, res.password)) {
 		ctx.app.emit('error', invalidPassword, ctx)
+		ctx.body = {
+			result: invalidPassword
+		}
 		return
 	}
 

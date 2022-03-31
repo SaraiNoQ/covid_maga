@@ -16,6 +16,13 @@
         <el-form-item label="Account" prop="account">
           <el-input v-model="ruleForm.account" type="email" autocomplete="off" />
         </el-form-item>
+        <el-form-item label="Old Password" prop="originalPassword">
+          <el-input
+            v-model="ruleForm.originalPassword"
+            type="password"
+            autocomplete="off"
+          />
+        </el-form-item>
         <el-form-item label="New Password" prop="password">
           <el-input
             v-model="ruleForm.password"
@@ -44,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, getCurrentInstance, reactive, ref } from 'vue'
 import type { FormInstance } from 'element-plus'
 export default defineComponent({
     setup() {
@@ -85,6 +92,7 @@ export default defineComponent({
           }
         }
         const ruleForm = reactive({
+          originalPassword: '',
           password: '',
           passwordAgain: '',
           account: ''
@@ -97,13 +105,27 @@ export default defineComponent({
             message: 'Please input correct email address',
             trigger: ['blur', 'change'],
           }],
-          passwordAgain: [{ validator: validatePassword, trigger: 'blur' }]
+          passwordAgain: [{ validator: validatePassword, trigger: 'blur' }],
+          originalPassword: [{ required: true, trigger: 'blur' }]
         })
 
+        const { proxy } = getCurrentInstance()
         const submitForm = (formEl: FormInstance | undefined) => {
           if (!formEl) return
-          formEl.validate((valid) => {
+          formEl.validate(async (valid) => {
             if (valid) {
+              const formData = new FormData()
+              formData.append('user_name', ruleForm.account)
+              formData.append('password', ruleForm.originalPassword)
+              formData.append('new_password', ruleForm.password)
+              const res = await proxy.$axios.post('/passwd', formData)
+              console.log('changepsd', res);
+              if (res.success) {
+                alert('change password success!')
+                dialogTableVisible.value = false
+              } else {
+                alert(res.error.data.result.message)
+              }
             } else {
               return false
             }
