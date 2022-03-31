@@ -12,7 +12,7 @@ const { userAlreadyExited,
 
 // 验证注册信息是否合法
 const userValidator = async (ctx, next) => {
-	console.log('!!!!!', ctx.request)
+	console.log('enter validate!', ctx.request)
 	// get request data
 	const { user_name, password } = ctx.request.body
 		
@@ -76,12 +76,12 @@ const vertifyLogin = async (ctx, next) => {
 
 // 加密密码
 const cryptPassword = async (ctx, next) => {
-	const {password} = ctx.request.body
+	const { new_password } = ctx.request.body
 	//生成密钥
 	const salt = bcrypt.genSaltSync(10)
 	// 生成密文
-	const hash = bcrypt.hashSync(password, salt)
-	ctx.request.body.password = hash
+	const hash = bcrypt.hashSync(new_password, salt)
+	ctx.request.body.new_password = hash
 
 	await next()
 }

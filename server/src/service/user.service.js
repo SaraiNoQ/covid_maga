@@ -43,13 +43,13 @@ class UserService {
 	}
 
 	// update in database
-	async updateById({id, password, user_name, is_admin, nick_name}) {
+	async updateById({ id, password, user_name, is_admin, nick_name }) {
 		const change = {}
 		const whereOpt = {id}
 
 		// 增加update复用性
-		password && Object.assign(change, {password})
-		user_name && Object.assign(change, {user_name})
+		password && Object.assign(change, { password })
+		user_name && Object.assign(change, { user_name })
 		is_admin && Object.assign(change, { is_admin })
 		nick_name && Object.assign(change, { nick_name })
 		

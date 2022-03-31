@@ -17,7 +17,7 @@ module.exports = {
 	},
 	userNotExited: {
 		code: '10004',
-		message: 'nickname is not exsit!',
+		message: 'account is not exsit!',
 		result: ''
 	},
 	userLoginError: {
