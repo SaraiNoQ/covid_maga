@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
+const { JWT_SECRET } = require('../config/config.default')
 const { getUser, updateById } = require('../service/user.service')
 const { userAlreadyExited,
 	userFormatError,
@@ -7,7 +9,7 @@ const { userAlreadyExited,
 	userNotExited,
 	userLoginError,
 	invalidPassword,
-	updatePswError 
+	invalidToken
 } = require('../constants/err.type') 
 
 // 验证注册信息是否合法
@@ -90,9 +92,26 @@ const cryptPassword = async (ctx, next) => {
 	await next()
 }
 
+const authToken = async (ctx, next) => {
+	const { token } = ctx.request.body
+	try {
+		const user = jwt.verify(token, JWT_SECRET)
+		ctx.state.user = user
+	} catch (error) {
+		ctx.app.emit('error', invalidToken, ctx)
+		ctx.body = {
+			result: 'Please Login!'
+		}
+		return
+	}
+
+	await next()
+}
+
 module.exports = {
 	userValidator,
 	vertifyLogin,
 	userVertifier,
-	cryptPassword
+	cryptPassword,
+	authToken
 }

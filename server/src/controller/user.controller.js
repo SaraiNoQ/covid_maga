@@ -72,6 +72,20 @@ class UserController {
 			console.error('change password error!', error)
 		}
 	}
+
+	async verify(ctx) {
+		const { user_name } = ctx.state.user
+		try {
+			await getUser({ user_name })
+			console.log('verified')
+			ctx.body = {
+				code: 0,
+				message: 'verified!'
+			}
+		} catch (error) {
+			console.error('verify user error')
+		}
+	}
 }
 
 module.exports = new UserController()

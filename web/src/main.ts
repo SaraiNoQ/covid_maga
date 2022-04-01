@@ -4,7 +4,7 @@ import axios from './plugins/axios'
 import router from './router'
 import store from './store'
 import './index.css'
-import './plugins/icons.js'
+import './plugins/icons'
 
 import svgIcon from './components/svgIcon.vue'
 

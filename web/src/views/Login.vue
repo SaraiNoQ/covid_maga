@@ -195,12 +195,11 @@ export default defineComponent({
         if (res.success) {
           // 设置token
           store.commit('setToken', res.success.result.token)
-          router.push('/home')
+          router.replace('/home')
         } else {
           loginErrorInfo.value = res.error.data.message
           await alertRef.value.setDis()
         }
-        console.log('zaizhe');
         loginDisabled.value = false
       }
       // const loginFail = () => {
