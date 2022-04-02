@@ -1,6 +1,6 @@
 <template>
-    <div className=' fixed top-0 left-0 h-screen w-16 m-0
-            flex flex-col
+    <div className='fixed top-0 left-0 h-screen w-16 m-0
+            flex flex-col z-50
           bg-gray-900 text-white shadow-lg'>
         <div 
         class="sidebar-icon group fa-xl"
@@ -53,8 +53,6 @@
                 <font-awesome-icon icon="screwdriver-wrench"/>
             </span>
         </div>
-        
- 
     </div>
 </template>
 
@@ -85,6 +83,11 @@ export default defineComponent({
 <style scoped>
 .hidden {
     display: none;
+}
+
+.test {
+    height: 100%;
+    width: 68px;
 }
 </style>
 

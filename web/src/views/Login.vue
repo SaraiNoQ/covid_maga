@@ -197,7 +197,7 @@ export default defineComponent({
           store.commit('setToken', res.success.result.token)
           router.replace('/home')
         } else {
-          loginErrorInfo.value = res.error.data.message
+          loginErrorInfo.value = 'Account OR Password ERROR!'
           await alertRef.value.setDis()
         }
         loginDisabled.value = false
