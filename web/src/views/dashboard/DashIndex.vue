@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-6 text-3xl font-extrabold text-center">home</div>
+    <!-- <div class="mb-6 text-3xl font-extrabold text-center">home</div>
 
     <p class="mb-6 text-center">Name in store is: {{ name }}</p>
 
@@ -11,28 +11,18 @@
     <button
         @click="saveName"
         class="p-2 text-white bg-indigo-600 rounded">Submit
-    </button>
+    </button> -->
 
 
-    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4
-    group hover:cursor-pointer">
-        <div class="flex-shrink-0">
-            <div class="w-14 h-14 block rounded-md  
-            group-hover:bg-red-200 group-hover:text-purple-500">
-                <svg-icon class="mx-auto w-5" name="google-brands" viewBox="0 0 60 60"></svg-icon>
-            </div>
-        </div>
-        <div>
-            <div class="text-xl font-medium text-black">Teacher</div>
-            <p class="text-gray-500">You have a new message!</p>
-        </div>
-    </div>
+    <data-card :data="'1,928'"/>
 </template>
 
 
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import { useStore } from 'vuex';
+
+import DataCard from './components/DaraCard.vue'
 export default defineComponent({
     setup() {
         const store = useStore();
@@ -50,7 +40,8 @@ export default defineComponent({
             newName,
             saveName
         };
-    }
+    },
+    components: { DataCard }
 })
 </script>
 

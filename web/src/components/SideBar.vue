@@ -5,7 +5,8 @@
         <div 
         class="sidebar-icon group fa-xl"
         @mouseover="sendFocus($event)"
-        @mouseout="sendNoFocus($event)">  
+        @mouseout="sendNoFocus($event)"
+        @click="router.push('/home/dashboard')">  
             <font-awesome-icon icon="fire"/>
             <span class="sidebar-tooltip group-hover:scale-100">tips</span>
         </div>
@@ -13,7 +14,7 @@
         <div class="w-14 h-1 mx-auto bg-gray-700"></div>
 
         <!-- 收集用户信息 -->
-        <div class="sidebar-icon group fa-xl">
+        <div class="sidebar-icon group fa-xl" @click="router.push('/home/gather')">
             <font-awesome-icon icon="id-card"/>
             <span class="sidebar-tooltip group-hover:scale-100">Gather Info
                 <font-awesome-icon icon="fingerprint"/>
@@ -58,14 +59,19 @@
 
 
 <script lang="ts">
+import { log } from 'console'
 import { defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
     setup() {
         const focus = ref<boolean>(false)
 
+        const router = useRouter()
+
         return {
-            focus
+            focus,
+            router
         }
 
     },
