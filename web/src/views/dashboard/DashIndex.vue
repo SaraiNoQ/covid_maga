@@ -13,13 +13,14 @@
         class="p-2 text-white bg-indigo-600 rounded">Submit
     </button> -->
 
-
-    <data-card :data="'1,928'"/>
+    <div class="flex justify-between">
+        <data-card v-for="(item, index) in chartData" :key="index" :data="item" class=""/>
+    </div>
 </template>
 
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, reactive, ref } from "vue";
 import { useStore } from 'vuex';
 
 import DataCard from './components/DaraCard.vue'
@@ -35,10 +36,29 @@ export default defineComponent({
             // store.commit('setName', newName.value)
             newName.value = "";
         };
+
+        const chartData = reactive([
+            {
+                name: "Teacher",
+                number: "1,928",
+                color: "#4285f4"
+            },
+            {
+                name: "Student",
+                number: "1,928",
+                color: "#3b5998"
+            },
+            {
+                name: "Twitter",
+                number: "1,928",
+                color: "#00acee"
+            }
+        ]);
         return {
             name,
             newName,
-            saveName
+            saveName,
+            chartData
         };
     },
     components: { DataCard }

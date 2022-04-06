@@ -1,5 +1,5 @@
 <template>
-    <div class="hover:cursor-pointer">
+    <div class="hover:cursor-pointer mr-4">
         <el-dropdown trigger="click">
             <span class="el-dropdown-link">
                 <el-avatar> user </el-avatar>

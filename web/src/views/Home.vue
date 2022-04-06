@@ -6,7 +6,7 @@
     <div class="absolute right-0 top-0 shadow-md bg-white w-[calc(100vw-68px)] h-12">
         <home-header/>
     </div>
-    <div class="absolute right-0 top-[3rem] bg-red-100 w-[calc(100vw-68px)] h-[calc(100%-3rem)]">
+    <div class="absolute right-0 top-[3rem] bg-white w-[calc(100vw-68px)] h-[calc(100%-3rem)] overflow-scroll">
         
         <!-- <div class="mb-6 text-3xl font-extrabold text-center">home</div>
 
