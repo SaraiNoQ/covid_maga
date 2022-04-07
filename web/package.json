@@ -16,6 +16,8 @@
     "@vuelidate/core": "^2.0.0-alpha.38",
     "@vuelidate/validators": "^2.0.0-alpha.28",
     "axios": "^0.26.1",
+    "dayjs": "^1.11.0",
+    "echarts": "^5.3.2",
     "element-plus": "^2.1.7",
     "postcss-import": "^14.1.0",
     "tw-elements": "^1.0.0-alpha11",

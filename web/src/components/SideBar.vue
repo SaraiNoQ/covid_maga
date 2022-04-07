@@ -22,7 +22,7 @@
         </div>
 
         <!-- 查询用户信息 -->
-        <div class="sidebar-icon group fa-xl">
+        <div class="sidebar-icon group fa-xl" @click="router.push('/home/query')">
             <font-awesome-icon icon="users-viewfinder"/>
             <span class="sidebar-tooltip group-hover:scale-100">Query Student
                 <font-awesome-icon icon="magnifying-glass"/>
@@ -30,7 +30,7 @@
         </div>
     
         <!-- 审批 -->
-        <div class="sidebar-icon group fa-xl">
+        <div class="sidebar-icon group fa-xl" @click="router.push('/home/authorize')">
             <font-awesome-icon icon="user-shield"/>
             <span class="sidebar-tooltip group-hover:scale-100">Authorize
                 <font-awesome-icon icon="shield-halved"/>
@@ -39,7 +39,7 @@
 
 
         <!-- 统计用户 -->
-        <div class="sidebar-icon group fa-xl">
+        <div class="sidebar-icon group fa-xl" @click="router.push('/home/statistics')">
             <font-awesome-icon icon="chart-column"/>
             <span class="sidebar-tooltip group-hover:scale-100">Statistic
                 <font-awesome-icon icon="chart-pie"/>

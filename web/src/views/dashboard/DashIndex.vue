@@ -16,12 +16,14 @@
     <div class="flex justify-between">
         <data-card v-for="(item, index) in chartData" :key="index" :data="item" class=""/>
     </div>
+    <div id="test" class="mx-12 mt-5 bg-red-100"></div>
 </template>
 
 
 <script lang="ts">
-import { computed, defineComponent, reactive, ref } from "vue";
+import { computed, defineComponent, onMounted, reactive, ref } from "vue";
 import { useStore } from 'vuex';
+import * as echarts from 'echarts';
 
 import DataCard from './components/DaraCard.vue'
 export default defineComponent({
@@ -54,6 +56,31 @@ export default defineComponent({
                 color: "#00acee"
             }
         ]);
+
+        onMounted(() => {
+            const myChart = echarts.init(document.getElementById('test'), null, {
+                width: 600,
+                height: 400
+            });
+            myChart.setOption({
+                title: {
+                    text: 'ECharts 入门示例'
+                },
+                tooltip: {},
+                legend: {
+                    data: ['销量']
+                },
+                xAxis: {
+                    data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+                },
+                yAxis: {},
+                series: [{
+                    name: '销量',
+                    type: 'bar',
+                    data: [5, 20, 36, 10, 10, 20]
+                }]
+            });
+        });
         return {
             name,
             newName,
@@ -61,7 +88,7 @@ export default defineComponent({
             chartData
         };
     },
-    components: { DataCard }
+    components: { DataCard },
 })
 </script>
 
