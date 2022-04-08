@@ -13,10 +13,14 @@
         class="p-2 text-white bg-indigo-600 rounded">Submit
     </button> -->
 
-    <div class="flex justify-between">
-        <data-card v-for="(item, index) in chartData" :key="index" :data="item" class=""/>
+    <div class="md:flex justify-between">
+        <data-card v-for="(item, index) in chartData" :key="index" :data="item" class="mt-4"/>
     </div>
-    <div id="test" class="mx-12 mt-5 bg-red-100"></div>
+    <div id="test" class="mx-10 mt-5 bg-white"></div>
+    <div class="mt-8 mx-10">
+        <h2 class="text-3xl text-green-600 w-60 mb-4 ml-[-4rem]">Latest</h2>
+        <time-line></time-line>
+    </div>
 </template>
 
 
@@ -25,6 +29,7 @@ import { computed, defineComponent, onMounted, reactive, ref } from "vue";
 import { useStore } from 'vuex';
 import * as echarts from 'echarts';
 
+import TimeLine from './components/TimeLine/index.vue'
 import DataCard from './components/DaraCard.vue'
 export default defineComponent({
     setup() {
@@ -62,31 +67,35 @@ export default defineComponent({
                 hover: 'group-hover:bg-green-100'
             }
         ]);
-
         onMounted(() => {
             const myChart = echarts.init(document.getElementById('test'), null, {
-                width: 800,
-                height: 400
+                height: 450
             });
             myChart.setOption({
-                xAxis: {
-                    data: ['A', 'B', 'C', 'D', 'E']
+                xAxis: { type: 'category' },
+                yAxis: {  },
+                series: [{ type: 'line' }, { type: 'line' }, { type: 'line' }],
+                dataset: {
+                    source: [
+                        ['date', 'Teacher', 'Student', 'Review'],
+                        ['2022-04-08', 235, 665, 308],
+                        ['2022-04-09', 168, 748, 299],
+                        ['2022-04-10', 191, 522, 212],
+                        ['2022-04-11', 237, 410, 276]
+                    ]
                 },
-                yAxis: {},
-                series: [
-                    {
-                    data: [10, 22, 28, 43, 49],
-                    type: 'line',
-                    stack: 'x'
-                    },
-                    {
-                    data: [5, 4, 3, 5, 10],
-                    type: 'line',
-                    stack: 'x'
-                    }
-                ]
+                legend: {
+                    orient: 'vertical',
+                    top: 'center',
+                    right: 10,
+                },
             });
+            
+            window.onresize = function() {
+                myChart.resize();
+            };
         });
+        
         return {
             name,
             newName,
@@ -94,7 +103,7 @@ export default defineComponent({
             chartData
         };
     },
-    components: { DataCard },
+    components: { DataCard, TimeLine },
 })
 </script>
 

@@ -13,7 +13,8 @@ import {
     faChartPie,
     faUserGraduate,
     faList,
-    faUser
+    faUser,
+    faClipboardList,
 } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -30,7 +31,8 @@ library.add(faFire,
     faChartPie,
     faUserGraduate,
     faList,
-    faUser
+    faUser,
+    faClipboardList,
 );
 
 export default library
