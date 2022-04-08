@@ -11,6 +11,9 @@ import {
     faUserShield,
     faShieldHalved,
     faChartPie,
+    faUserGraduate,
+    faList,
+    faUser
 } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -24,7 +27,10 @@ library.add(faFire,
     faFingerprint,
     faUserShield,
     faShieldHalved,
-    faChartPie
+    faChartPie,
+    faUserGraduate,
+    faList,
+    faUser
 );
 
 export default library

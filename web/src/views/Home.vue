@@ -3,7 +3,7 @@
     <div class="w-17">
         <SideBar/>
     </div>
-    <div class="absolute right-0 top-0 shadow-md bg-white w-[calc(100vw-68px)] h-12">
+    <div class="absolute right-0 top-0 bg-white w-[calc(100vw-68px)] h-12 header-shadow z-50">
         <home-header/>
     </div>
     <div class="absolute right-0 top-[3rem] bg-white w-[calc(100vw-68px)] h-[calc(100%-3rem)] overflow-auto">
@@ -76,5 +76,10 @@ export default defineComponent({
   height: 3.5em;
   fill: currentColor;
   vertical-align: middle;
+}
+
+.header-shadow {
+    -webkit-box-shadow: 0 0 20px rgb(0 0 0 / 20%);
+    box-shadow: 0 0 20px rgb(0 0 0 / 20%);
 }
 </style>

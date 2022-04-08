@@ -43,42 +43,48 @@ export default defineComponent({
             {
                 name: "Teacher",
                 number: "1,928",
-                color: "#4285f4"
+                color: "text-blue-300",
+                icon: 'user-graduate',
+                hover: 'group-hover:bg-red-100'
             },
             {
                 name: "Student",
                 number: "1,928",
-                color: "#3b5998"
+                color: "text-green-300",
+                icon: 'user',
+                hover: 'group-hover:bg-purple-100'
             },
             {
-                name: "Twitter",
+                name: "Review",
                 number: "1,928",
-                color: "#00acee"
+                color: "text-yellow-300",
+                icon: 'list',
+                hover: 'group-hover:bg-green-100'
             }
         ]);
 
         onMounted(() => {
             const myChart = echarts.init(document.getElementById('test'), null, {
-                width: 600,
+                width: 800,
                 height: 400
             });
             myChart.setOption({
-                title: {
-                    text: 'ECharts 入门示例'
-                },
-                tooltip: {},
-                legend: {
-                    data: ['销量']
-                },
                 xAxis: {
-                    data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+                    data: ['A', 'B', 'C', 'D', 'E']
                 },
                 yAxis: {},
-                series: [{
-                    name: '销量',
-                    type: 'bar',
-                    data: [5, 20, 36, 10, 10, 20]
-                }]
+                series: [
+                    {
+                    data: [10, 22, 28, 43, 49],
+                    type: 'line',
+                    stack: 'x'
+                    },
+                    {
+                    data: [5, 4, 3, 5, 10],
+                    type: 'line',
+                    stack: 'x'
+                    }
+                ]
             });
         });
         return {
