@@ -21,19 +21,11 @@
             </span>
         </div>
 
-        <!-- 查询用户信息 -->
-        <div class="sidebar-icon group fa-xl" @click="router.push('/home/query')">
+        <!--  注册学生 -->
+        <div class="sidebar-icon group fa-xl" @click="router.push('/home/student')">
             <font-awesome-icon icon="users-viewfinder"/>
             <span class="sidebar-tooltip group-hover:scale-100">Query Student
                 <font-awesome-icon icon="magnifying-glass"/>
-            </span>
-        </div>
-
-        <!--  注册学生 -->
-        <div class="sidebar-icon group fa-xl" @click="router.push('/home/student')">
-            <font-awesome-icon icon="user-pen"/>
-            <span class="sidebar-tooltip group-hover:scale-100">Register Student
-                <font-awesome-icon icon="id-card-clip"/>
             </span>
         </div>
     
