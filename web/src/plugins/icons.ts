@@ -15,6 +15,8 @@ import {
     faList,
     faUser,
     faClipboardList,
+    faUserPen,
+    faIdCardClip
 } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -33,6 +35,8 @@ library.add(faFire,
     faList,
     faUser,
     faClipboardList,
+    faUserPen,
+    faIdCardClip
 );
 
 export default library

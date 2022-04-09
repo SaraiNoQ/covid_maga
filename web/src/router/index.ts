@@ -7,31 +7,37 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Home',
         component: () => import('@/views/Home.vue'),
         children: [
-        {
-            path: '/home/dashboard',
-            name: 'Dashboard',
-            component: () => import('@/views/dashboard/DashIndex.vue')
-        },
-        {
-            path: '/home/gather',
-            name: 'Gather',
-            component: () => import('@/views/gather/GatherIndex.vue')
-        },
-        {
-            path: '/home/query',
-            name: 'Query',
-            component: () => import('@/views/query/QueryIndex.vue')
-        },
-        {
-            path: '/home/authorize',
-            name: 'Authorize',
-            component: () => import('@/views/authorize/AuthorizeIndex.vue')
-        },
-        {
-            path: '/home/statistics',
-            name: 'Statistics',
-            component: () => import('@/views/statistics/StatisticsIndex.vue')
-        }]
+            {
+                path: '/home/dashboard',
+                name: 'Dashboard',
+                component: () => import('@/views/dashboard/DashIndex.vue')
+            },
+            {
+                path: '/home/gather',
+                name: 'Gather',
+                component: () => import('@/views/gather/GatherIndex.vue')
+            },
+            {
+                path: '/home/query',
+                name: 'Query',
+                component: () => import('@/views/query/QueryIndex.vue')
+            },
+            {
+                path: '/home/student',
+                name: 'Student',
+                component: () => import('@/views/register/RegisterIndex.vue')
+            },
+            {
+                path: '/home/authorize',
+                name: 'Authorize',
+                component: () => import('@/views/authorize/AuthorizeIndex.vue')
+            },
+            {
+                path: '/home/statistics',
+                name: 'Statistics',
+                component: () => import('@/views/statistics/StatisticsIndex.vue')
+            }
+        ]
     },
     {
         path: '/',

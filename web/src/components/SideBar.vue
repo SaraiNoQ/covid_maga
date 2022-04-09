@@ -28,6 +28,14 @@
                 <font-awesome-icon icon="magnifying-glass"/>
             </span>
         </div>
+
+        <!--  注册学生 -->
+        <div class="sidebar-icon group fa-xl" @click="router.push('/home/student')">
+            <font-awesome-icon icon="user-pen"/>
+            <span class="sidebar-tooltip group-hover:scale-100">Register Student
+                <font-awesome-icon icon="id-card-clip"/>
+            </span>
+        </div>
     
         <!-- 审批 -->
         <div class="sidebar-icon group fa-xl" @click="router.push('/home/authorize')">

@@ -1,5 +1,5 @@
 <template>
-    <h2 class="text-3xl text-green-600 font-semibold">行 程 打 卡</h2>
+    <h2 class="mt-4 text-3xl text-green-600 font-semibold">行 程 打 卡</h2>
     <div class="search-form mt-5 mx-0 w-[100vw] xl:w-[60vw] xl:mx-auto">
         <el-form label-position="left" label-width="80px" :model="searchForm" class="search-tab">
             <el-form-item label="身 份 选 择">
