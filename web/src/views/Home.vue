@@ -3,7 +3,7 @@
     <div class="w-17">
         <SideBar/>
     </div>
-    <div class="absolute right-0 top-0 bg-white w-[calc(100vw-68px)] h-12 header-shadow z-50">
+    <div class="absolute right-0 top-0 bg-white w-[calc(100vw-68px)] h-12 header-shadow z-30">
         <home-header/>
     </div>
     <div class="absolute right-0 top-[3rem] bg-gray-100 w-[calc(100vw-68px)] h-[calc(100%-3rem)] overflow-auto">

@@ -9,7 +9,7 @@
         @click="toDashboard"
         :class="{ denycur: isdeny }">
             <font-awesome-icon icon="fire"/>
-            <span class="sidebar-tooltip group-hover:scale-100">tips</span>
+            <span class="sidebar-tooltip group-hover:scale-100 z-50">tips</span>
         </div>
 
         <div class="w-14 h-1 mx-auto bg-gray-700"></div>

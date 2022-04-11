@@ -1,5 +1,6 @@
 <template>
-    <!-- alert -->
+<div>
+  <!-- alert -->
     <alert-message :message="loginErrorInfo" type="error" ref="alertRef"/>
     <alert-message message="Login success! Please waiting..." type="success" ref="successRef"/>
 
@@ -25,7 +26,7 @@
             class="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0"
           >
             <img
-              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+              src="../assets/login.webp"
               class="w-full"
               alt="Sample image"
             />
@@ -147,6 +148,7 @@
         </div>
       </div>
     </section>
+</div>
 </template>
 
 <script lang="ts">
