@@ -195,10 +195,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-table .danger-row {
+::v-deep(.el-table .danger-row) {
   --el-table-tr-bg-color: var(--el-color-danger-light-9);
 }
-::v-deep .el-table .success-row {
+::v-deep(.el-table .success-row) {
   --el-table-tr-bg-color: var(--el-color-success-light-9);
 }
 </style>

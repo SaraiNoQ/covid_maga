@@ -6,7 +6,8 @@
         class="sidebar-icon group fa-xl"
         @mouseover="sendFocus($event)"
         @mouseout="sendNoFocus($event)"
-        @click="router.push('/home/dashboard')">  
+        @click="toDashboard"
+        :class="{ denycur: isdeny }">
             <font-awesome-icon icon="fire"/>
             <span class="sidebar-tooltip group-hover:scale-100">tips</span>
         </div>
@@ -14,7 +15,7 @@
         <div class="w-14 h-1 mx-auto bg-gray-700"></div>
 
         <!-- 收集用户信息 -->
-        <div class="sidebar-icon group fa-xl" @click="router.push('/home/gather')">
+        <div class="sidebar-icon group fa-xl" @click="toGather" :class="{ denycur: isdeny }">
             <font-awesome-icon icon="id-card"/>
             <span class="sidebar-tooltip group-hover:scale-100">Gather Info
                 <font-awesome-icon icon="fingerprint"/>
@@ -22,7 +23,7 @@
         </div>
 
         <!--  注册学生 -->
-        <div class="sidebar-icon group fa-xl" @click="router.push('/home/student')">
+        <div class="sidebar-icon group fa-xl" @click="toStudent" :class="{ denycur: isdeny }">
             <font-awesome-icon icon="users-viewfinder"/>
             <span class="sidebar-tooltip group-hover:scale-100">Query Student
                 <font-awesome-icon icon="magnifying-glass"/>
@@ -30,7 +31,7 @@
         </div>
     
         <!-- 审批 -->
-        <div class="sidebar-icon group fa-xl" @click="router.push('/home/authorize')">
+        <div class="sidebar-icon group fa-xl" @click="toAuthorize" :class="{ denycur: isdeny }">
             <font-awesome-icon icon="user-shield"/>
             <span class="sidebar-tooltip group-hover:scale-100">Authorize
                 <font-awesome-icon icon="shield-halved"/>
@@ -39,7 +40,7 @@
 
 
         <!-- 统计用户 -->
-        <div class="sidebar-icon group fa-xl" @click="router.push('/home/statistics')">
+        <div class="sidebar-icon group fa-xl" @click="toStatistics" :class="{ denycur: isdeny }">
             <font-awesome-icon icon="chart-column"/>
             <span class="sidebar-tooltip group-hover:scale-100">Statistic
                 <font-awesome-icon icon="chart-pie"/>
@@ -59,19 +60,51 @@
 
 
 <script lang="ts">
-import { log } from 'console'
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
     setup() {
         const focus = ref<boolean>(false)
+        const isdeny = ref<boolean>(false)
 
         const router = useRouter()
 
+        const toGather = async () => {
+            isdeny.value = true
+            await router.push('/home/gather')
+            isdeny.value = false
+        }
+        const toStudent = async () => {
+            isdeny.value = true
+            await router.push('/home/student')
+            isdeny.value = false
+        }
+        const toAuthorize = async () => {
+            isdeny.value = true
+            await router.push('/home/authorize')
+            isdeny.value = false
+        }
+        const toStatistics = async () => {
+            isdeny.value = true
+            await router.push('/home/statistics')
+            isdeny.value = false
+        }
+        const toDashboard = async () => {
+            isdeny.value = true
+            await router.push('/home/dashboard')
+            isdeny.value = false
+        }
+
         return {
             focus,
-            router
+            router,
+            toDashboard,
+            toGather,
+            toAuthorize,
+            toStudent,
+            toStatistics,
+            isdeny
         }
 
     },
@@ -87,6 +120,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.denycur {
+    cursor: not-allowed;
+}
 .hidden {
     display: none;
 }

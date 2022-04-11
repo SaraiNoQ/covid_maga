@@ -10,7 +10,8 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "skipLibCheck": true, // 针对element-puls的ts打包校验
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/components/SideBar.js", "src/components/SideBar.js", "src/plugins/svgBuilder.js"],
   "references": [{ "path": "./tsconfig.node.json" }]

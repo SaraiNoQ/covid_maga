@@ -1,5 +1,6 @@
 <template>
-    <h2 class="mt-4 text-3xl text-green-600 font-semibold">学 生 信 息 录 入</h2>
+<div>
+  <h2 class="mt-4 text-3xl text-green-600 font-semibold">学 生 信 息 录 入</h2>
     <div class="rg-shadow mt-2 w-[75vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] mx-auto bg-gray-200 pt-4 pr-12 pb-2">
         <el-form :model="form" label-width="120px">
           <el-form-item label="Name">
@@ -50,6 +51,7 @@
           </el-form-item>
         </el-form>
     </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -101,14 +103,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep .el-upload--text {
+::v-deep(.el-upload--text) {
     align-items: flex-end;
     @media screen and (max-width: 830px) {
         display: block;
     }
 }
 
-::v-deep .el-input__inner {
+::v-deep(.el-input__inner) {
     width: 335px;
 }
 

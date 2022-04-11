@@ -66,6 +66,7 @@ router.beforeEach(async (to, from, next) => {
     const formData: FormData = new FormData()
     formData.append('token', <string>token)
     const res = await instance.post('/token', formData)
+    // @ts-ignore
     if (res.success) {
         next()
         return

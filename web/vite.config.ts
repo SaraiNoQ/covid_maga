@@ -38,7 +38,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '/')
       },
       '/url': {
-        target: 'http://localhost:5015',
+        target: 'http://82.157.232.71:5015',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/url/, '/')
       }

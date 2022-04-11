@@ -1,13 +1,15 @@
 <template>
-    <div class="mt-3 mx-auto w-[80vw] lg:grid lg:grid-cols-3 lg:w-[95vw]">
-        <div id="chart1" class="mx-4 mt-5 bg-white"></div>
-        <div id="chart2" class="mx-4 mt-5 bg-white"></div>
-        <div id="chart3" class="mx-4 mt-5 bg-white"></div>
-    </div>
-    <div class="mt-4 mx-auto w-[80vw] lg:grid lg:grid-cols-2 lg:grid-rows-2 lg:w-[95vw]">
-        <div id="chart4" class="lg:row-span-2 mx-4 mt-5 bg-white"></div>
-        <div id="chart5" class="mx-4 mt-5 bg-white"></div>
-        <div id="chart6" class="mx-4 mt-5 bg-white"></div>
+    <div>
+        <div class="mt-3 mx-auto w-[80vw] lg:grid lg:grid-cols-3 lg:w-[95vw]">
+            <div id="chart1" class="mx-4 mt-5 bg-white"></div>
+            <div id="chart2" class="mx-4 mt-5 bg-white"></div>
+            <div id="chart3" class="mx-4 mt-5 bg-white"></div>
+        </div>
+        <div class="mt-4 mx-auto w-[80vw] lg:grid lg:grid-cols-2 lg:grid-rows-2 lg:w-[95vw]">
+            <div id="chart4" class="lg:row-span-2 mx-4 mt-5 bg-white"></div>
+            <div id="chart5" class="mx-4 mt-5 bg-white"></div>
+            <div id="chart6" class="mx-4 mt-5 bg-white"></div>
+        </div>
     </div>
 </template>
 
@@ -18,21 +20,27 @@ import * as echarts from 'echarts';
 export default defineComponent({
     setup() {
         onMounted(() => {
+            // @ts-ignore
             const myChart1 = echarts.init(document.getElementById('chart1'), null, {
                 height: 350
             });
+            // @ts-ignore
             const myChart2 = echarts.init(document.getElementById('chart2'), null, {
                 height: 350
             });
+            // @ts-ignore
             const myChart3 = echarts.init(document.getElementById('chart3'), null, {
                 height: 350
             });
+            // @ts-ignore
             const myChart4 = echarts.init(document.getElementById('chart4'), null, {
                 height: 600
             });
+            // @ts-ignore
             const myChart5 = echarts.init(document.getElementById('chart5'), null, {
                 height: 300
             });
+            // @ts-ignore
             const myChart6 = echarts.init(document.getElementById('chart6'), null, {
                 height: 300
             });
@@ -80,10 +88,10 @@ export default defineComponent({
                     {
                       data: [320, 400, 350, 380, 370, 410, 430],
                       type: 'bar',
-                      showBackground: true,
-                      backgroundStyle: {
-                        color: 'rgba(220, 220, 220, 0.8)'
-                      }
+                    //   showBackground: true,
+                    //   backgroundStyle: {
+                    //     color: 'rgba(220, 220, 220, 0.8)'
+                    //   }
                     }
                   ]
             });
@@ -201,5 +209,20 @@ export default defineComponent({
             };
         });
     },
+    beforeUnmount() {
+        window.onresize = null;
+        // @ts-ignore
+        document.getElementById('chart1').removeAttribute('_echarts_instance_');
+        // @ts-ignore
+        document.getElementById('chart2').removeAttribute('_echarts_instance_');
+        // @ts-ignore
+        document.getElementById('chart3').removeAttribute('_echarts_instance_');
+        // @ts-ignore
+        document.getElementById('chart4').removeAttribute('_echarts_instance_');
+        // @ts-ignore
+        document.getElementById('chart5').removeAttribute('_echarts_instance_');
+        // @ts-ignore
+        document.getElementById('chart6').removeAttribute('_echarts_instance_');
+    }
 })
 </script>

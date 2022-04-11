@@ -109,6 +109,7 @@ export default defineComponent({
           originalPassword: [{ required: true, trigger: 'blur' }]
         })
 
+        // @ts-ignore
         const { proxy } = getCurrentInstance()
         const submitForm = (formEl: FormInstance | undefined) => {
           if (!formEl) return

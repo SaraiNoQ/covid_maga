@@ -181,6 +181,7 @@ export default defineComponent({
       const alertRef = ref<any>(null)
       const successRef = ref<any>(null)
       const loginErrorInfo = ref<string>('login fail! Please check your email or password.')
+      // @ts-ignore
       const { proxy } = getCurrentInstance()
       const loginDisabled = ref<Boolean>(false)
       const clickLogin = async () => {

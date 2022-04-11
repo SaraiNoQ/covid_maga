@@ -12,15 +12,17 @@
         @click="saveName"
         class="p-2 text-white bg-indigo-600 rounded">Submit
     </button> -->
-
-    <div class="md:flex justify-between">
-        <data-card v-for="(item, index) in chartData" :key="index" :data="item" class="mt-4"/>
+    <div>
+        <div class="md:flex justify-between">
+            <data-card v-for="(item, index) in chartData" :key="index" :data="item" class="mt-4"/>
+        </div>
+        <div id="test" class="mx-10 mt-5 bg-white"></div>
+        <div class="mt-8 mx-10">
+            <h2 class="text-3xl text-green-600 w-60 mb-4 ml-[-4rem]">Latest</h2>
+            <time-line></time-line>
+        </div>
     </div>
-    <div id="test" class="mx-10 mt-5 bg-white"></div>
-    <div class="mt-8 mx-10">
-        <h2 class="text-3xl text-green-600 w-60 mb-4 ml-[-4rem]">Latest</h2>
-        <time-line></time-line>
-    </div>
+    
 </template>
 
 
@@ -68,6 +70,7 @@ export default defineComponent({
             }
         ]);
         onMounted(() => {
+            // @ts-ignore
             const myChart = echarts.init(document.getElementById('test'), null, {
                 height: 450
             });
