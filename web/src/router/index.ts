@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router"
+import { createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw } from "vue-router"
 import instance from '../plugins/axios'
 
 const routes: Array<RouteRecordRaw> = [
@@ -52,7 +52,7 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes
 })
 

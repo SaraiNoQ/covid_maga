@@ -18,7 +18,7 @@ app
 			keepExtensions: true
 		}
 	}))
-	.use(static(path.join(__dirname, '../uploads')))
+	.use(static(path.join(__dirname, '../../../dist')))
 	.use(parameter(app))
 	.use(userRouter.routes())
 	// 没有写的请求类型返回405错误
