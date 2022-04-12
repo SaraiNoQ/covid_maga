@@ -107,7 +107,7 @@ export default defineComponent({
         };
     },
     components: { DataCard, TimeLine },
-    beforeMount() {
+    beforeUnmount() {
         window.onresize = null;
         // @ts-ignore
         document.getElementById('test').removeAttribute('_echarts_instance_');
