@@ -2,7 +2,7 @@
     <div>
         <!-- alert -->
         <alert-message :message="regist.fail" type="error" ref="errorRef"/>
-        <alert-message :message="regist.success" type="success" ref="successRef"/>
+        <!-- <alert-message :message="regist.success" type="success" ref="successRef"/> -->
         <section class="h-full gradient-form bg-gray-200 md:h-screen">
           <div class="container py-12 px-6 h-full mx-auto">
             <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
@@ -167,21 +167,22 @@
 <script lang="ts">
 import { computed, defineComponent, getCurrentInstance, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 import useValidate from '@vuelidate/core'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 
 import AlertMessage from '../components/AlertMessage.vue'
-
 export default defineComponent({
     components: { AlertMessage },
     setup() {
         const router = useRouter()
+        const store = useStore()
 
         const errorRef = ref<any>(null)
         const successRef = ref<any>(null)
         const regist = reactive({
-            fail: '',
+            fail: 'Register Failed!',
             success: ''
         })
 
@@ -192,12 +193,12 @@ export default defineComponent({
           confirm: ''
         })
         const rules = computed(() => {
-        return {
-            nickName: { required },
-            account: { required, email },
-            password: { required, minLength: minLength(8) },
-            confirm: { sameAs: sameAs(state.password) }
-          }
+            return {
+                nickName: { required },
+                account: { required, email },
+                password: { required, minLength: minLength(8) },
+                confirm: { sameAs: sameAs(state.password) }
+            }
         })
         const v$ = useValidate(rules, state)
 
@@ -224,15 +225,19 @@ export default defineComponent({
             formData.append('user_name', state.account)
             formData.append('password', state.password)
             // @ts-ignore
-            const res = await proxy.$axios.post('/register', formData)
+            const res = await proxy.$axios.post('/captcha', formData)
             console.log('register:', res.success ? res.success : res.error);
             if (res.success) {
-                regist.success = 'regist success!'
-                await successRef.value.setDis()
-                router.push('/')
+                store.commit('setRegister', {
+                    nick_name: state.nickName,
+                    user_name: state.account,
+                    password: state.password
+                })
+                router.push('/register/vertify')
             } else {
                 registFail(res.error)
             }
+            
         }
 
         return {

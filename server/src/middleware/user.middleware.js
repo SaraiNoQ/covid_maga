@@ -10,7 +10,8 @@ const { userAlreadyExited,
 	userLoginError,
 	invalidPassword,
 	invalidToken
-} = require('../constants/err.type') 
+} = require('../constants/err.type')
+const redisHelper = require('../app/redis')
 
 // 验证注册信息是否合法
 const userValidator = async (ctx, next) => {
@@ -120,10 +121,21 @@ const authToken = async (ctx, next) => {
 	await next()
 }
 
+const vertifyCaptcha = async (ctx, next) => {
+	const { captcha } = ctx.request.body
+	if (!captcha) {
+		console.error('captcha is illegal!')
+		ctx.app.emit('error', userFormatError, ctx)
+		return
+	}
+	await next()
+}
+
 module.exports = {
 	userValidator,
 	vertifyLogin,
 	userVertifier,
 	cryptPassword,
-	authToken
+	authToken,
+	vertifyCaptcha
 }

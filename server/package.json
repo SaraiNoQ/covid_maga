@@ -23,6 +23,8 @@
     "koa-parameter": "^3.0.1",
     "koa-static": "^5.0.0",
     "mysql2": "^2.3.3",
+    "nodemailer": "^6.7.3",
+    "redis": "^3.1.2",
     "sequelize": "^7.0.0-alpha2.1"
   },
   "devDependencies": {

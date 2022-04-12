@@ -29,6 +29,7 @@ declare module 'vue' {
     ForgetPassword: typeof import('./src/components/ForgetPassword.vue')['default']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
     SvgIcon: typeof import('./src/components/svgIcon.vue')['default']
+    VertifyCode: typeof import('./src/components/VertifyCode.vue')['default']
   }
 }
 

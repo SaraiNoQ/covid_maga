@@ -31,7 +31,7 @@ export default defineConfig({
     proxy: {
       '/api': {
          // 目标地址
-        target: 'http://82.157.232.71:5015',
+        target: 'http://localhost:5015',
         // 发送请求头中host会设置成target
         changeOrigin: true,
         // 重写请求地址

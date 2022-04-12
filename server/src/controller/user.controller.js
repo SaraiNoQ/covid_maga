@@ -4,28 +4,59 @@ const { userRegisterError, userNotExited } = require('../constants/err.type')
 const jwt = require('jsonwebtoken')
 // eslint-disable-next-line no-undef
 const { JWT_SECRET } = require('../config/config.default')
+const redisHelper = require('../app/redis')
+const nodemailer = require('../app/nodemailer')
 
 class UserController {
-	async register (ctx) {
+	async getCaptcha(ctx) {
+		const { user_name } = ctx.request.body
+		console.log('captcha', user_name)
+		const code = parseInt(Math.random(0, 1) * 1000000) // 生成随机验证码
+		const result = await redisHelper.setString(user_name, code, 60 * 5)
+		if (result === 'OK') {
+			const result1 = await redisHelper.getString(user_name)
+			console.log('send email success!', result1)
+			nodemailer(ctx.request.body, code)
+			ctx.body = {
+				'status': 0,
+				'message': 'captcha successly send!'
+			}
+		} else {
+			console.error('send captcha error!')
+			ctx.app.emit('error', userRegisterError, ctx)
+		}
+	}
+	
+	async register(ctx) {
 		// 1. get request
-		const {user_name, password, nick_name} = ctx.request.body
+		const { user_name, password, nick_name, captcha } = ctx.request.body
+		console.log('user_name', user_name)
+		const result = await redisHelper.getString(user_name)
+		console.log('send: ', captcha, 'true captcha is: ', result, result !== captcha)
+		if (result !== captcha) {
+			console.error('captcha error!')
+			ctx.app.emit('error', userRegisterError, ctx)
+			return
+		}
 		try {
 			// 2. crud database
 			const res = await createUser(user_name, password, nick_name)
-			// 3. return response
-			ctx.body = {
-				'status': 0,
-				'message': 'Register Success!',
-				'result': {
-					'id': res.id,
-					'user_name': res.user_name
+			// 3. send email
+			if (res) {
+				// 4. return response
+				ctx.body = {
+					'status': 0,
+					'message': 'Create User Success!',
+					'result': {
+						'id': res.id,
+						'user_name': res.user_name
+					}
 				}
 			}
 		} catch (error) {
 			console.error('注册用户信息错误', error)
 			ctx.app.emit('error', userRegisterError, ctx)
 		}
-		
 	}
 	
 	async login (ctx) {
