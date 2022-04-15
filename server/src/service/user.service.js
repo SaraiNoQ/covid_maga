@@ -38,7 +38,7 @@ class UserService {
 			attributes: ['user_name', 'password', 'is_admin', 'id', 'nick_name'],
 			where: {user_name}
 		})
-		// console.log('res', res ? res.dataValues : null)
+		console.log('res', res ? res.dataValues : null)
 		return res ? res.dataValues : null
 	}
 

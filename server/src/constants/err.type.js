@@ -80,4 +80,24 @@ module.exports = {
 		message: 'remove goods info error!',
 		result: ''
 	},
+	studentFormatError: {
+		code: '20101', // 中间件层面错误
+		message: 'student regist info format error',
+		result: ''
+	},
+	studentAlreadyExited: {
+		code: '20102',
+		message: 'student already exist',
+		result: ''
+	},
+	studentRegisterError: {
+		code: '20103',
+		message: 'student regist error',
+		result: ''
+	},
+	createStudentError: {
+		code: '20201', // 数据库层面报错
+		message: 'create student error',
+		result: ''
+	}
 }
