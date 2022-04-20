@@ -28,8 +28,8 @@ const journeyVertified = async (ctx, next) => {
     const res = await getJourney({ student_id })
     // console.log('vertify', res)
     try {
-        if (res.dataValues) {
-            if (dayjs(res.dataValues.createAt).format('YYYY-MM-DD') === dayjs(new Date()).format('YYYY-MM-DD')) {
+        if (res) {
+            if (dayjs(res.createAt).format('YYYY-MM-DD') === dayjs(new Date()).format('YYYY-MM-DD')) {
                 const res = await updateJourney({ student_id, journey_category, journey_destination, journey_info, journey_reason, live_zone, healthy_status, journey_start_time, journey_end_time })
                 if (res) {
                     ctx.body = {

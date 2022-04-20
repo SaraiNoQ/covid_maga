@@ -121,8 +121,13 @@ module.exports = {
 		result: ''
 	},
 	createJourneyError: {
-		coed: '30201',
+		code: '30201',
 		message: 'create journey error',
+		result: ''
+	},
+	noQueryStudent: {
+		code: '30202',
+		message: 'no query student',
 		result: ''
 	}
 }

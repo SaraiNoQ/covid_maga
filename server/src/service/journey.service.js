@@ -34,7 +34,7 @@ class JourneyService {
         // console.log('student_id', whereOpt)
 
         try {
-            const res = Journey.findOne({
+            const res = await Journey.findOne({
                 attributes: [
                     'journey_id',
                     'student_id',
@@ -50,9 +50,9 @@ class JourneyService {
                 ],
                 where: whereOpt
             })
-            return res ? res : null
+            return res ? res.dataValues : null
         } catch (error) {
-            console.error(error)
+            console.log('query error')
             // return error
         }
     }

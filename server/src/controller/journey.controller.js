@@ -1,6 +1,6 @@
 const { createJourney, getJourney } = require('../service/journey.service')
 
-const { createJourneyError } = require('../constants/err.type')
+const { createJourneyError, noQueryStudent } = require('../constants/err.type')
 
 class JourneyController {
     async createJourney(ctx) {
@@ -45,7 +45,7 @@ class JourneyController {
 
     async getJourney(ctx) {
         console.log('getJourney')
-        const { student_id } = ctx.request.body
+        const { student_id } = ctx.request.query
         console.log('get', student_id)
         try {
             const res = await getJourney({ student_id })
@@ -56,6 +56,9 @@ class JourneyController {
                     message: 'get journey success!',
                     data: res
                 }
+            } else {
+                console.error('error')
+                ctx.app.emit('error', noQueryStudent, ctx)
             }
         } catch (error) {
             console.error(error)
