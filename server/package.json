@@ -16,6 +16,7 @@
   "dependencies": {
     "@koa/router": "^10.1.1",
     "bcryptjs": "^2.4.3",
+    "dayjs": "^1.11.1",
     "dotenv": "^16.0.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.4",
@@ -25,7 +26,8 @@
     "mysql2": "^2.3.3",
     "nodemailer": "^6.7.3",
     "redis": "^3.1.2",
-    "sequelize": "^7.0.0-alpha2.1"
+    "sequelize": "^7.0.0-alpha2.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.15.0",

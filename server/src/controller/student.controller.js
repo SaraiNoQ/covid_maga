@@ -1,9 +1,9 @@
-const { createStudent } = require('../service/student.service')
+const { createStudent, deleteStudent } = require('../service/student.service')
 
-const { createStudentError } = require('../constants/err.type')
+const { createStudentError, deleteStudentError, deleteStudentNull } = require('../constants/err.type')
 
 class StudentController {
-	async create(ctx) {
+	async createStu(ctx) {
 		console.log('create Stu')
         const { student_name, student_number, student_gender, student_major } = ctx.request.body
         const { student_image } = ctx.request.files
@@ -20,8 +20,28 @@ class StudentController {
             console.error('create student error!')
             ctx.app.emit('error', createStudentError, ctx)
         }
-        
-	}
+    }
+    
+    async deleteStu(ctx) {
+        console.log('Del Stu')
+        const { student_number } = ctx.request.body
+        try {
+            const res = await deleteStudent({ student_number })
+            if (res !== 0) {
+                ctx.body = {
+                    code: 0,
+                    message: 'delete student success!'
+                }
+            } else {
+                ctx.app.emit('error', deleteStudentNull, ctx)
+            }
+        } catch (error) {
+            console.error('delete student error!')
+            ctx.app.emit('error', deleteStudentError, ctx)
+        }
+    }
+
+    async updateStu(ctx) {}
 }
 
 module.exports = new StudentController()

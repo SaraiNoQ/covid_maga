@@ -99,5 +99,30 @@ module.exports = {
 		code: '20201', // 数据库层面报错
 		message: 'create student error',
 		result: ''
+	},
+	deleteStudentError: {
+		code: '20202',
+		message: 'delete student error',
+		result: ''
+	},
+	deleteStudentNull: {
+		code: '20203',
+		message: 'delete student is not exist',
+		result: ''
+	},
+	deleteConditionNull: {
+		code: '20104',
+		message: 'delete condition is null',
+		result: ''
+	},
+	journeyFormatError: {
+		code: '30101',
+		message: 'journey info format error',
+		result: ''
+	},
+	createJourneyError: {
+		coed: '30201',
+		message: 'create journey error',
+		result: ''
 	}
 }

@@ -2,7 +2,8 @@ const { getStudent } = require('../service/student.service')
 
 const { studentAlreadyExited,
     studentFormatError,
-    studentRegisterError
+    studentRegisterError,
+    deleteConditionNull
 } = require('../constants/err.type')
 
 
@@ -33,7 +34,18 @@ const studentVertifier = async (ctx, next) => {
     await next()
 }
 
+const deleteValidator = async (ctx, next) => {
+    const { student_number } = ctx.request.body
+    if (!student_number) {
+        console.error('delete condition is null')
+        ctx.app.emit('error', deleteConditionNull, ctx)
+        return
+    }
+    await next()
+}
+
 module.exports = {
     studentValidator,
-    studentVertifier
+    studentVertifier,
+    deleteValidator
 }
