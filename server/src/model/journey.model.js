@@ -5,7 +5,7 @@ const Student = require('../model/student.model')
 
 const Journey = seq.define('zd_journey', {
     journey_id: {
-        type: DataTypes.CHAR(16),
+        type: DataTypes.UUID,
         allowNull: false,
         unique: true,
         comment: 'main key'
@@ -54,12 +54,22 @@ const Journey = seq.define('zd_journey', {
 		type: DataTypes.DATE,
 		allowNull: false,
 		comment: 'create time YY-MM-DD 00:00:00'
+	},
+	record_status: {
+		type: DataTypes.CHAR(8),
+		allowNull: false,
+		comment: 'record_status, 0: waiting / 1: completed',
+		defaultValue: '0'
 	}
 })
 
 Journey.belongsTo(Student, {
 	foreignKey: 'student_id',
 	targetKey: 'student_number'
+})
+Student.hasMany(Journey, {
+	foreignKey: 'student_id',
+	sourceKey: 'student_number'
 })
 
 // Journey.sync({

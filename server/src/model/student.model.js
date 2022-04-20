@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize')
 
+const { Journey } = require('../model/journey.model')
 const seq = require('../db/seq')
 
 // create Model (Model zd_student -> zd_students)
