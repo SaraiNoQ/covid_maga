@@ -13,6 +13,10 @@
         class="p-2 text-white bg-indigo-600 rounded">Submit
     </button> -->
     <div>
+        <div class="lg:grid lg:grid-cols-2 lg:mx-10 xl:wx-15">
+            <User-Logo class="lg:col-span-1" />
+            <Calendar class="lg:col-sapn-1" />
+        </div>
         <div class="md:flex justify-between">
             <data-card v-for="(item, index) in chartData" :key="index" :data="item" class="mt-4"/>
         </div>
@@ -33,6 +37,8 @@ import * as echarts from 'echarts';
 
 import TimeLine from './components/TimeLine/index.vue'
 import DataCard from './components/DaraCard.vue'
+import UserLogo from '../../components/UserLogo.vue'
+import Calendar from '../../components/Calendar.vue'
 export default defineComponent({
     setup() {
         const store = useStore();
@@ -106,7 +112,7 @@ export default defineComponent({
             chartData
         };
     },
-    components: { DataCard, TimeLine },
+    components: { DataCard, TimeLine, UserLogo, Calendar },
     beforeUnmount() {
         window.onresize = null;
         // @ts-ignore

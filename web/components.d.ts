@@ -5,10 +5,12 @@
 declare module 'vue' {
   export interface GlobalComponents {
     AlertMessage: typeof import('./src/components/AlertMessage.vue')['default']
+    Calendar: typeof import('./src/components/Calendar.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCalendar: typeof import('element-plus/es')['ElCalendar']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
@@ -29,6 +31,8 @@ declare module 'vue' {
     ForgetPassword: typeof import('./src/components/ForgetPassword.vue')['default']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
     SvgIcon: typeof import('./src/components/svgIcon.vue')['default']
+    UserInfo: typeof import('./src/components/UserInfo.vue')['default']
+    UserLogo: typeof import('./src/components/UserLogo.vue')['default']
     VertifyCode: typeof import('./src/components/VertifyCode.vue')['default']
   }
 }

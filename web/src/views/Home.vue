@@ -1,5 +1,5 @@
 <template>
-
+<div>
     <div class="w-17">
         <SideBar/>
     </div>
@@ -38,7 +38,7 @@
         </div> -->
         <router-view></router-view>
     </div> 
-
+</div>
 </template>
 
 
