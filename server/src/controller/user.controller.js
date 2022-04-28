@@ -1,12 +1,12 @@
+const path = require('path')
 // 获取请求，调用service操作model层方法
-const { createUser, getUser, updateById } = require('../service/user.service')
-const { userRegisterError, userNotExited } = require('../constants/err.type')
+const { createUser, getUser, updateById, updateImage } = require('../service/user.service')
+const { userRegisterError, userNotExited, fileTypeError, fileUploadError } = require('../constants/err.type')
 const jwt = require('jsonwebtoken')
 // eslint-disable-next-line no-undef
 const { JWT_SECRET } = require('../config/config.default')
 const redisHelper = require('../app/redis')
 const nodemailer = require('../app/nodemailer')
-const base64js = require('base64-js')
 
 class UserController {
 	async getCaptcha(ctx) {
@@ -119,13 +119,30 @@ class UserController {
 		}
 	}
 	
-	async uploadImage(ctx) {
+	async uploadImage(ctx, next) {
 		const { user_image } = ctx.request.files
-		try {
-			console.log('image', user_image)
-		} catch (error) {
-			console.error(error)
+		const trueType = ['image/jpeg', 'image/png']
+		if (user_image.size !== 0) {
+			if (!trueType.includes(user_image.type)) {
+				return ctx.app.emit('error', fileTypeError, ctx)
+			}
+			ctx.body = {
+				code: 0,
+				message: 'upload success!',
+				result: {
+					// 通过路径获取到文件的名字
+					goods_img: path.basename(user_image.path)
+				}
+			}
+			ctx.state.filePath = path.basename(user_image.path)
+			await next()
+		} else {
+			return ctx.app.emit('error', fileUploadError, ctx)
 		}
+	}
+
+	async saveToDB(ctx) {
+		
 	}
 }
 

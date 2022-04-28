@@ -56,6 +56,10 @@ class UserService {
 		const res = await User.update(change, {where: whereOpt})
 		return res
 	}
+
+	async updateImage({ user_image }) {
+		
+	}
 }
 
 module.exports = new UserService()
