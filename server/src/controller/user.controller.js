@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../config/config.default')
 const redisHelper = require('../app/redis')
 const nodemailer = require('../app/nodemailer')
+const base64js = require('base64-js')
 
 class UserController {
 	async getCaptcha(ctx) {
@@ -115,6 +116,15 @@ class UserController {
 			}
 		} catch (error) {
 			console.error('verify user error')
+		}
+	}
+	
+	async uploadImage(ctx) {
+		const { user_image } = ctx.request.files
+		try {
+			console.log('image', user_image)
+		} catch (error) {
+			console.error(error)
 		}
 	}
 }

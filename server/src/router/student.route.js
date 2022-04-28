@@ -10,4 +10,5 @@ router.post('/create', studentValidator, studentVertifier, createStu)
 router.post('/delete', deleteValidator, deleteStu)
 
 router.post('/update', updateStu)
+
 module.exports = router
