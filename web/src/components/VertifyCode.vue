@@ -139,7 +139,7 @@ export default defineComponent({
         const { proxy } = getCurrentInstance()
         const registerTo = async () => {
             const formData = new FormData()
-            formData.append('nick_name', register.nickName)
+            formData.append('nick_name', register.nick_name)
             formData.append('user_name', register.user_name)
             formData.append('password', register.password)
             formData.append('captcha', state.captcha)

@@ -221,12 +221,13 @@ export default defineComponent({
         const { proxy } = getCurrentInstance()
         const register = async () => {
             const formData = new FormData()
+            
             formData.append('nick_name', state.nickName)
             formData.append('user_name', state.account)
             formData.append('password', state.password)
             // @ts-ignore
             const res = await proxy.$axios.post('/captcha', formData)
-            console.log('register:', res.success ? res.success : res.error);
+            // console.log('register:', res.success ? res.success : res.error);
             if (res.success) {
                 store.commit('setRegister', {
                     nick_name: state.nickName,

@@ -31,7 +31,7 @@ class UserController {
 	async register(ctx) {
 		// 1. get request
 		const { user_name, password, nick_name, captcha } = ctx.request.body
-		console.log('user_name', user_name)
+		console.log('nick_name!!!', nick_name)
 		const result = await redisHelper.getString(user_name)
 		console.log('send: ', captcha, 'true captcha is: ', result, result !== captcha)
 		if (result !== captcha) {

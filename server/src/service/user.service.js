@@ -5,6 +5,7 @@ class UserService {
 	// create in database
 	async createUser(user_name, password, nick_name) {
 		// 对象解构
+		// console.log('create nick_name', nick_name)
 		const res = await User.create({
 			user_name,
 			password,
