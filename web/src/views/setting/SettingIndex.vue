@@ -20,17 +20,21 @@
                         :on-exceed="handleExceed"
                         :limit="1"
                         ref="upload_img">
-                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <!-- <img v-if="imageUrl" :src="imageUrl" class="avatar"> -->
                             <el-avatar
                                 :size="102"
                                 class="cursor-pointer"
-                                :src="imageUrl"
+                                v-if="imageUrl"
+                                :src="imageUrl"></el-avatar>
+                            <el-avatar
+                                :size="102"
+                                class="cursor-pointer"
                                 v-else> user </el-avatar>
                     </el-upload>
                 </div>
 
                 
-                <div class="relative block h-5">
+                <!-- <div class="relative block h-5">
                     <div class="absolute top-0 left-[40%]">
                         <button
                             class="border border-gray-700 rounded-lg h-5 py-0 px-2 text-xs min-w-min ml-2 text-gray-700"
@@ -39,7 +43,7 @@
                             class="border border-orange-400 rounded-lg h-5 py-0 px-2 text-xs min-w-min ml-2 text-orange-400"
                             @click="save">保存</button>
                     </div>
-                </div>
+                </div> -->
 
 
                 <div class="mt-6 mr-6 ml-[-30px] md:ml-0">
@@ -116,18 +120,14 @@
 
 <script lang="ts" setup>
 // import { defineComponent } from 'vue'
-
+import { useStore } from 'vuex'
 import { reactive, ref } from "vue-demi";
 import { genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
 import Axios from '../../plugins/axios'
 
-// export default defineComponent({
-//     setup() {
-        
-//     },
-// })
+const store = useStore()
 const imageUrl = ref<string>('')
 // const image = ref<UploadRawFile>()
 const upload_img = ref()
@@ -168,12 +168,27 @@ const onChange = async (file, fileList) => {
         }
         var obj = new Blob([u8arr], {type:mime});
         var fd = new FormData();
-        fd.append("user_image", obj, "image.png");
+        fd.append('user_image', obj, 'image.png')
+        // console.log(JSON.parse(sessionStorage.getItem('register') as string).user_name, 'store')
+        const userName = JSON.parse(sessionStorage.getItem('register') as string).user_name
+        fd.append('user_name', userName)
         
         const resp = await Axios.post('/image', fd)
         console.log('uploading', resp, obj)
+        // 初始化imageUrl
+        imageUrl.value = ''
+        try {
+            // @ts-ignore
+            if (resp.success) {
+                // @ts-ignore
+                const filePath = `D:/GitHub/project/covid_maga/server/src/uploads/${resp.success.result.file_path}`
+                imageUrl.value = filePath
+            }
+        } catch (error) {
+            console.log('error')    
+        }
     }
-    console.log('changed', file, fileList, flag)
+    // console.log('changed', file, fileList, flag)
 }
 
 // 只允许有一张照片
@@ -184,12 +199,12 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
   upload_img.value!.handleStart(file)
 }
 
-const save = () => {
-    // console.log('changed', upload_img.value)
-}
-const cancel = () => {
-    console.log('cancel')    
-}
+// const save = () => {
+//     // console.log('changed', upload_img.value)
+// }
+// const cancel = () => {
+//     console.log('cancel')    
+// }
 
 const getBase64 = (file) => {
     return new Promise(function (resolve, reject) {

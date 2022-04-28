@@ -57,8 +57,10 @@ class UserService {
 		return res
 	}
 
-	async updateImage({ user_image }) {
-		
+	async updateImage({ user_name }, filePath) {
+		const whereOpt = { user_name }
+		const res = await User.update({ user_image: filePath }, { where: whereOpt })
+		return res
 	}
 }
 

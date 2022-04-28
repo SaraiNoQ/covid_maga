@@ -126,14 +126,6 @@ class UserController {
 			if (!trueType.includes(user_image.type)) {
 				return ctx.app.emit('error', fileTypeError, ctx)
 			}
-			ctx.body = {
-				code: 0,
-				message: 'upload success!',
-				result: {
-					// 通过路径获取到文件的名字
-					goods_img: path.basename(user_image.path)
-				}
-			}
 			ctx.state.filePath = path.basename(user_image.path)
 			await next()
 		} else {
@@ -142,7 +134,19 @@ class UserController {
 	}
 
 	async saveToDB(ctx) {
-		
+		const { user_name } = ctx.request.body
+		const { filePath } = ctx.state
+		console.log('filePath', { filePath })
+		const res = await updateImage({ user_name }, filePath)
+		if (res) {
+			ctx.body = {
+				code: 0,
+				message: 'upload success!',
+				result: {
+					file_path: filePath
+				}
+			}
+		}
 	}
 }
 
