@@ -152,11 +152,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive, ref, getCurrentInstance } from 'vue'
+import { defineComponent, computed, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import useValidate from '@vuelidate/core'
 import { required, email, minLength } from '@vuelidate/validators'
+import Axios from '../plugins/axios'
 
 import AlertMessage from '../components/AlertMessage.vue'
 import ForgetPassword from '../components/ForgetPassword.vue'
@@ -184,7 +185,6 @@ export default defineComponent({
       const successRef = ref<any>(null)
       const loginErrorInfo = ref<string>('login fail! Please check your email or password.')
       // @ts-ignore
-      const { proxy } = getCurrentInstance()
       const loginDisabled = ref<Boolean>(false)
       const clickLogin = async () => {
         if (loginDisabled.value) { return }
@@ -193,10 +193,12 @@ export default defineComponent({
         const formData = new FormData()
         formData.append('user_name', state.email)
         formData.append('password', state.password)
-        const res = await proxy.$axios.post('/login', formData)
-        // console.log('loging', res.success ? res.success : res.error);
+        const res = await Axios.post('/login', formData)
+        // console.log('loging', res)
+        // @ts-ignore
         if (res.success) {
           // 设置token
+          // @ts-ignore
           store.commit('setToken', res.success.result.token)
           router.replace('/home')
         } else {

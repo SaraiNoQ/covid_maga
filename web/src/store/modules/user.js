@@ -19,6 +19,10 @@ export default {
         setRegister(state, data) {
             state.register = data
             sessionStorage.setItem('register', JSON.stringify(data))
+        },
+        removeToken(state) {
+            state.token = ''
+            localStorage.removeItem('token')
         }
     },
     actions:{

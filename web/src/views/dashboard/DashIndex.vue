@@ -38,6 +38,7 @@ import * as echarts from 'echarts';
 import TimeLine from './components/TimeLine/index.vue'
 import DataCard from './components/DaraCard.vue'
 import UserLogo from '../../components/UserLogo.vue'
+// @ts-ignore
 import Calendar from '../../components/Calendar.vue'
 export default defineComponent({
     setup() {
