@@ -49,7 +49,7 @@
 
         <div class="w-14 h-1 mx-auto bg-gray-700"></div>
 
-        <div class="sidebar-icon group fa-xl">
+        <div class="sidebar-icon group fa-xl" @click="toSettings" :class="{ denycur: isdeny }">
             <font-awesome-icon icon="gear"/>
             <span class="sidebar-tooltip group-hover:scale-100">Settings
                 <font-awesome-icon icon="screwdriver-wrench"/>
@@ -95,6 +95,11 @@ export default defineComponent({
             await router.push('/home/dashboard')
             isdeny.value = false
         }
+        const toSettings = async () => {
+            isdeny.value = true
+            await router.push('/home/settings')
+            isdeny.value = false
+        }
 
         return {
             focus,
@@ -104,6 +109,7 @@ export default defineComponent({
             toAuthorize,
             toStudent,
             toStatistics,
+            toSettings,
             isdeny
         }
 

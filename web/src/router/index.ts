@@ -36,6 +36,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/home/statistics',
                 name: 'Statistics',
                 component: () => import('@/views/statistics/StatisticsIndex.vue')
+            },
+            {
+                path: '/home/settings',
+                name: 'Settings',
+                component: () => import('@/views/setting/SettingIndex.vue')
             }
         ]
     },
