@@ -10,7 +10,8 @@ You could check for it by:
 ```bash
 node -v && npm -v
 ```
-**By the way, you can install latest Nodejs at the moment.**
+**By the way, you can install latest Nodejs at the moment to resolve bugs that caused by vesion.**
+
 
 > Operation
 ### install package
