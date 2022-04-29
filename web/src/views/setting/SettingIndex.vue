@@ -91,37 +91,151 @@
                     </el-form>
                 </div>
             </div>
-            <div class="head py-5 px-6 border-y-[0.01rem]
-                flex items-center justify-center">
-                <div class="w-[92%]">
-                    <h3 class="text-left text-base">密码</h3>
-                    <div class="mt-1 text-left text-gray-500 text-sm">未设置</div>
+            <div class="head py-5 px-6 border-y-[0.01rem]">
+                <div class="flex items-center justify-center">
+                    <div class="w-[92%]">
+                        <h3 class="text-left text-base">密码</h3>
+                        <div class="mt-1 text-left text-gray-500 text-sm">未设置</div>
+                    </div>
+                    <div class="ml-4">
+                        <button class="h-auto text-blue-600 bg-transparent text-sm
+                            cursor-pointer text-center w-10"
+                            @click="changePasswordVisible">{{passwordVisible ? '收起' : '编辑'}}</button>
+                    </div>
                 </div>
-                <div class="ml-4">
-                    <button class="h-auto text-blue-600 bg-transparent text-sm
-                        cursor-pointer text-center">编辑</button>
+                <!-- 编辑时渲染：重置密码 -->
+                <div v-if="passwordVisible">
+                    <el-form
+                        label-width="0"
+                        :model="formPassword"
+                        size="large"
+                        class="mt-6"
+                    >
+                        <el-form-item>
+                            <div class="w-[65%] lg:w-[60%]">
+                                <el-input v-model="formPassword.firstPsw" placeholder="输入新密码"/>
+                            </div>
+                            <div class="ml-3 text-gray-400">
+                                8 位以上数字和字母
+                            </div>
+                        </el-form-item>
+                        <el-form-item>
+                            <div class="w-[65%] lg:w-[60%] ">
+                                <el-input v-model="formPassword.secondPsw" placeholder="再次输入新密码"/>
+                            </div>
+                        </el-form-item>
+                    </el-form>
+                    <div class="relative h-10 w-full">
+                        <button
+                            type="button"
+                            data-mdb-ripple="true"
+                            data-mdb-ripple-color="light"
+                            class="absolute inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-sm leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out
+                            left-0 w-[65%] lg:w-[60%]"
+                        >提交</button>
+                    </div>
                 </div>
             </div>
-            <div class="head py-5 px-6 border-y-[0.01rem]
-                flex items-center justify-center">
-                <div class="w-[92%]">
-                    <h3 class="text-left text-base">绑定手机</h3>
-                    <div class="mt-1 text-left text-gray-500 text-sm">+86191****0360</div>
+
+            <div class="head py-5 px-6 border-y-[0.01rem]">
+                <div class="flex items-center justify-center">
+                    <div class="w-[92%]">
+                        <h3 class="text-left text-base">绑定手机</h3>
+                        <div class="mt-1 text-left text-gray-500 text-sm">+86191****0360</div>
+                    </div>
+                    <div class="ml-4">
+                        <button class="h-auto text-blue-600 bg-transparent text-sm
+                            cursor-pointer text-center w-10"
+                            @click="changePhoneVisible">{{phoneVisible ? '收起' : '编辑'}}</button>
+                    </div>
                 </div>
-                <div class="ml-4">
-                    <button class="h-auto text-blue-600 bg-transparent text-sm
-                        cursor-pointer text-center">编辑</button>
+                <!-- 编辑时渲染：绑定手机 -->
+                <div v-if="phoneVisible">
+                    <el-form
+                        label-width="0"
+                        :model="formPhone"
+                        size="large"
+                        class="mt-6"
+                    >
+                        <el-form-item>
+                            <div class="w-[65%] lg:w-[60%]">
+                                <el-input v-model="formPhone.number" placeholder="输入手机号"/>
+                            </div>
+                        </el-form-item>
+                        <el-form-item>
+                            <div class="w-[65%] lg:w-[60%] flex">
+                                <el-input v-model="formPhone.code" placeholder="验证码"/>
+                                <button
+                                    type="button"
+                                    data-mdb-ripple="true"
+                                    data-mdb-ripple-color="light"
+                                    class="inline-block px-6 py-2.5 bg-blue-100 text-blue-400 font-medium text-xs tracking-widest leading-tight uppercase rounded hover:bg-blue-200 hover:shadow-lg 
+                                    w-[140%] lg:w-[80%] ml-2"
+                                >发送验证码</button>
+                            </div>
+                        </el-form-item>
+                    </el-form>
+                    <div class="relative h-10 w-full">
+                        <button
+                            type="button"
+                            data-mdb-ripple="true"
+                            data-mdb-ripple-color="light"
+                            class="absolute inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-sm leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out
+                            left-0 w-[65%] lg:w-[60%]"
+                            :class="{ noInput: noInput }"
+                        >提交</button>
+                    </div>
                 </div>
             </div>
-            <div class="head py-5 px-6 border-y-[0.01rem]
-                flex items-center justify-center">
-                <div class="w-[92%]">
-                    <h3 class="text-left text-base">绑定邮箱</h3>
-                    <div class="mt-1 text-left text-gray-500 text-sm">299******@qq.com</div>
+
+            <div class="head py-5 px-6 border-y-[0.01rem]">
+                <div class="flex items-center justify-center">
+                    <div class="w-[92%]">
+                        <h3 class="text-left text-base">绑定邮箱</h3>
+                        <div class="mt-1 text-left text-gray-500 text-sm">299******@qq.com</div>
+                    </div>
+                    <div class="ml-4">
+                        <button class="h-auto text-blue-600 bg-transparent text-sm
+                            cursor-pointer text-center w-10"
+                            @click="changeEmailVisible">{{emailVisible ? '收起' : '编辑'}}</button>
+                    </div>
                 </div>
-                <div class="ml-4">
-                    <button class="h-auto text-blue-600 bg-transparent text-sm
-                        cursor-pointer text-center">编辑</button>
+                <!-- 编辑时渲染：改绑邮箱 -->
+                <div v-if="emailVisible">
+                    <el-form
+                        label-width="0"
+                        :model="formEmail"
+                        size="large"
+                        class="mt-6"
+                    >
+                        <el-form-item>
+                            <div class="w-[65%] lg:w-[60%]">
+                                <el-input v-model="formEmail.email" placeholder="输入新邮箱"/>
+                            </div>
+                        </el-form-item>
+                        <el-form-item>
+                            <div class="w-[65%] lg:w-[60%] flex">
+                                <el-input v-model="formEmail.code" placeholder="验证码"/>
+                                <button
+                                    type="button"
+                                    data-mdb-ripple="true"
+                                    data-mdb-ripple-color="light"
+                                    class="inline-block px-6 py-2.5 bg-blue-100 text-blue-400 font-medium text-xs tracking-widest leading-tight uppercase rounded hover:bg-blue-200 hover:shadow-lg 
+                                    w-[140%] lg:w-[80%] ml-2"
+                                >发送验证码</button>
+                            </div>
+                        </el-form-item>
+                    </el-form>
+                    <div class="relative h-10 w-full">
+                        <button
+                            type="button"
+                            data-mdb-ripple="true"
+                            data-mdb-ripple-color="light"
+                            class="absolute inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-sm leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out
+                            left-0 w-[65%] lg:w-[60%]"
+                            :class="{ noInput: noInput1 }"
+                        >提交</button>
+                    </div>
                 </div>
             </div>
             
@@ -131,12 +245,12 @@
 
 <script lang="ts" setup>
 import { useStore } from 'vuex'
-import { reactive, ref, onBeforeMount } from "vue-demi"
+import { reactive, ref, onBeforeMount, watch } from "vue-demi"
 import { genFileId } from 'element-plus'
-import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+import type { UploadProps, UploadRawFile } from 'element-plus'
 
 import Axios from '../../plugins/axios'
-import AlertMessage from '../../components/AlertMessage.vue';
+import AlertMessage from '../../components/AlertMessage.vue'
 const store = useStore()
 
 interface UserInformation {
@@ -378,6 +492,66 @@ const getBase64 = (file) => {
         };
     });
 }
+
+interface PasswordForm {
+    firstPsw?: string,
+    secondPsw?: string
+}
+const formPassword: PasswordForm = reactive<PasswordForm>({
+    firstPsw: '',
+    secondPsw: ''
+})
+// 输入框是否可见
+const passwordVisible = ref<Boolean>(false)
+const changePasswordVisible = () => {
+    passwordVisible.value = !passwordVisible.value
+}
+
+interface PhoneForm {
+    number?: string,
+    code?: string
+}
+const formPhone: PhoneForm = reactive<PhoneForm>({
+    number: '',
+    code: ''
+})
+// 监听按钮样式
+const noInput = ref<Boolean>(true)
+watch(formPhone, (newValue: PhoneForm) => {
+    if (newValue.number && (newValue.code as string).length === 4) {
+        noInput.value = false
+    } else {
+        noInput.value = true
+    }
+})
+// 输入框是否可见
+const phoneVisible = ref<Boolean>(false)
+const changePhoneVisible = () => {
+    phoneVisible.value = !phoneVisible.value
+}
+
+// 邮箱功能
+interface EmailForm {
+    email?: string,
+    code?: string
+}
+const formEmail: EmailForm = reactive<EmailForm>({
+    email: '',
+    code: ''
+})
+const emailVisible = ref<Boolean>(false)
+const changeEmailVisible = () => {
+    emailVisible.value = !emailVisible.value
+}
+const noInput1 = ref<Boolean>(true)
+watch(formEmail, (newValue: EmailForm) => {
+    if (newValue.email && (newValue.code as string).length === 4) {
+        noInput1.value = false
+    } else {
+        noInput1.value = true
+    }
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -386,6 +560,11 @@ const getBase64 = (file) => {
     // font-size: 15px;
     color: #121212;
     font-size: 19px;
+}
+
+.noInput {
+    color: #fff !important;
+    background-color: rgb(161, 196, 250) !important;
 }
 
 :deep(.el-form-item__label) {
@@ -400,5 +579,9 @@ const getBase64 = (file) => {
 :deep(.el-input__inner) {
     background-color: rgb(240, 241, 244);
     border-radius: 8px;
+}
+
+:deep(.el-form-item) {
+    margin-bottom: 15px;
 }
 </style>
