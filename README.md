@@ -5,12 +5,12 @@
 
 > Environment
 
-Fistly, you need to make true that *the version of Node.js&&npm* installed in your current operation system which is using currently higher than or equal *v17.8.0&&6.14.9*.
+Fistly, you need to make true that **the version of Node.js&&npm** installed in your current operation system which is using currently higher than or equal **v17.8.0&&6.14.9**.
 You could check for it by:
 ```bash
 node -v && npm -v
 ```
-*By the way, you can install latest Nodejs at the moment.*
+**By the way, you can install latest Nodejs at the moment.**
 
 > Operation
 ### install package
