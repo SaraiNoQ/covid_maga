@@ -85,6 +85,11 @@ module.exports = {
 		message: 'get user information error!',
 		result: ''
 	},
+	updateAccountError: {
+		code: '10208',
+		message: 'update email error',
+		result: ''
+	},
 	studentFormatError: {
 		code: '20101', // 中间件层面错误
 		message: 'student regist info format error',

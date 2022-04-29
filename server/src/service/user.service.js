@@ -36,7 +36,7 @@ class UserService {
 	// retrieve in database
 	async getUser({user_name}) {
 		const res = await User.findOne({
-			attributes: ['user_name', 'password', 'is_admin', 'id', 'nick_name', 'user_info'],
+			attributes: ['user_name', 'password', 'is_admin', 'id', 'nick_name', 'user_info', 'user_account'],
 			where: {user_name}
 		})
 		console.log('res', res ? res.dataValues : null)
@@ -70,6 +70,13 @@ class UserService {
 		user_info && Object.assign(whereUpdate, { user_info })
 
 		const res = await User.update(whereUpdate, {
+			where: { user_name }
+		})
+		return res
+	}
+
+	async updateAccount({ user_name, new_account }) {
+		const res = await User.update({ user_account: new_account }, {
 			where: { user_name }
 		})
 		return res

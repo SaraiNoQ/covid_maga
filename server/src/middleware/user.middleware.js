@@ -44,6 +44,17 @@ const userNameValidate = async (ctx, next) => {
 	await next()
 }
 
+// 验证new_account不为空
+const newAccountValidate = async (ctx, next) => {
+	const { new_account } = ctx.request.body
+	if (!new_account) {
+		console.error('new_account is null!')
+		ctx.app.emit('error', userFormatError, ctx)
+		return
+	}
+	await next()
+}
+
 // 验证注册用户是否已经存在
 const userVertifier = async (ctx, next) => {
 	const {user_name} = ctx.request.body
@@ -163,5 +174,6 @@ module.exports = {
 	authToken,
 	vertifyCaptcha,
 	userNameValidate,
-	infoValidate
+	infoValidate,
+	newAccountValidate
 }

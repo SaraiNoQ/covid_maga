@@ -1,13 +1,14 @@
 const path = require('path')
 // 获取请求，调用service操作model层方法
-const { createUser, getUser, updateById, updateImage, updateInfo } = require('../service/user.service')
+const { createUser, getUser, updateById, updateImage, updateInfo, updateAccount } = require('../service/user.service')
 const {
 	userRegisterError,
 	userNotExited,
 	fileTypeError,
 	fileUploadError,
 	infoUpdateError,
-	getUserInfoError
+	getUserInfoError,
+	updateAccountError
 } = require('../constants/err.type')
 const jwt = require('jsonwebtoken')
 // eslint-disable-next-line no-undef
@@ -26,7 +27,7 @@ class UserController {
 		if (result === 'OK') {
 			const result1 = await redisHelper.getString(user_name)
 			console.log('send email success!', result1)
-			nodemailer(ctx.request.body, code)
+			nodemailer.create(ctx.request.body, code)
 			ctx.body = {
 				'status': 0,
 				'message': 'captcha successly send!'
@@ -182,12 +183,71 @@ class UserController {
 	async getInformation(ctx) {
 		const { user_name } = ctx.request.query
 		try {
-			const {password, ...res} = await getUser({ user_name })
+			const { password, ...res } = await getUser({ user_name })
 			if (res) {
 				ctx.body = {
 					code: 0,
 					message: 'get user_info success',
 					result: res
+				}
+			}
+		} catch (error) {
+			console.error(error)
+			ctx.app.emit('error', getUserInfoError, ctx)
+		}
+	}
+
+	async changeAccount(ctx) {
+		const { user_name, new_account, captcha } = ctx.request.body
+		const result = await redisHelper.getString(new_account)
+		if (result !== captcha) {
+			console.error('captcha error!')
+			ctx.app.emit('error', userRegisterError, ctx)
+			return
+		}
+		try {
+			const res = await updateAccount({ user_name, new_account })
+			if (res) {
+				ctx.body = {
+					code: 0,
+					message: 'update email success!',
+					result: res
+				}
+			}
+		} catch (error) {
+			console.error(error)
+			ctx.app.emit('error', updateAccountError, ctx)
+		}
+	}
+
+	async getNewCaptcha(ctx) {
+		const { new_account } = ctx.request.body
+		// console.log('captcha', new_account)
+		const code = parseInt(Math.random(0, 1) * 1000000) // 生成随机验证码
+		const result = await redisHelper.setString(new_account, code, 60 * 5)
+		if (result === 'OK') {
+			// const result1 = await redisHelper.getString(new_account)
+			// console.log('send email success!', result1)
+			nodemailer.update(ctx.request.body, code)
+			ctx.body = {
+				'status': 0,
+				'message': 'captcha successly send!'
+			}
+		} else {
+			console.error('send captcha error!')
+			ctx.app.emit('error', userRegisterError, ctx)
+		}
+	}
+
+	async getAccount(ctx) {
+		const { user_name } = ctx.request.query
+		try {
+			const { user_account } = await getUser({ user_name })
+			if (user_account) {
+				ctx.body = {
+					code: 0,
+					message: 'retrieve account success',
+					result: user_account
 				}
 			}
 		} catch (error) {

@@ -8,7 +8,8 @@ const {
     cryptPassword,
     authToken,
     userNameValidate,
-    infoValidate
+    infoValidate,
+    newAccountValidate
 } = require('../middleware/user.middleware')
 const { login,
     register,
@@ -18,7 +19,10 @@ const { login,
     uploadImage,
     saveToDB,
     uploadInfo,
-    getInformation
+    getInformation,
+    changeAccount,
+    getNewCaptcha,
+    getAccount
 } = require('../controller/user.controller')
 
 const router = new Router()
@@ -41,5 +45,11 @@ router.patch('/information', userNameValidate, infoValidate, uploadInfo)
 router.get('/information', getInformation)
 
 router.patch('/passwd', authToken, userNameValidate, cryptPassword, passwd)
+
+router.patch('/account', authToken, userNameValidate, newAccountValidate, vertifyCaptcha, changeAccount)
+
+router.get('/account', getAccount)
+
+router.post('/new/captcha', newAccountValidate, getNewCaptcha)
 
 module.exports = router

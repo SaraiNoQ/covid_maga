@@ -150,7 +150,7 @@
                 <div class="flex items-center justify-center">
                     <div class="w-[92%]">
                         <h3 class="text-left text-base">绑定手机</h3>
-                        <div class="mt-1 text-left text-gray-500 text-sm">+86191****0360</div>
+                        <div class="mt-1 text-left text-gray-500 text-sm">🔗VIP功能</div>
                     </div>
                     <div class="ml-4">
                         <button class="h-auto text-blue-600 bg-transparent text-sm
@@ -178,7 +178,7 @@
                                     type="button"
                                     data-mdb-ripple="true"
                                     data-mdb-ripple-color="light"
-                                    class="inline-block px-6 py-2.5 bg-blue-100 text-blue-400 font-medium text-xs tracking-widest leading-tight uppercase rounded hover:bg-blue-200 hover:shadow-lg 
+                                    class="inline-block px-6 py-2.5 bg-blue-100 text-blue-400 font-medium text-xs tracking-widest leading-tight uppercase rounded hover:bg-blue-200
                                     w-[140%] lg:w-[80%] ml-2"
                                 >发送验证码</button>
                             </div>
@@ -229,8 +229,9 @@
                                     type="button"
                                     data-mdb-ripple="true"
                                     data-mdb-ripple-color="light"
-                                    class="inline-block px-6 py-2.5 bg-blue-100 text-blue-400 font-medium text-xs tracking-widest leading-tight uppercase rounded hover:bg-blue-200 hover:shadow-lg 
+                                    class="inline-block px-6 py-2.5 bg-blue-100 text-blue-400 font-medium text-xs tracking-widest leading-tight uppercase rounded hover:bg-blue-200
                                     w-[140%] lg:w-[80%] ml-2"
+                                    @click="getNewCaptcha"
                                 >发送验证码</button>
                             </div>
                         </el-form-item>
@@ -243,6 +244,7 @@
                             class="absolute inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-sm leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out
                             left-0 w-[65%] lg:w-[60%]"
                             :class="{ noInput: noInput1 }"
+                            @click="submitChangeAccount"
                         >提交</button>
                     </div>
                 </div>
@@ -280,11 +282,21 @@ interface ButtonVisible {
     info: Boolean
 }
 
-// 当前user_name
-const currentUserName = computed(() => {
-    const str: string = getUserName()
-    return `${str.substr(0, 3)}****${str.substr(7)}`
+// 当前绑定邮箱
+const currentUserName = ref<string>('')
+onBeforeMount(async() => {
+    await dispalyAccount()
 })
+const dispalyAccount = async() => {
+    const user_name: string = getUserName()
+    const res = await Axios.get('/account?user_name=' + user_name)
+    // @ts-ignore
+    if (res.success) {
+        // @ts-ignore
+        const str = res.success.result
+        currentUserName.value = `${str.substr(0, 3)}****${str.substr(7)}`
+    }
+}
 
 const imageUrl = ref<string>('')
 const upload_img = ref()
@@ -430,7 +442,9 @@ const saveName = async () => {
     // @ts-ignore
     if (res.success) {
         successMessage.value = '昵称修改成功!'
+        // 修改成功后要修改localstorage和隐藏按钮框
         afterChangeInfo({ nick_name: nickName })
+        visible.name = false
         await successRef.value.setDis()
     } else {
         alertMessage.value = '网络异常...修改失败!'
@@ -461,7 +475,7 @@ const saveIntroduction = async () => {
     const formData: FormData = new FormData()
     const userName: string = JSON.parse(localStorage.getItem('user') as string).user_name
     const userInfo: string = formLabelAlign.info
-    formData.append('nick_name', userInfo)
+    formData.append('user_info', userInfo)
     formData.append('user_name', userName)
 
     const res = await Axios.patch('/information', formData)
@@ -469,6 +483,7 @@ const saveIntroduction = async () => {
     if (res.success) {
         successMessage.value = '简介修改成功!'
         afterChangeInfo({ user_info: userInfo })
+        visible.info = false
         await successRef.value.setDis()
     } else {
         alertMessage.value = '网络异常...修改失败!'
@@ -589,12 +604,51 @@ const changeEmailVisible = () => {
 }
 const noInput1 = ref<Boolean>(true)
 watch(formEmail, (newValue: EmailForm) => {
-    if (newValue.email && (newValue.code as string).length === 4) {
+    if (newValue.email && (newValue.code as string).length === 6) {
         noInput1.value = false
     } else {
         noInput1.value = true
     }
 })
+const getNewCaptcha = async() => {
+    if (formEmail.email) {
+        const userName: string = getUserName()
+        const formData = new FormData()
+        formData.append('new_account', formEmail.email as string)
+        formData.append('user_name', userName)
+        const res = await Axios.post('/new/captcha', formData)
+        console.log(res);
+        
+        // @ts-ignore
+        if (res.success) {
+            successMessage.value = '验证码已发送！'
+            await successRef.value.setDis()
+        }
+    }
+}
+
+const submitChangeAccount = async() => {
+    if (formEmail.email && formEmail.code) {
+        const formData = new FormData()
+        formData.append('token', token)
+        formData.append('user_name', getUserName())
+        formData.append('new_account', formEmail.email)
+        formData.append('captcha', formEmail.code)
+        const res = await Axios.patch('/account', formData)
+        console.log(res);
+        // @ts-ignore
+        if (res.success) {
+            successMessage.value = '成功绑定邮箱！'
+            formEmail.code = ''
+            formEmail.email = ''
+            await dispalyAccount()
+            await successRef.value.setDis()
+        } else {
+            alertMessage.value = '验证码错误!'
+            await alertRef.value.setDis()
+        }
+    }
+}
 
 
 </script>

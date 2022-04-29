@@ -35,6 +35,11 @@ const User = seq.define('zd_user', {
 		type: DataTypes.STRING,
 		allowNull: true,
 		comment: 'user information'
+	},
+	user_account: {
+		type: DataTypes.STRING,
+		allowNull: true,
+		comment: 'new email'
 	}
 })
 
