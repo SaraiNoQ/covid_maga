@@ -97,8 +97,9 @@ const vertifyLogin = async (ctx, next) => {
 
 // 加密密码
 const cryptPassword = async (ctx, next) => {
-	console.log('enter Res!')
+	// console.log('enter Res!')
 	const { new_password } = ctx.request.body
+	// 如果没有新密码，则说名是在注册密码
 	if (!new_password) {
 		const { password } = ctx.request.body
 		//生成密钥

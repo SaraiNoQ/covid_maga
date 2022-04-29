@@ -48,7 +48,7 @@
                     </div>
                 </div> -->
 
-
+                <!-- 昵称+简介设置 -->
                 <div class="mt-6 mr-6 ml-[-30px] md:ml-0">
                     <el-form
                     label-width="100px"
@@ -91,7 +91,11 @@
                     </el-form>
                 </div>
             </div>
+
+            <!-- 密码设置 -->
             <div class="head py-5 px-6 border-y-[0.01rem]">
+
+                <!-- 初始密码设置 -->
                 <div class="flex items-center justify-center">
                     <div class="w-[92%]">
                         <h3 class="text-left text-base">密码</h3>
@@ -103,8 +107,10 @@
                             @click="changePasswordVisible">{{passwordVisible ? '收起' : '编辑'}}</button>
                     </div>
                 </div>
-                <!-- 编辑时渲染：重置密码 -->
+
+                <!-- 展开：重置密码 -->
                 <div v-if="passwordVisible">
+                    <!-- 密码表单 -->
                     <el-form
                         label-width="0"
                         :model="formPassword"
@@ -125,6 +131,8 @@
                             </div>
                         </el-form-item>
                     </el-form>
+
+                    <!-- 提交按钮 -->
                     <div class="relative h-10 w-full">
                         <button
                             type="button"
@@ -132,6 +140,7 @@
                             data-mdb-ripple-color="light"
                             class="absolute inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-sm leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out
                             left-0 w-[65%] lg:w-[60%]"
+                            @click="submitChangePsw"
                         >提交</button>
                     </div>
                 </div>
@@ -192,7 +201,7 @@
                 <div class="flex items-center justify-center">
                     <div class="w-[92%]">
                         <h3 class="text-left text-base">绑定邮箱</h3>
-                        <div class="mt-1 text-left text-gray-500 text-sm">299******@qq.com</div>
+                        <div class="mt-1 text-left text-gray-500 text-sm">{{currentUserName}}</div>
                     </div>
                     <div class="ml-4">
                         <button class="h-auto text-blue-600 bg-transparent text-sm
@@ -245,13 +254,15 @@
 
 <script lang="ts" setup>
 import { useStore } from 'vuex'
-import { reactive, ref, onBeforeMount, watch } from "vue-demi"
+import { useRouter } from 'vue-router'
+import { reactive, ref, onBeforeMount, watch, computed } from "vue-demi"
 import { genFileId } from 'element-plus'
 import type { UploadProps, UploadRawFile } from 'element-plus'
 
 import Axios from '../../plugins/axios'
 import AlertMessage from '../../components/AlertMessage.vue'
 const store = useStore()
+const router = useRouter()
 
 interface UserInformation {
     user_name: string,
@@ -268,6 +279,12 @@ interface ButtonVisible {
     name: Boolean,
     info: Boolean
 }
+
+// 当前user_name
+const currentUserName = computed(() => {
+    const str: string = getUserName()
+    return `${str.substr(0, 3)}****${str.substr(7)}`
+})
 
 const imageUrl = ref<string>('')
 const upload_img = ref()
@@ -493,6 +510,13 @@ const getBase64 = (file) => {
     });
 }
 
+// token
+const token: string = localStorage.getItem('token') as string
+const getUserName = () => {
+    return JSON.parse(localStorage.getItem('user') as string).user_name
+}
+
+/* 重置密码 */
 interface PasswordForm {
     firstPsw?: string,
     secondPsw?: string
@@ -505,6 +529,26 @@ const formPassword: PasswordForm = reactive<PasswordForm>({
 const passwordVisible = ref<Boolean>(false)
 const changePasswordVisible = () => {
     passwordVisible.value = !passwordVisible.value
+}
+
+const submitChangePsw = async () => {
+    if (formPassword.firstPsw && formPassword.firstPsw === formPassword.secondPsw && formPassword.firstPsw.length >= 8) {
+        const formData = new FormData()
+        const userName = getUserName()
+        formData.append('token', token)
+        formData.append('user_name', userName)
+        formData.append('new_password', formPassword.firstPsw)
+        const res = await Axios.patch('/passwd', formData)
+        console.log('psw', res);
+        // @ts-ignore
+        if (res.success) {
+            successMessage.value = '密码修改成功！请重新登录...'
+            await successRef.value.setDis()
+            store.commit('removeToken')
+            localStorage.removeItem('user')
+            router.replace('/')
+        }
+    }
 }
 
 interface PhoneForm {
@@ -551,6 +595,7 @@ watch(formEmail, (newValue: EmailForm) => {
         noInput1.value = true
     }
 })
+
 
 </script>
 

@@ -40,4 +40,6 @@ router.patch('/information', userNameValidate, infoValidate, uploadInfo)
 
 router.get('/information', getInformation)
 
+router.patch('/passwd', authToken, userNameValidate, cryptPassword, passwd)
+
 module.exports = router
