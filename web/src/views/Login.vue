@@ -201,7 +201,8 @@ export default defineComponent({
           // @ts-ignore
           store.commit('setToken', res.success.result.token)
           // logout时要删掉
-          localStorage.setItem('user', JSON.stringify(res.success.result.user_info))
+          // @ts-ignore
+          localStorage.setItem('user', JSON.stringify(res.success.result.res))
           router.replace('/home')
         } else {
           loginErrorInfo.value = 'Account OR Password ERROR!'

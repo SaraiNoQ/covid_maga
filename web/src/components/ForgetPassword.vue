@@ -1,4 +1,5 @@
 <template>
+  <div>
     <el-link type="warning" :underline="false" @click="displayDialog">forger password?</el-link>
     <!-- dialog -->
     <el-dialog v-model="dialogTableVisible" title="Reset Your Account" class="flex justify-center">
@@ -48,6 +49,7 @@
         </span>
       </template>
     </el-dialog>
+  </div>
 </template>
 
 <script lang="ts">

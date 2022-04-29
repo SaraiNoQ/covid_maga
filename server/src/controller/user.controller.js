@@ -83,7 +83,7 @@ class UserController {
 					message: 'login success!',
 					result: {
 						token: jwt.sign(res, JWT_SECRET, { expiresIn: '2h' }),
-						user_info: res
+						res: res
 					}
 				}
 			}

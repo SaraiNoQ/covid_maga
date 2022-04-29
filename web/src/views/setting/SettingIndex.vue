@@ -56,10 +56,10 @@
                     >
                         <el-form-item label="昵称">
                             <div class="w-[100%] ">
-                                <el-input v-model="formLabelAlign.name" />
+                                <el-input v-model="formLabelAlign.name" @input="focusName"/>
                                 <div class="relative mt-2 text-left ">
                                     <span class="text-xs align-top text-gray-400">4～30个字符，支持中英文、数字</span>
-                                    <div class="absolute right-0 top-0">
+                                    <div class="absolute right-0 top-0" v-show="visible.name">
                                         <button
                                             class="border border-gray-700 rounded-lg h-5 py-0 px-2 text-xs min-w-min ml-2 text-gray-700"
                                             @click="cancelName">取消</button>
@@ -74,12 +74,16 @@
                       
                         <el-form-item label="简介">
                             <div class="w-[100%] ">
-                                <el-input v-model="formLabelAlign.info" />
+                                <el-input v-model="formLabelAlign.info" @input="focusInfo"/>
                                 <div class="relative mt-2 text-left text-gray-400">
                                     <span class="text-xs align-top">1～140个字符</span>
-                                    <div class="absolute right-0 top-0">
-                                        <button class="border border-gray-700 rounded-lg h-5 py-0 px-2 text-xs min-w-min ml-2 text-gray-700">取消</button>
-                                        <button class="border border-orange-400 rounded-lg h-5 py-0 px-2 text-xs min-w-min ml-2 text-orange-400">保存</button>
+                                    <div class="absolute right-0 top-0" v-show="visible.info">
+                                        <button
+                                            class="border border-gray-700 rounded-lg h-5 py-0 px-2 text-xs min-w-min ml-2 text-gray-700"
+                                            @click="cancelIntroduction">取消</button>
+                                        <button
+                                            class="border border-orange-400 rounded-lg h-5 py-0 px-2 text-xs min-w-min ml-2 text-orange-400"
+                                            @click="saveIntroduction">保存</button>
                                     </div>
                                 </div>
                             </div>
@@ -126,10 +130,8 @@
 </template>
 
 <script lang="ts" setup>
-// import { defineComponent } from 'vue'
 import { useStore } from 'vuex'
 import { reactive, ref, onBeforeMount } from "vue-demi"
-// import { onBeforeMount } from 'vue'
 import { genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
@@ -137,30 +139,31 @@ import Axios from '../../plugins/axios'
 import AlertMessage from '../../components/AlertMessage.vue';
 const store = useStore()
 
-
 interface UserInformation {
     user_name: string,
     nick_name: string,
     user_info: string,
-    is_admin?: number
+    is_admin?: number | Boolean,
+    id?: number
 }
 interface UserForm {
-    name: string,
-    info: string
+    name?: string,
+    info?: string
+}
+interface ButtonVisible {
+    name: Boolean,
+    info: Boolean
 }
 
 const imageUrl = ref<string>('')
-// const image = ref<UploadRawFile>()
 const upload_img = ref()
+
 const formLabelAlign: UserForm = reactive<UserForm>({
     name: '',
     info: ''
 })
-// 当输入框获得鼠标点击事件时更新该组件
-// 是否展示保存和取消按钮
-const nameVisible = ref<Boolean>(false)
-const introductionVisible = ref<Boolean>(false)
 
+// 页面加载完成前获取个人信息
 onBeforeMount(async() => {
     const userName: string = JSON.parse(localStorage.getItem('user') as string).user_name
     const res = await Axios.get('/information?user_name=' + userName)
@@ -251,6 +254,21 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
   upload_img.value!.handleStart(file)
 }
 
+
+// 当输入框获得鼠标点击事件时更新该组件
+// 是否展示保存和取消按钮
+const visible: ButtonVisible = reactive<ButtonVisible>({
+    name: false,
+    info: false
+})
+const focusName = () => {
+    visible.name = true
+}
+const focusInfo = () => {
+    visible.info = true
+}
+
+
 // 修改昵称
 const cancelName = () => {
     formLabelAlign.name = ''
@@ -262,19 +280,85 @@ const saveName = async () => {
         await alertRef.value.setDis()
         return
     }
+    try {
+        if (formLabelAlign.name.length < 4 || formLabelAlign.name.length > 30) {
+            alertMessage.value = '昵称在4-30个字符长度之间!'
+            await alertRef.value.setDis()
+            return
+        }
+    } catch (error) {
+        console.error(error)   
+    }
     const formData: FormData = new FormData()
     const userName: string = JSON.parse(localStorage.getItem('user') as string).user_name
-    formData.append('nick_name', formLabelAlign.name)
+    const nickName: string = formLabelAlign.name
+    formData.append('nick_name', nickName)
     formData.append('user_name', userName)
 
     const res = await Axios.patch('/information', formData)
+    // @ts-ignore
     if (res.success) {
         successMessage.value = '昵称修改成功!'
+        afterChangeInfo({ nick_name: nickName })
         await successRef.value.setDis()
     } else {
         alertMessage.value = '网络异常...修改失败!'
         await alertRef.value.setDis()
     }
+}
+
+// 修改简介
+const cancelIntroduction = () => {
+    formLabelAlign.info = ''
+}
+
+const saveIntroduction = async () => {
+    if (!formLabelAlign.info) {
+        alertMessage.value = '请输入正确的简介!'
+        await alertRef.value.setDis()
+        return
+    }
+    try {
+        if (formLabelAlign.info.length < 1 || formLabelAlign.info.length > 140) {
+            alertMessage.value = '简介在1-140个字符长度之间!'
+            await alertRef.value.setDis()
+            return
+        }
+    } catch (error) {
+        console.error(error)   
+    }
+    const formData: FormData = new FormData()
+    const userName: string = JSON.parse(localStorage.getItem('user') as string).user_name
+    const userInfo: string = formLabelAlign.info
+    formData.append('nick_name', userInfo)
+    formData.append('user_name', userName)
+
+    const res = await Axios.patch('/information', formData)
+    // @ts-ignore
+    if (res.success) {
+        successMessage.value = '简介修改成功!'
+        afterChangeInfo({ user_info: userInfo })
+        await successRef.value.setDis()
+    } else {
+        alertMessage.value = '网络异常...修改失败!'
+        await alertRef.value.setDis()
+    }
+}
+
+interface changeInfo {
+    nick_name?: string,
+    user_info?: string
+}
+// 修改完成之后要修改localStorage中的数据
+const afterChangeInfo = (data: changeInfo) => {
+    const userInfo: UserInformation = JSON.parse(localStorage.getItem('user') as string)
+    if (data.nick_name) {
+        userInfo.nick_name = data.nick_name
+    }
+    if (data.user_info) {
+        userInfo.user_info = data.user_info
+    }
+    localStorage.setItem('user', JSON.stringify(userInfo))
 }
 
 // base编码
