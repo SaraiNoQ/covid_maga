@@ -37,6 +37,7 @@ export default defineComponent({
             if (command === 'logout') {
                 await successRef.value.setDis()
                 store.commit('removeToken')
+                localStorage.removeItem('user')
                 router.replace('/')
             }
             if (command === 'signup') {

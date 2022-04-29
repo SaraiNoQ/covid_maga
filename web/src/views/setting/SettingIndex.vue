@@ -1,5 +1,8 @@
 <template>
     <div>
+        <Alert-Message :message="alertMessage" type="error" ref="alertRef"/>
+        <Alert-Message :message="successMessage" type="success" ref="successRef"/>
+
         <div class="mx-auto mt-6 bg-white rounded-lg w-[90%] md:w-3/5 lg:w-1/2 box-border">
             <div class="head py-5 px-6 items-center border-y-[0.01rem]">
                 <h1 class="text-xl text-left font-bold">个人设置</h1>
@@ -130,6 +133,7 @@ import { genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
 import Axios from '../../plugins/axios'
+import AlertMessage from '../../components/AlertMessage.vue';
 
 const store = useStore()
 const imageUrl = ref<string>('')
@@ -139,6 +143,11 @@ const formLabelAlign = reactive({
     name: '',
     info: ''
 })
+// alert-message组件
+const alertRef = ref<any>(null)
+const successRef = ref<any>(null)
+const alertMessage = ref<string>('')
+const successMessage = ref<string>('')
 
 // 文件上传成功的钩子
 const handleAvatarSuccess = (res, file) => {
@@ -174,7 +183,6 @@ const onChange = async (file, fileList) => {
         var obj = new Blob([u8arr], {type:mime});
         var fd = new FormData();
         fd.append('user_image', obj, 'image.png')
-        // console.log(JSON.parse(sessionStorage.getItem('register') as string).user_name, 'store')
         const userName = JSON.parse(sessionStorage.getItem('register') as string).user_name
         fd.append('user_name', userName)
         
@@ -209,8 +217,15 @@ const cancelName = () => {
 }
 
 const saveName = async () => {
+    if (!formLabelAlign.name) {
+        alertMessage.value = '请输入正确的昵称!'
+        await alertRef.value.setDis()
+        return
+    }
     const formData = new FormData()
-    formData.append('nicke_name', formLabelAlign.name)
+    const userName = 
+    formData.append('nick_name', formLabelAlign.name)
+    // formData.append('user_name', )
 
     const res = await Axios.patch('/information', formData)
     console.log('response', res)

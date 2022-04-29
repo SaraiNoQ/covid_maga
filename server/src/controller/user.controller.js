@@ -74,13 +74,16 @@ class UserController {
 		// 获取用户信息（在token的payload中，记录id，user_name，is_admin）
 		try {
 			// 获取到除了password之外的属性
-			const {password, ...res} = await getUser({user_name})
+			const { password, ...res } = await getUser({ user_name })
 
-			ctx.body = {
-				code: 0,
-				message: 'login success!',
-				result: {
-					token: jwt.sign(res, JWT_SECRET, { expiresIn: '2h' })
+			if (res) {
+				ctx.body = {
+					code: 0,
+					message: 'login success!',
+					result: {
+						token: jwt.sign(res, JWT_SECRET, { expiresIn: '2h' }),
+						user_info: res
+					}
 				}
 			}
 		} catch (error) {

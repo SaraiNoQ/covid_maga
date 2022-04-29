@@ -150,6 +150,8 @@ export default defineComponent({
                 regist.success = 'regist success!'
                 await successRef.value.setDis()
                 router.push('/')
+                // 删除session中保存的用户注册信息
+                sessionStorage.removeItem('register')
             } else {
                 registFail(res.error)
             }

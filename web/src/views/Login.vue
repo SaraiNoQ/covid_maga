@@ -197,9 +197,11 @@ export default defineComponent({
         // console.log('loging', res)
         // @ts-ignore
         if (res.success) {
-          // 设置token
+          // 设置token和个人信息
           // @ts-ignore
           store.commit('setToken', res.success.result.token)
+          // logout时要删掉
+          localStorage.setItem('user', JSON.stringify(res.success.result.user_info))
           router.replace('/home')
         } else {
           loginErrorInfo.value = 'Account OR Password ERROR!'
