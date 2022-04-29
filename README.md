@@ -1,7 +1,7 @@
 # covid_maga
 基于koa.js和Vue.js的前全栈的校园疫情管理系统。前端技术栈Vue3+Typescript+Vite2+Tailwindcss，后端技术栈koa.js，数据库采用MySQL
 
-## How to Run It?
+## How To Run It?
 
 > Environment
 
@@ -28,6 +28,6 @@ And then, you could copy URL: `localhost:3000` to the bar which in browser navig
 
 ### build project
 ```bash
-cd server/ && npm run build
-cd web && npm run build
+cd web/ && npm run build
 ```
+You will get `dist` folder in current directory. And so, you could copy to web-server and mount it.
