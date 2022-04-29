@@ -63,6 +63,17 @@ class UserService {
 		const res = await User.update({ user_image: filePath }, { where: whereOpt })
 		return res
 	}
+
+	async updateInfo({ user_info, nick_name, user_name }) {
+		const whereUpdate = {}
+		nick_name && Object.assign(whereUpdate, { nick_name })
+		user_info && Object.assign(whereUpdate, { user_info })
+
+		const res = await User.update(whereUpdate, {
+			where: { user_name }
+		})
+		return res
+	}
 }
 
 module.exports = new UserService()

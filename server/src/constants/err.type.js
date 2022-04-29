@@ -129,5 +129,10 @@ module.exports = {
 		code: '30202',
 		message: 'no query student',
 		result: ''
+	},
+	infoUpdateError: {
+		code: '30203',
+		message: 'update user info error',
+		result: ''
 	}
 }

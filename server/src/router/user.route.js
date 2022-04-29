@@ -1,7 +1,7 @@
 const Router = require('@koa/router')
 
-const { vertifyCaptcha, userValidator, vertifyLogin, userVertifier, cryptPassword, authToken } = require('../middleware/user.middleware')
-const { login, register, passwd, verify, getCaptcha, uploadImage, saveToDB } = require('../controller/user.controller')
+const { vertifyCaptcha, userValidator, vertifyLogin, userVertifier, cryptPassword, authToken, userNameValidate, infoValidate } = require('../middleware/user.middleware')
+const { login, register, passwd, verify, getCaptcha, uploadImage, saveToDB, uploadInfo } = require('../controller/user.controller')
 
 const router = new Router()
 
@@ -15,6 +15,9 @@ router.post('/passwd', userValidator, vertifyLogin, cryptPassword, passwd)
 
 router.post('/token', authToken, verify)
 
-router.post('/image', uploadImage, saveToDB)
+
+router.post('/image', userNameValidate, uploadImage, saveToDB)
+
+router.patch('/information', userNameValidate, infoValidate, uploadInfo)
 
 module.exports = router

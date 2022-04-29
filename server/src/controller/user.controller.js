@@ -1,12 +1,20 @@
 const path = require('path')
 // 获取请求，调用service操作model层方法
-const { createUser, getUser, updateById, updateImage } = require('../service/user.service')
-const { userRegisterError, userNotExited, fileTypeError, fileUploadError } = require('../constants/err.type')
+const { createUser, getUser, updateById, updateImage, updateInfo } = require('../service/user.service')
+const {
+	userRegisterError,
+	userNotExited,
+	fileTypeError,
+	fileUploadError,
+	infoUpdateError
+} = require('../constants/err.type')
 const jwt = require('jsonwebtoken')
 // eslint-disable-next-line no-undef
 const { JWT_SECRET } = require('../config/config.default')
 const redisHelper = require('../app/redis')
 const nodemailer = require('../app/nodemailer')
+
+
 
 class UserController {
 	async getCaptcha(ctx) {
@@ -146,6 +154,24 @@ class UserController {
 					file_path: filePath
 				}
 			}
+		}
+	}
+
+	async uploadInfo(ctx) {
+		const { nick_name, user_info, user_name } = ctx.request.body
+		try {
+			// console.log('waitting for update', { nick_name, user_info, user_name })
+			const res = await updateInfo({ nick_name, user_info, user_name })
+			if (res) {
+				ctx.body = {
+					code: 0,
+					message: 'update user information success!',
+					result: ''
+				}
+			}
+		} catch (error) {
+			console.log('update user-info error')
+			ctx.app.emit('error', infoUpdateError, ctx)
 		}
 	}
 }

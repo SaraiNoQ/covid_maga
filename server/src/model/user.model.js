@@ -29,8 +29,12 @@ const User = seq.define('zd_user', {
 	user_image: {
 		type: DataTypes.CHAR(64),
 		allowNull: true,
-		defaultValue: '',
 		comment: 'user image'
+	},
+	user_info: {
+		type: DataTypes.STRING,
+		allowNull: true,
+		comment: 'user information'
 	}
 })
 

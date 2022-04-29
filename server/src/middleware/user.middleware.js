@@ -12,6 +12,7 @@ const { userAlreadyExited,
 	invalidToken
 } = require('../constants/err.type')
 const redisHelper = require('../app/redis')
+const { emit } = require('process')
 
 // 验证注册信息是否合法
 const userValidator = async (ctx, next) => {
@@ -29,6 +30,17 @@ const userValidator = async (ctx, next) => {
 	console.log('enter NEXT!')
 
 	// 如果数据合法，正常进入下一个middleware
+	await next()
+}
+
+// 验证user_name不为空
+const userNameValidate = async (ctx, next) => {
+	const { user_name } = ctx.request.body
+	if (!user_name) {
+		console.error('user_name is null!')
+		ctx.app.emit('error', userFormatError, ctx)
+		return
+	}
 	await next()
 }
 
@@ -131,11 +143,24 @@ const vertifyCaptcha = async (ctx, next) => {
 	await next()
 }
 
+// 验证用户详细信息
+const infoValidate = async (ctx, next) => {
+	const { nick_name, user_info } = ctx.request.body
+	if (nick_name || user_info) {
+		await next()
+	} else {
+		console.error('nick_name and user_info are all null!')
+		ctx.app.emit('error', userFormatError, ctx)
+	}
+}
+
 module.exports = {
 	userValidator,
 	vertifyLogin,
 	userVertifier,
 	cryptPassword,
 	authToken,
-	vertifyCaptcha
+	vertifyCaptcha,
+	userNameValidate,
+	infoValidate
 }

@@ -57,8 +57,12 @@
                                 <div class="relative mt-2 text-left ">
                                     <span class="text-xs align-top text-gray-400">4～30个字符，支持中英文、数字</span>
                                     <div class="absolute right-0 top-0">
-                                        <button class="border border-gray-700 rounded-lg h-5 py-0 px-2 text-xs min-w-min ml-2 text-gray-700">取消</button>
-                                        <button class="border border-orange-400 rounded-lg h-5 py-0 px-2 text-xs min-w-min ml-2 text-orange-400">保存</button>
+                                        <button
+                                            class="border border-gray-700 rounded-lg h-5 py-0 px-2 text-xs min-w-min ml-2 text-gray-700"
+                                            @click="cancelName">取消</button>
+                                        <button
+                                            class="border border-orange-400 rounded-lg h-5 py-0 px-2 text-xs min-w-min ml-2 text-orange-400"
+                                            @click="saveName">保存</button>
                                     </div>
                                 </div>
                             </div>
@@ -153,6 +157,7 @@ const beforeAvatarUpload = (file: UploadRawFile) => {
     }
     return isJPG && isLt2M;
 }
+
 // fileList改变时触发钩子
 let flag = 0
 const onChange = async (file, fileList) => {
@@ -199,13 +204,19 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
   upload_img.value!.handleStart(file)
 }
 
-// const save = () => {
-//     // console.log('changed', upload_img.value)
-// }
-// const cancel = () => {
-//     console.log('cancel')    
-// }
+const cancelName = () => {
+    formLabelAlign.name = ''
+}
 
+const saveName = async () => {
+    const formData = new FormData()
+    formData.append('nicke_name', formLabelAlign.name)
+
+    const res = await Axios.patch('/information', formData)
+    console.log('response', res)
+}
+
+// base编码
 const getBase64 = (file) => {
     return new Promise(function (resolve, reject) {
         let reader = new FileReader();
