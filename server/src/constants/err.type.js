@@ -80,6 +80,11 @@ module.exports = {
 		message: 'remove goods info error!',
 		result: ''
 	},
+	getUserInfoError: {
+		code: '10207',
+		message: 'get user information error!',
+		result: ''
+	},
 	studentFormatError: {
 		code: '20101', // 中间件层面错误
 		message: 'student regist info format error',

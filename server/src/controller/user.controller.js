@@ -6,7 +6,8 @@ const {
 	userNotExited,
 	fileTypeError,
 	fileUploadError,
-	infoUpdateError
+	infoUpdateError,
+	getUserInfoError
 } = require('../constants/err.type')
 const jwt = require('jsonwebtoken')
 // eslint-disable-next-line no-undef
@@ -175,6 +176,23 @@ class UserController {
 		} catch (error) {
 			console.log('update user-info error')
 			ctx.app.emit('error', infoUpdateError, ctx)
+		}
+	}
+
+	async getInformation(ctx) {
+		const { user_name } = ctx.request.query
+		try {
+			const {password, ...res} = await getUser({ user_name })
+			if (res) {
+				ctx.body = {
+					code: 0,
+					message: 'get user_info success',
+					result: res
+				}
+			}
+		} catch (error) {
+			console.error(error)
+			ctx.app.emit('error', getUserInfoError, ctx)
 		}
 	}
 }

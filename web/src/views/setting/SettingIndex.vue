@@ -128,21 +128,51 @@
 <script lang="ts" setup>
 // import { defineComponent } from 'vue'
 import { useStore } from 'vuex'
-import { reactive, ref } from "vue-demi";
+import { reactive, ref, onBeforeMount } from "vue-demi"
+// import { onBeforeMount } from 'vue'
 import { genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
 import Axios from '../../plugins/axios'
 import AlertMessage from '../../components/AlertMessage.vue';
-
 const store = useStore()
+
+
+interface UserInformation {
+    user_name: string,
+    nick_name: string,
+    user_info: string,
+    is_admin?: number
+}
+interface UserForm {
+    name: string,
+    info: string
+}
+
 const imageUrl = ref<string>('')
 // const image = ref<UploadRawFile>()
 const upload_img = ref()
-const formLabelAlign = reactive({
+const formLabelAlign: UserForm = reactive<UserForm>({
     name: '',
     info: ''
 })
+// 当输入框获得鼠标点击事件时更新该组件
+// 是否展示保存和取消按钮
+const nameVisible = ref<Boolean>(false)
+const introductionVisible = ref<Boolean>(false)
+
+onBeforeMount(async() => {
+    const userName: string = JSON.parse(localStorage.getItem('user') as string).user_name
+    const res = await Axios.get('/information?user_name=' + userName)
+    // @ts-ignore
+    if (res.success) {
+        // @ts-ignore
+        const userInfo: UserInformation = res.success.result
+        formLabelAlign.name = userInfo.nick_name ? userInfo.nick_name : ''
+        formLabelAlign.info = userInfo.user_info ? userInfo.user_info : ''
+    }
+})
+
 // alert-message组件
 const alertRef = ref<any>(null)
 const successRef = ref<any>(null)
@@ -154,7 +184,8 @@ const handleAvatarSuccess = (res, file) => {
     imageUrl.value = 'cdn测试域名' + res.key;
     console.log('imageUrl', imageUrl.value)
 }
-const beforeAvatarUpload = (file: UploadRawFile) => {
+// 判断图片格式的钩子
+const beforeAvatarUpload = (file) => {
     const isJPG = file.type === 'image/jpeg';
     const isLt2M = file.size / 1024 / 1024 < 2;
 
@@ -172,6 +203,11 @@ let flag = 0
 const onChange = async (file, fileList) => {
     flag++
     if (flag % 2 !== 0) {
+        if (!beforeAvatarUpload(file.raw)) {
+            alertMessage.value = '上传头像的格式错误!'
+            await alertRef.value.setDis()
+            return
+        }
         const res = await getBase64(file.raw)
         // base64编码转成二进制
         // @ts-ignore
@@ -183,7 +219,8 @@ const onChange = async (file, fileList) => {
         var obj = new Blob([u8arr], {type:mime});
         var fd = new FormData();
         fd.append('user_image', obj, 'image.png')
-        const userName = JSON.parse(sessionStorage.getItem('register') as string).user_name
+
+        const userName = JSON.parse(localStorage.getItem('user') as string).user_name
         fd.append('user_name', userName)
         
         const resp = await Axios.post('/image', fd)
@@ -193,6 +230,8 @@ const onChange = async (file, fileList) => {
         try {
             // @ts-ignore
             if (resp.success) {
+                successMessage.value = '头像修改成功!'
+                await successRef.value.setDis()
                 // @ts-ignore
                 const filePath = `D:/GitHub/project/covid_maga/server/src/uploads/${resp.success.result.file_path}`
                 imageUrl.value = filePath
@@ -212,6 +251,7 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
   upload_img.value!.handleStart(file)
 }
 
+// 修改昵称
 const cancelName = () => {
     formLabelAlign.name = ''
 }
@@ -222,13 +262,19 @@ const saveName = async () => {
         await alertRef.value.setDis()
         return
     }
-    const formData = new FormData()
-    const userName = 
+    const formData: FormData = new FormData()
+    const userName: string = JSON.parse(localStorage.getItem('user') as string).user_name
     formData.append('nick_name', formLabelAlign.name)
-    // formData.append('user_name', )
+    formData.append('user_name', userName)
 
     const res = await Axios.patch('/information', formData)
-    console.log('response', res)
+    if (res.success) {
+        successMessage.value = '昵称修改成功!'
+        await successRef.value.setDis()
+    } else {
+        alertMessage.value = '网络异常...修改失败!'
+        await alertRef.value.setDis()
+    }
 }
 
 // base编码
