@@ -156,10 +156,11 @@ class UserController {
 		try {
 			const res = await getUser({ user_name })
 			if (res) {
-				// fs.unlink(path, )
+				const currentPath = path.join(__dirname, '../../static/images/')
 				if (res.user_image) {
-					console.log('same file')
-					await next()
+					fs.unlink(currentPath + res.user_image, (res) => {
+						console.log('removeDuplicate', res)
+					})
 				}
 			}
 		} catch (error) {

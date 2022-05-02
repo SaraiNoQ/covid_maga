@@ -299,6 +299,7 @@ const dispalyAccount = async() => {
     if (res.success) {
         // @ts-ignore
         const str = res.success.result.user_account
+        // @ts-ignore
         imageUrl.value = res.success.result.user_image ? `${httpAPI.imageUrlPrefix}${res.success.result.user_image}` : ''
         currentUserName.value = `${str.substr(0, 3)}****${str.substr(7)}`
     }
@@ -335,15 +336,19 @@ const handleAvatarSuccess = (res, file) => {
     imageUrl.value = 'cdn测试域名' + res.key;
     console.log('imageUrl', imageUrl.value)
 }
+
+const uploadErrorType = ref<string>('')
 // 判断图片格式的钩子
 const beforeAvatarUpload = (file) => {
     const isJPG = file.type === 'image/jpeg';
     const isLt2M = file.size / 1024 / 1024 < 2;
 
     if (!isJPG) {
+        uploadErrorType.value = '上传头像图片只能是 JPG / JPEG / PNG / GIF 格式!'
         console.log('上传头像图片只能是 JPG 格式!');
     }
     if (!isLt2M) {
+        uploadErrorType.value = '上传头像图片大小不能超过 2MB!'
         console.log('上传头像图片大小不能超过 2MB!');
     }
     return isJPG && isLt2M;
@@ -355,7 +360,7 @@ const onChange = async (file, fileList) => {
     flag++
     if (flag % 2 !== 0) {
         if (!beforeAvatarUpload(file.raw)) {
-            alertMessage.value = '上传头像的格式错误!'
+            alertMessage.value = uploadErrorType.value ? uploadErrorType.value : '上传头像的格式错误!'
             await alertRef.value.setDis()
             return
         }
