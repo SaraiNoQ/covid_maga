@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue-demi'
 
 import BreadCrumb from './components/BreadCrumb.vue'
 import UserInfo from './components/UserInfo.vue'

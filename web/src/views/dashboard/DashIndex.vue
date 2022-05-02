@@ -31,7 +31,7 @@
 
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref } from "vue";
+import { computed, defineComponent, onMounted, reactive, ref } from "vue-demi";
 import { useStore } from 'vuex';
 import * as echarts from 'echarts';
 

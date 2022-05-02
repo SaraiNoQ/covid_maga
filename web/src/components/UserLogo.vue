@@ -34,13 +34,16 @@
       <div class="text-center mt-6">
         <div class="mb-0">
           <div class="flex justify-center mb-6">
-            <img
-              src="https://mdbootstrap.com/img/Photos/Avatars/img%20(9).jpg"
-              class="rounded-full shadow-lg w-32"
-            />
+            <el-avatar
+              :size="108"
+              :src="formLabelAlign.user_image"
+              v-if="formLabelAlign.user_image"></el-avatar>
+            <el-avatar
+              :size="108"
+              v-else> user </el-avatar>
           </div>
-          <h5 class="text-xl font-semibold mb-4">John Smith</h5>
-          <h6 class="font-semibold text-blue-600 mb-4">Marketing Specialist</h6>
+          <h5 class="text-xl font-semibold mb-4">{{formLabelAlign.nick_name}}</h5>
+          <h6 class="font-semibold text-blue-600 mb-4">{{formLabelAlign.is_admin ? 'You are admin' : 'You are user'}}</h6>
           <p class="mb-4">
             <svg
               aria-hidden="true"
@@ -55,8 +58,7 @@
               <path
                 fill="currentColor"
                 d="M464 256h-80v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8c-88.4 0-160 71.6-160 160v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48zm-288 0H96v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8C71.6 32 0 103.6 0 192v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48z"
-              ></path></svg>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
-            praesentium voluptatum deleniti atque corrupti.
+              ></path></svg>{{formLabelAlign.user_info}}
           </p>
         </div>
       </div>
@@ -65,5 +67,46 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, onBeforeMount, reactive } from 'vue-demi'
+import Axios from '../plugins/axios'
 
+import httpAPI from '../plugins/port'
+
+interface User {
+  id?: number,
+  nick_name?: string,
+  user_account?: string,
+  user_info?: string,
+  is_admin?: boolean | number,
+  user_name?: string,
+  user_image?: string
+}
+
+// 页面加载完成前获取个人信息
+const formLabelAlign: User = reactive({
+  nick_name: '',
+  user_info: '',
+  is_admin: 0,
+  user_image: ''
+})
+onBeforeMount(async() => {
+    const userName: string = JSON.parse(localStorage.getItem('user') as string).user_name
+    const res = await Axios.get('/information?user_name=' + userName)
+    // @ts-ignore
+    if (res.success) {
+      // @ts-ignore
+      const userInfo: User = res.success.result
+      formLabelAlign.nick_name = userInfo.nick_name ? userInfo.nick_name : ''
+      formLabelAlign.user_info = userInfo.user_info ? userInfo.user_info : ''
+
+      // 设置头像
+      const imageUrlPrefix: string = httpAPI.imageUrlPrefix
+      formLabelAlign.user_image =  userInfo.user_image ? `${imageUrlPrefix}${userInfo.user_image}` : ''
+      formLabelAlign.is_admin = userInfo.is_admin ? userInfo.is_admin : 0
+      console.log('waiting for image', formLabelAlign)
+    }
+})
 </script>
+
+<style lang="scss" scoped>
+</style>

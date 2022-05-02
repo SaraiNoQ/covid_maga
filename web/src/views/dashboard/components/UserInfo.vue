@@ -4,7 +4,13 @@
         <div class="hover:cursor-pointer mr-4">
             <el-dropdown trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">
-                    <el-avatar> user </el-avatar>
+                    <el-avatar
+                        :size="40"
+                        :src="userAvatar"
+                        v-if="userAvatar"></el-avatar>
+                        <el-avatar
+                        :size="40"
+                        v-else> user </el-avatar>
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
@@ -22,7 +28,10 @@
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import AlertMessage from '../../../components/AlertMessage.vue'
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, onBeforeMount } from 'vue-demi'
+
+import Axios from '../../../plugins/axios'
+import httpAPI from '../../../plugins/port'
 
 export default defineComponent({
     components: {
@@ -45,9 +54,24 @@ export default defineComponent({
             }
         }
 
+        const userAvatar = ref<string>('')
+        onBeforeMount(async () => {
+            const userName: string = JSON.parse(localStorage.getItem('user') as string).user_name
+            const res = await Axios.get('/information?user_name=' + userName)
+            // @ts-ignore
+            if (res.success) {
+                // @ts-ignore
+                const userInfo: User = res.success.result
+                // 设置头像
+                const imageUrlPrefix: string = httpAPI.imageUrlPrefix
+                userAvatar.value = userInfo.user_image ? imageUrlPrefix + userInfo.user_image : ''
+            }
+        })
+
         return {
             successRef,
-            handleCommand
+            handleCommand,
+            userAvatar
         }
     }
 })

@@ -28,8 +28,7 @@
                                 :size="102"
                                 class="cursor-pointer"
                                 v-if="imageUrl"
-                                :src="imageUrl"
-                                fit="scale-down"></el-avatar>
+                                :src="imageUrl"></el-avatar>
                             <el-avatar
                                 :size="102"
                                 class="cursor-pointer"
