@@ -22,7 +22,8 @@ const { login,
     getInformation,
     changeAccount,
     getNewCaptcha,
-    getAccount
+    getAccount,
+    removeDuplicate
 } = require('../controller/user.controller')
 
 const router = new Router()
@@ -38,7 +39,7 @@ router.post('/passwd', userValidator, vertifyLogin, cryptPassword, passwd)
 router.post('/token', authToken, verify)
 
 
-router.post('/image', userNameValidate, uploadImage, saveToDB)
+router.post('/image', userNameValidate, uploadImage, removeDuplicate, saveToDB)
 
 router.patch('/information', userNameValidate, infoValidate, uploadInfo)
 

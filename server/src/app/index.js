@@ -14,11 +14,11 @@ app
 	.use(body({
 		multipart: true,
 		formidable: {
-			uploadDir: path.join(__dirname, '../uploads'),
+			uploadDir: path.join(__dirname, '../../static/images'),
 			keepExtensions: true
 		}
 	}))
-	.use(static(path.join(__dirname, '../../../dist')))
+	.use(static(path.join(__dirname, '../../static')))
 	.use(parameter(app))
 	.use(userRouter.routes())
 	// 没有写的请求类型返回405错误

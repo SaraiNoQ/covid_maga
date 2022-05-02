@@ -1,4 +1,6 @@
 const path = require('path')
+// 删除文件
+const fs = require('fs')
 // 获取请求，调用service操作model层方法
 const { createUser, getUser, updateById, updateImage, updateInfo, updateAccount } = require('../service/user.service')
 const {
@@ -133,12 +135,14 @@ class UserController {
 	}
 	
 	async uploadImage(ctx, next) {
+		// 判断文件格式是否正确，只支持png,jpg,jpeg,gif
 		const { user_image } = ctx.request.files
 		const trueType = ['image/jpeg', 'image/png']
 		if (user_image.size !== 0) {
 			if (!trueType.includes(user_image.type)) {
 				return ctx.app.emit('error', fileTypeError, ctx)
 			}
+			// 格式正确，则取出文件名
 			ctx.state.filePath = path.basename(user_image.path)
 			await next()
 		} else {
@@ -146,10 +150,30 @@ class UserController {
 		}
 	}
 
+	async removeDuplicate(ctx, next) {
+		const { user_name } = ctx.request.body
+		// console.log({  user_name }, filePath)
+		try {
+			const res = await getUser({ user_name })
+			if (res) {
+				// fs.unlink(path, )
+				if (res.user_image) {
+					console.log('same file')
+					await next()
+				}
+			}
+		} catch (error) {
+			console.error(error)
+			ctx.app.emit('error', getUserInfoError, ctx)
+		}
+
+		await next()
+	}
+
 	async saveToDB(ctx) {
 		const { user_name } = ctx.request.body
 		const { filePath } = ctx.state
-		console.log('filePath', { filePath })
+		// console.log('filePath', { filePath })
 		const res = await updateImage({ user_name }, filePath)
 		if (res) {
 			ctx.body = {
@@ -242,12 +266,15 @@ class UserController {
 	async getAccount(ctx) {
 		const { user_name } = ctx.request.query
 		try {
-			const { user_account } = await getUser({ user_name })
+			const { user_account, user_image } = await getUser({ user_name })
 			if (user_account) {
 				ctx.body = {
 					code: 0,
 					message: 'retrieve account success',
-					result: user_account
+					result: {
+						user_account,
+						user_image
+					}
 				}
 			}
 		} catch (error) {

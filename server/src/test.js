@@ -1,9 +1,9 @@
-const where = {}
+// const where = {}
 
-Object.assign(where, { name: 'aaa' })
-Object.assign(where, { id: 22 })
+// Object.assign(where, { name: 'aaa' })
+// Object.assign(where, { id: 22 })
 
-console.log(where)
+// console.log(where)
 
 // // console.log(where)
 // const dayjs = require('dayjs')
@@ -62,3 +62,7 @@ console.log(where)
 // console.log(dayjs('2022-04-27').diff(dayjs('2022-04-01'), 'day'))
 // const startTime: string = dayjs(new Date()).format('YYYY-MM-DD')
 // const endTime: string = dayjs().format('YYYY-MM-DD')
+
+const path = require('path')
+
+console.log(path.join(__dirname, '../static'))

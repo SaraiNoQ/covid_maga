@@ -28,7 +28,8 @@
                                 :size="102"
                                 class="cursor-pointer"
                                 v-if="imageUrl"
-                                :src="imageUrl"></el-avatar>
+                                :src="imageUrl"
+                                fit="scale-down"></el-avatar>
                             <el-avatar
                                 :size="102"
                                 class="cursor-pointer"
@@ -263,6 +264,7 @@ import type { UploadProps, UploadRawFile } from 'element-plus'
 
 import Axios from '../../plugins/axios'
 import AlertMessage from '../../components/AlertMessage.vue'
+import httpAPI from '../../plugins/port'
 const store = useStore()
 const router = useRouter()
 
@@ -282,6 +284,9 @@ interface ButtonVisible {
     info: Boolean
 }
 
+// 当前头像
+const imageUrl = ref<string>('')
+
 // 当前绑定邮箱
 const currentUserName = ref<string>('')
 onBeforeMount(async() => {
@@ -293,12 +298,12 @@ const dispalyAccount = async() => {
     // @ts-ignore
     if (res.success) {
         // @ts-ignore
-        const str = res.success.result
+        const str = res.success.result.user_account
+        imageUrl.value = res.success.result.user_image ? `${httpAPI.imageUrlPrefix}${res.success.result.user_image}` : ''
         currentUserName.value = `${str.substr(0, 3)}****${str.substr(7)}`
     }
 }
 
-const imageUrl = ref<string>('')
 const upload_img = ref()
 
 const formLabelAlign: UserForm = reactive<UserForm>({
@@ -379,7 +384,7 @@ const onChange = async (file, fileList) => {
                 successMessage.value = '头像修改成功!'
                 await successRef.value.setDis()
                 // @ts-ignore
-                const filePath = `D:/GitHub/project/covid_maga/server/src/uploads/${resp.success.result.file_path}`
+                const filePath = `${httpAPI.imageUrlPrefix}${resp.success.result.file_path}`
                 imageUrl.value = filePath
             }
         } catch (error) {

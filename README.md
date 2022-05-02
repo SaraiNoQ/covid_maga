@@ -32,3 +32,16 @@ And then, you could copy URL: `localhost:3000` to the bar which in browser navig
 cd web/ && npm run build
 ```
 You will get `dist` folder in current directory. And so, you could copy to web-server and mount it.
+
+
+
+### caculate lines of code
+
+open bash and do this:
+
+```bash
+find . "(" -name ".html" -or -name ".js" -or -name ".css" -or -name ".vue" ")" -print | xargs wc -l
+```
+
+
+
