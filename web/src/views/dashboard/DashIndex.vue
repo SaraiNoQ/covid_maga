@@ -20,9 +20,9 @@
         <div class="md:flex justify-between">
             <data-card v-for="(item, index) in chartData" :key="index" :data="item" class="mt-4"/>
         </div>
-        <div id="test" class="mx-10 mt-5 bg-white"></div>
-        <div class="mt-8 mx-10">
-            <h2 class="text-3xl text-green-600 w-60 mb-4 ml-[-4rem]">Latest</h2>
+        <div id="test" class="ml-6 mr-2 mt-5 bg-white"></div>
+        <div class="mt-8 ml-6 mr-0 md:mx-10">
+            <h2 class="text-3xl text-green-600 w-60 mb-4 ml-[-5rem]">Latest</h2>
             <time-line></time-line>
         </div>
     </div>

@@ -293,14 +293,14 @@ onBeforeMount(async() => {
 })
 const dispalyAccount = async() => {
     const user_name: string = getUserName()
-    const res = await Axios.get('/account?user_name=' + user_name)
+    const res = await Axios.get('/information?user_name=' + user_name)
     // @ts-ignore
     if (res.success) {
         // @ts-ignore
-        const str = res.success.result.user_account
+        const str = res.success.result.user_account ? res.success.result.user_account : ''
         // @ts-ignore
         imageUrl.value = res.success.result.user_image ? `${httpAPI.imageUrlPrefix}${res.success.result.user_image}` : ''
-        currentUserName.value = `${str.substr(0, 3)}****${str.substr(7)}`
+        currentUserName.value = currentUserName.value ? `${str.substr(0, 3)}****${str.substr(7)}` : '未绑定'
     }
 }
 

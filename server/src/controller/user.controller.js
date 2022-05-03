@@ -271,11 +271,16 @@ class UserController {
 			if (user_account) {
 				ctx.body = {
 					code: 0,
-					message: 'retrieve account success',
+					message: 'retrieve account success!',
 					result: {
 						user_account,
 						user_image
 					}
+				}
+			} else {
+				ctx.body = {
+					code: 0,
+					message: 'user account is null'
 				}
 			}
 		} catch (error) {
