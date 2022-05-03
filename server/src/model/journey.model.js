@@ -58,7 +58,7 @@ const Journey = seq.define('zd_journey', {
 	record_status: {
 		type: DataTypes.CHAR(8),
 		allowNull: false,
-		comment: 'record_status, 0: waiting / 1: completed',
+		comment: 'record_status, 0: created / 1: completed / 2: denied',
 		defaultValue: '0'
 	}
 })

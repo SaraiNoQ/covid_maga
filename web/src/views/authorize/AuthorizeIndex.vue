@@ -1,5 +1,7 @@
 <template>
     <div>
+        <Alert-Message :message="alertMessage" type="error" ref="alertRef"/>
+        <Alert-Message :message="successMessage" type="success" ref="successRef"/>
         <el-table
             ref="tableRef"
             row-key="date"
@@ -8,22 +10,24 @@
             :row-class-name="tableRowClassName"
             class="hover:cursor-pointer" 
         >
-            <el-table-column label="No." type="index" width="50" align="center"/>
+            <el-table-column label="序号" type="index" width="60" align="center"/>
             <el-table-column
             prop="date"
-            label="Date"
+            label="日期"
             sortable
-            width="200"
+            width="180"
             column-key="date"
+            align="center"
             />
-            <el-table-column prop="name" label="Name" width="200" />
-            <el-table-column prop="address" label="Destination"/>
-            <el-table-column prop="reason" label="Reason" width="250"/>
+            <el-table-column prop="name" label="身份号" width="150" align="center"/>
+            <el-table-column prop="address" label="目的地" align="center" />
+            <el-table-column prop="reason" label="事由" width="290" align="center" />
 
             <el-table-column
                 prop="tag"
-                label="Tag"
-                width="80"
+                label="身份"
+                width="90"
+                align="center"
             >
                 <template #default="scope">
                     <el-tag
@@ -59,110 +63,90 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onBeforeMount, ref } from 'vue-demi'
 
 import dayjs from 'dayjs'
+import Axios from '../../plugins/axios'
 
 interface User {
     date: string
     name: string
     address: string
     tag: string
-    reason?: string
+    reason: string
+    record: string
+    id: string
+}
+
+interface StuNum {
+    student_id: Array<string>
 }
 
 export default defineComponent({
     setup() {
+        const alertMessage = ref<string>('')
+        const successMessage = ref<string>('')
+        const alertRef = ref()
+        const successRef = ref()
+
         const search = ref<string>('')
-        const tableData: User[] = [
-            {
-                date: dayjs('1411111').format('YYYY-MM-DD HH:MM:ss'),
-                name: '2020081092(Student-QIqi)',
-                address: 'No. 189, Grove St, Los Angeles11111111111111111111sagsahhsdh1111111111',
-                tag: 'Home',
-                reason: '222222ahsfhjhryjyr22222222222222222'
-            },
-            {
-                date: dayjs('1131111').format('YYYY-MM-DD HH:MM:ss'),
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles',
-                tag: 'Office',
-            },
-            {
-                date: dayjs('1211111').format('YYYY-MM-DD HH:MM:ss'),
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles',
-                tag: 'Home',
-            },
-            {
-                date: dayjs('1111111').format('YYYY-MM-DD HH:MM:ss'),
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles',
-                tag: 'Office',
-            },
-            {
-                date: dayjs('1911111').format('YYYY-MM-DD HH:MM:ss'),
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles',
-                tag: 'Office',
-            },
-            {
-                date: dayjs('1811111').format('YYYY-MM-DD HH:MM:ss'),
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles',
-                tag: 'Home',
-            },
-            {
-                date: dayjs('711111').format('YYYY-MM-DD HH:MM:ss'),
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles',
-                tag: 'Office',
-            },
-            {
-                date: dayjs('611111').format('YYYY-MM-DD HH:MM:ss'),
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles',
-                tag: 'Office',
-            },
-            {
-                date: dayjs('511111').format('YYYY-MM-DD HH:MM:ss'),
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles',
-                tag: 'Home',
-            },
-            {
-                date: dayjs('411111').format('YYYY-MM-DD HH:MM:ss'),
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles',
-                tag: 'Office',
-            },
-            {
-                date: dayjs('211111').format('YYYY-MM-DD HH:MM:ss'),
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles',
-                tag: 'Home',
-            },
-            {
-                date: dayjs('311111').format('YYYY-MM-DD HH:MM:ss'),
-                name: 'Tom',
-                address: 'No. 189, Grove St, Los Angeles',
-                tag: 'Office',
-            },
-        ]
+
+        const tableData = ref<User[]>([])
+        const allowArray = ref<number[]>([]);
+        const denyArray = ref<number[]>([]);
+        onBeforeMount(async() => {
+            const res = await Axios.get('/student/numbers')
+
+            // @ts-ignore
+            if (!res.success) {
+                return
+            }
+            // @ts-ignore
+            const students = res.success.result
+            const form: StuNum = {
+                student_id: []
+            }
+            students.forEach((e: any) => {
+                form.student_id.push(e.student_number)
+            })
+            const res2 = await Axios.post('/journey/info', form)
+            // @ts-ignore
+            if (res2.success) {
+                // @ts-ignore
+                const respData = res2.success.data
+                for (let i = 0; i < respData.length; i++) {
+                    const userInfo: User = {
+                        date: dayjs(respData[i].createdAt).format('YYYY-MM-DD'),
+                        name: respData[i].student_id,
+                        address: respData[i].journey_destination,
+                        tag: respData[i].journey_category,
+                        reason: respData[i].journey_reason,
+                        id: respData[i].journey_id,
+                        record: respData[i].record_status
+                    }
+                    tableData.value.push(userInfo)
+                    // 如果record为1，就存入allow，为2，就存入deny
+                    if (userInfo.record === '1') {
+                        allowArray.value.push(i)
+                    } else if (userInfo.record === '2') {
+                        denyArray.value.push(i)
+                    }
+                }
+            }
+        })
+
         const filterTableData = computed(() =>
-            tableData.filter(
+            tableData.value.filter(
                 (data) =>
                 !search.value ||
                 data.name.toLowerCase().includes(search.value.toLowerCase())
             )
         )
 
-        const allowArray = ref<number[]>([]);
-        const denyArray = ref<number[]>([]);
         const tableRowClassName = (
             { row, rowIndex}: {
-            row: User
-            rowIndex: number
+                row: User
+                rowIndex: number
             }) => {
             if (denyArray.value.includes(rowIndex)) {
                 return 'danger-row'
@@ -178,17 +162,41 @@ export default defineComponent({
             filterTableData,
             tableRowClassName,
             allowArray,
-            denyArray
+            denyArray,
+            successMessage,
+            alertMessage,
+            alertRef,
+            successRef
         }
     },
     methods: {
-        handleAllow (index: number, row: User) {
-            this.allowArray.push(index)
-            console.log(this.allowArray);
+        async handleAllow (index: number, row: User) {
+            if (row.id && row.record) {
+                const fd = new FormData()
+                fd.append('journey_id', row.id)
+                fd.append('record_status', '1')
+                const res = await Axios.patch('/journey/authority', fd)
+                // @ts-ignore
+                if (res.success) {
+                    this.allowArray.push(index)
+                    this.successMessage = '授权成功！'
+                    this.successRef.setDis()
+                }
+            }
         },
-        handleDeny (index: number, row: User) {
-            this.denyArray.push(index)
-            console.log(this.denyArray);
+        async handleDeny (index: number, row: User) {
+            if (row.id && row.record) {
+                const fd = new FormData()
+                fd.append('journey_id', row.id)
+                fd.append('record_status', '2')
+                const res = await Axios.patch('/journey/authority', fd)
+                // @ts-ignore
+                if (res.success) {
+                    this.allowArray.push(index)
+                    this.alertMessage = '授权成功！'
+                    this.alertRef.setDis()
+                }
+            }
         }
     }
 })

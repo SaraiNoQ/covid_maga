@@ -1,6 +1,6 @@
-const { createJourney, getJourney } = require('../service/journey.service')
+const { createJourney, getJourney, updateById } = require('../service/journey.service')
 
-const { createJourneyError, noQueryStudent } = require('../constants/err.type')
+const { createJourneyError, noQueryStudent, updateJourneyError } = require('../constants/err.type')
 
 class JourneyController {
     async createJourney(ctx) {
@@ -44,17 +44,21 @@ class JourneyController {
     }
 
     async getJourney(ctx) {
-        console.log('getJourney')
-        const { student_id } = ctx.request.query
-        console.log('get', student_id)
+        // student_id 为一个数组
+        const { student_id } = ctx.request.body
+        // console.log('get', student_id)
+        const response = []
         try {
-            const res = await getJourney({ student_id })
-            if (res) {
-                console.log(res)
+            for (let i = 0; i < student_id.length; i++) {
+                const res = await getJourney({ student_id: student_id[i] })
+                response.push(res)
+            }
+            // console.log('getJourney', res)
+            if (response) {
                 ctx.body = {
                     code: 0,
                     message: 'get journey success!',
-                    data: res
+                    data: response
                 }
             } else {
                 console.error('error')
@@ -63,6 +67,22 @@ class JourneyController {
         } catch (error) {
             console.error(error)
             ctx.app.emit('error', createJourneyError, ctx)
+        }
+    }
+
+    async changeAuth(ctx) {
+        const { journey_id, record_status } = ctx.request.body
+        try {
+            const res = await updateById({ journey_id, record_status })
+            if (res) {
+                ctx.body = {
+                    code: 0,
+                    result: res
+                }
+            }
+        } catch (error) {
+            console.error(error)
+            ctx.app.emit('error', updateJourneyError, ctx)
         }
     }
 }

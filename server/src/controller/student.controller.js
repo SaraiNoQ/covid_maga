@@ -1,6 +1,15 @@
-const { createStudent, deleteStudent } = require('../service/student.service')
+const {
+    createStudent,
+    deleteStudent,
+    retrieveStudent,
+} = require('../service/student.service')
 
-const { createStudentError, deleteStudentError, deleteStudentNull } = require('../constants/err.type')
+const {
+    createStudentError,
+    deleteStudentError,
+    deleteStudentNull,
+    noQueryStudent
+} = require('../constants/err.type')
 
 class StudentController {
 	async createStu(ctx) {
@@ -41,7 +50,27 @@ class StudentController {
         }
     }
 
-    async updateStu(ctx) {}
+    async updateStu(ctx) {
+        ctx.body = {
+            code: 0,
+            message: 'waiting for build!'
+        }
+    }
+    
+    async getStu(ctx) {
+        try {
+            const res = await retrieveStudent()
+            if (res) {
+                ctx.body = {
+                    code: 0,
+                    result: res
+                }
+            }
+        } catch (error) {
+            console.error(error)
+            ctx.app.emit('error', noQueryStudent, ctx)
+        }
+    }
 }
 
 module.exports = new StudentController()

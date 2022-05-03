@@ -144,5 +144,10 @@ module.exports = {
 		code: '30203',
 		message: 'update user info error',
 		result: ''
+	},
+	updateJourneyError: {
+		code: '30204',
+		message: 'update journey error',
+		result: ''
 	}
 }

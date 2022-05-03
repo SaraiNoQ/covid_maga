@@ -40,15 +40,19 @@ class JourneyService {
                     'student_id',
                     'journey_category',
                     'live_zone',
+                    'record_status',
                     'healthy_status',
                     'journey_destination',
                     'journey_reason',
                     'journey_start_time',
                     'journey_end_time',
                     'journey_info',
-                    'createAt'
+                    'createdAt'
                 ],
-                where: whereOpt
+                where: whereOpt,
+                order: [
+                    ['createdAt', 'DESC']
+                ]
             })
             return res ? res.dataValues : null
         } catch (error) {
@@ -88,6 +92,17 @@ class JourneyService {
         } catch (error) {
             console.error(error)
             // return error
+        }
+    }
+
+    async updateById({ journey_id, record_status }) {
+        try {
+            const res = await Journey.update({ record_status }, {
+                where: { journey_id }
+            })
+            return res
+        } catch (error) {
+            console.error(error)
         }
     }
 }

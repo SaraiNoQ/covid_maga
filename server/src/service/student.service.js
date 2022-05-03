@@ -55,6 +55,14 @@ class StudentService {
         console.log('destroy', res)
         return res
     }
+
+    async retrieveStudent() {
+        const res = await Student.findAll({
+            attributes: ['student_name', 'student_number']
+        })
+        console.log('retrieve', res)
+        return res
+    }
 }
 
 module.exports = new StudentService()

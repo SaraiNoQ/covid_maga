@@ -46,7 +46,18 @@ const journeyVertified = async (ctx, next) => {
     await next()
 }
 
+// 判断是否有journey_id
+const idValidate = async (ctx, next) => {
+    const { journey_id, record_status } = ctx.request.body
+    if (!journey_id || !record_status) {
+        ctx.app.emit('error', journeyFormatError, ctx)
+        return
+    }
+    await next()
+}
+
 module.exports = {
     journeyValidator,
-    journeyVertified
+    journeyVertified,
+    idValidate
 }
