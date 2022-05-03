@@ -84,7 +84,8 @@ class JourneyService {
                 healthy_status,
                 journey_start_time,
                 journey_end_time,
-                createAt
+                createAt,
+                record_status: 0
             }, {
                 where: { student_id }
             })

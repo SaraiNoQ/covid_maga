@@ -208,7 +208,7 @@ export default defineComponent({
             formData.append('journey_start_time', dayjs(this.searchForm.timeValue[0]).format('YYYY-MM-DD'))
             formData.append('journey_end_time', dayjs(this.searchForm.timeValue[1]).format('YYYY-MM-DD'))
             formData.append('journey_info', this.searchForm.textareaValue)
-            console.log(this.searchForm.timeValue[0]);
+            // console.log(this.searchForm.timeValue[0]);
             const res = await Axios.post('/journey/create', formData)
             
             try {

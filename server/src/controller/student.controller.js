@@ -13,10 +13,9 @@ const {
 
 class StudentController {
 	async createStu(ctx) {
-		console.log('create Stu')
         const { student_name, student_number, student_gender, student_major } = ctx.request.body
         const { student_image } = ctx.request.files
-        console.log({ student_image })
+        // console.log({ student_image })
         try {
             const res = await createStudent(student_name, student_number, student_gender, student_major, student_image)
             if (res) {
