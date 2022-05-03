@@ -386,6 +386,13 @@ const onChange = async (file, fileList) => {
             // @ts-ignore
             if (resp.success) {
                 successMessage.value = '头像修改成功!'
+
+                // 修改localStorage中的user_image
+                const user = JSON.parse(localStorage.getItem('user') as string)
+                // @ts-ignore
+                user.user_image = resp.success.result.user_image
+                localStorage.setItem('user', JSON.stringify(user))
+
                 await successRef.value.setDis()
                 // @ts-ignore
                 const filePath = `${httpAPI.imageUrlPrefix}${resp.success.result.file_path}`
