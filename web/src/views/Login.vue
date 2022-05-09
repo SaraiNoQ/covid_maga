@@ -74,6 +74,17 @@
                     <!-- Apple -->
                     <svg-icon name="apple-brands" viewBox="0 0 10 10"></svg-icon>
                 </button>
+
+                <button
+                    type="button"
+                    data-mdb-ripple="true"
+                    data-mdb-ripple-color="light"
+                    class="inline-block p-3 bg-blue-600 text-white font-medium text-sm leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out mx-1"
+                    @click="connectGithub"
+                    >
+                    <!-- Github -->
+                    <svg-icon name="github-brands" viewBox="0 0 10 10"></svg-icon>
+                </button>
               </div>
     
               <div
@@ -218,6 +229,10 @@ export default defineComponent({
         router.push('/register')
       }
       
+      const connectGithub = () => {
+        window.location.href = 'https://github.com/SaraiNoQ/covid_maga'
+      }
+
       return {state,
         v$,
         alertRef,
@@ -225,7 +240,8 @@ export default defineComponent({
         clickLogin,
         gotoRegister,
         loginErrorInfo,
-        loginDisabled
+        loginDisabled,
+        connectGithub
       }
     },
     methods: {

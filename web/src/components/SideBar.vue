@@ -2,6 +2,7 @@
     <div className='fixed top-0 left-0 h-screen w-16 m-0
             flex flex-col z-50
           bg-gray-900 text-white shadow-lg'>
+
         <div 
         class="sidebar-icon group fa-xl"
         @mouseover="sendFocus($event)"
@@ -9,7 +10,17 @@
         @click="toDashboard"
         :class="{ denycur: isdeny }">
             <font-awesome-icon icon="fire"/>
-            <span class="sidebar-tooltip group-hover:scale-100 z-50">tips</span>
+            <span class="sidebar-tooltip group-hover:scale-100 z-50">工作台
+                <font-awesome-icon icon="gauge"/>
+            </span>
+        </div>
+ 
+        <!-- 疫情动态 -->
+        <div class="sidebar-icon group fa-xl" @click="toSettings" :class="{ denycur: isdeny }">
+            <font-awesome-icon icon="qrcode"/>
+            <span class="sidebar-tooltip group-hover:scale-100">疫情动态
+                <font-awesome-icon icon="circle-info"/>
+            </span>
         </div>
 
         <div class="w-14 h-1 mx-auto bg-gray-700"></div>
@@ -47,8 +58,10 @@
             </span>
         </div>
 
+        <!-- 分割线 -->
         <div class="w-14 h-1 mx-auto bg-gray-700"></div>
 
+        <!-- 用户设置 -->
         <div class="sidebar-icon group fa-xl" @click="toSettings" :class="{ denycur: isdeny }">
             <font-awesome-icon icon="gear"/>
             <span class="sidebar-tooltip group-hover:scale-100">Settings

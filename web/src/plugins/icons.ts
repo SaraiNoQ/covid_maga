@@ -16,7 +16,10 @@ import {
     faUser,
     faClipboardList,
     faUserPen,
-    faIdCardClip
+    faIdCardClip,
+    faQrcode,
+    faCircleInfo,
+    faGauge
 } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -36,7 +39,10 @@ library.add(faFire,
     faUser,
     faClipboardList,
     faUserPen,
-    faIdCardClip
+    faIdCardClip,
+    faQrcode,
+    faCircleInfo,
+    faGauge
 );
 
 export default library
