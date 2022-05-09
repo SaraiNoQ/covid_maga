@@ -54,7 +54,7 @@ export default defineComponent({
     setup() {
         const router = useRouter()
         // const isHome = router.currentRoute.value.fullPath === '/home'
-        // console.log('isHome', isHome, router.currentRoute.value.fullPath)
+        console.log('isHome', router.currentRoute, router.currentRoute.value.fullPath)
         
         const store = useStore();
         const name = computed(() => {
