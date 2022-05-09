@@ -52,6 +52,9 @@ export default defineComponent({
             if (command === 'signup') {
                 router.push('/register')
             }
+            if (command === 'user') {
+                router.push('/home/settings')
+            }
         }
 
         const userAvatar = ref<string>('')

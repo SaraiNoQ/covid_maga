@@ -40,7 +40,7 @@ You will get `dist` folder in current directory. And so, you could copy to web-s
 open bash and do this:
 
 ```bash
-find . "(" -name ".html" -or -name ".js" -or -name ".css" -or -name ".vue" ")" -print | xargs wc -l
+find . "(" -name "*.html" -or -name "*.js" -or -name "*.css" -or -name "*.vue" -or -name "*.ts" ")" -print | xargs wc -l
 ```
 
 

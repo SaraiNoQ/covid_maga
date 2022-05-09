@@ -3,7 +3,8 @@
     <div class="w-17">
         <SideBar/>
     </div>
-    <div class="absolute right-0 top-0 bg-white w-[calc(100vw-68px)] h-12 header-shadow z-30">
+    <div class="absolute
+        right-0 top-0 bg-white w-[calc(100vw-68px)] h-12 header-shadow z-30">
         <home-header/>
     </div>
     <div class="absolute right-0 top-[3rem] bg-gray-100 w-[calc(100vw-68px)] h-[calc(100%-3rem)] overflow-auto">
@@ -44,12 +45,17 @@
 
 <script lang="ts">
 import SideBar from "../components/SideBar.vue";
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue-demi";
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 import HomeHeader from './dashboard/HomeHeader.vue'
 export default defineComponent({
     setup() {
+        const router = useRouter()
+        // const isHome = router.currentRoute.value.fullPath === '/home'
+        // console.log('isHome', isHome, router.currentRoute.value.fullPath)
+        
         const store = useStore();
         const name = computed(() => {
             return store.state.user.name;
@@ -63,7 +69,8 @@ export default defineComponent({
         return {
             name,
             newName,
-            saveName
+            saveName,
+            // isHome
         };
     },
     components: { SideBar, HomeHeader }
