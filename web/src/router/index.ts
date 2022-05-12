@@ -41,6 +41,11 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/home/settings',
                 name: 'Settings',
                 component: () => import('@/views/setting/SettingIndex.vue')
+            },
+            {
+                path: '/home/dynamic',
+                name: 'Dynamic',
+                component: () => import('@/views/dynamic/DynamicIndex.vue')
             }
         ]
     },

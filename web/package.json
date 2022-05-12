@@ -20,6 +20,7 @@
     "dayjs": "^1.11.0",
     "echarts": "^5.3.2",
     "element-plus": "^2.1.7",
+    "lingo3d-vue": "^1.0.61",
     "postcss-import": "^14.1.0",
     "tw-elements": "^1.0.0-alpha11",
     "vue": "^3.2.25",

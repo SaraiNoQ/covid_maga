@@ -16,7 +16,7 @@
         </div>
  
         <!-- 疫情动态 -->
-        <div class="sidebar-icon group fa-xl" @click="toSettings" :class="{ denycur: isdeny }">
+        <div class="sidebar-icon group fa-xl" @click="toDynamic" :class="{ denycur: isdeny }">
             <font-awesome-icon icon="qrcode"/>
             <span class="sidebar-tooltip group-hover:scale-100">疫情动态
                 <font-awesome-icon icon="circle-info"/>
@@ -113,6 +113,11 @@ export default defineComponent({
             await router.push('/home/settings')
             isdeny.value = false
         }
+        const toDynamic = async () => {
+            isdeny.value = true
+            await router.push('/home/dynamic')
+            isdeny.value = false
+        }
 
         return {
             focus,
@@ -123,6 +128,7 @@ export default defineComponent({
             toStudent,
             toStatistics,
             toSettings,
+            toDynamic,
             isdeny
         }
 
