@@ -37,8 +37,8 @@
     </el-dialog>
   </div>
 
-  <h2 class="mt-4 text-3xl text-green-600 font-semibold">学 生 信 息 录 入</h2>
-  <div class="rg-shadow mt-2 w-[75vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] mx-auto bg-gray-200 pt-4 pr-12 pb-2">
+  <h2 class="my-4 text-3xl text-green-600 font-semibold">学 生 信 息 管 理</h2>
+  <div class="rg-shadow mt-2 mb-4 w-[75vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] mx-auto pt-4 pr-12 pb-2">
     <el-form
       :model="form"
       label-width="120px"

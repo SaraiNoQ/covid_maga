@@ -27,13 +27,13 @@ const mouseOut = () => {
       <World skybox="bg.png">
         <div class="absolute right-2 bottom-2">
           <Model
-            src="animeGril.fbx"
+            src="myGirl.fbx"
             :scale="5"
             toon 
             :animations="{
-              idle: 'Idle.fbx',
-              waving: 'Waving.fbx',
-              dancing: 'Dancing.fbx'
+              idle: 'myIdle.fbx',
+              waving: 'myWaving.fbx',
+              dancing: 'myDancing.fbx'
             }"
             :animation="animation"
           />
