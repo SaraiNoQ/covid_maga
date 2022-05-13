@@ -60,17 +60,20 @@
 
   <div>
     <el-table
-      :data="tableData"
+      :data="filterTableData"
       style="width: 100%"
       v-loading="tableLoading"
     >
       <el-table-column label="序号" type="index" width="60" align="center"/>
-      <el-table-column prop="student_number" label="学号" width="240" align="center" />
+      <el-table-column prop="student_number" label="学号" width="240" align="center" sortable />
       <el-table-column prop="student_name" label="姓名" width="240" align="center" />
       <el-table-column prop="student_gender" label="性别" align="center" />
       <el-table-column prop="student_major" label="专业" align="center" />
       <el-table-column prop="student_image" label="照片" width="140" align="center" />
       <el-table-column label="Operations" width="180" align="center">
+        <template #header>
+          <el-input v-model="search" size="small" placeholder="Type to search" />
+        </template>
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
           >编辑</el-button
@@ -89,7 +92,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, reactive, ref } from 'vue'
+import { defineComponent, onBeforeMount, reactive, ref, computed } from 'vue-demi'
 import { ElMessage, ElMessageBox, genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
@@ -105,6 +108,16 @@ export default defineComponent({
       major: '',
       number: ''
     })
+
+    // 搜索框
+    const search = ref('')
+    const filterTableData = computed(() =>
+      tableData.value.filter(
+        (data) =>
+          !search.value ||
+          data.student_name.toLowerCase().includes(search.value.toLowerCase())
+      )
+    )
 
     // 表单输入验证
     const validateNumber = (rule: any, value: any, callback: any) => {
@@ -188,6 +201,7 @@ export default defineComponent({
       upload_img.value!.submit()
     }
 
+    // 渲染表格
     interface Form {
       student_name: string;
       student_number: string;
@@ -208,6 +222,7 @@ export default defineComponent({
       }
     })
 
+    // 编辑学生
     const handleEdit = (index, row)  => {}
 
     // 删除学生
@@ -235,6 +250,7 @@ export default defineComponent({
     return {
         onSubmit,
         onReset,
+        search,
         handleExceed,
         submitUpload,
         form,
@@ -248,6 +264,7 @@ export default defineComponent({
         successInfo,
         buttonLoading,
         tableData,
+        filterTableData,
         handleEdit,
         handleDelete,
         tableLoading
