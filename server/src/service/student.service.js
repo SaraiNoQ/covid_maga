@@ -63,6 +63,14 @@ class StudentService {
         console.log('retrieve', res)
         return res
     }
+
+    async getStudentAll() {
+        const res = await Student.findAll({
+            attributes: ['student_number', 'student_name', 'student_gender', 'student_major', 'student_image']
+        })
+
+        return res
+    }
 }
 
 module.exports = new StudentService()

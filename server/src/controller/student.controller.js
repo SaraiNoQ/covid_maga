@@ -2,6 +2,7 @@ const {
     createStudent,
     deleteStudent,
     retrieveStudent,
+    getStudentAll
 } = require('../service/student.service')
 
 const {
@@ -59,6 +60,21 @@ class StudentController {
     async getStu(ctx) {
         try {
             const res = await retrieveStudent()
+            if (res) {
+                ctx.body = {
+                    code: 0,
+                    result: res
+                }
+            }
+        } catch (error) {
+            console.error(error)
+            ctx.app.emit('error', noQueryStudent, ctx)
+        }
+    }
+
+    async getStuAll(ctx) {
+        try {
+            const res = await getStudentAll()
             if (res) {
                 ctx.body = {
                     code: 0,
