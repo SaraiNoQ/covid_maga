@@ -15,4 +15,6 @@ router.get('/numbers', getStu)
 
 router.get('/students', getStuAll)
 
+router.patch('/student', studentValidator, updateStu)
+
 module.exports = router

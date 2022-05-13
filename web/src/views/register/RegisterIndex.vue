@@ -3,6 +3,40 @@
   <AlertMessage :message="errorInfo" type="error" ref="alertRef"/>
   <AlertMessage :message="successInfo" type="success" ref="successRef"/>
   <AlertMessage :message="warningInfo" type="warning" ref="warningRef"/>
+
+  <div>
+     <el-dialog v-model="dialogFormVisible" title="修改学生信息">
+      <el-form :model="dialogData">
+        <el-form-item label="学号" :label-width="formLabelWidth">
+          <el-input v-model="dialogData.student_number" autocomplete="off" disabled />
+        </el-form-item>
+        <el-form-item label="姓名" :label-width="formLabelWidth">
+          <el-input v-model="dialogData.student_name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="性别" :label-width="formLabelWidth">
+          <el-radio-group v-model="dialogData.student_gender">
+            <el-radio label="male" />
+            <el-radio label="female" />
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="专业" :label-width="formLabelWidth">
+          <el-input v-model="dialogData.student_major" autocomplete="off" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">Cancel</el-button>
+          <el-button
+            type="primary"
+            @click="confirmChange"
+            :loading="confirmLoading"
+          >Confirm
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
+  </div>
+
   <h2 class="mt-4 text-3xl text-green-600 font-semibold">学 生 信 息 录 入</h2>
   <div class="rg-shadow mt-2 w-[75vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] mx-auto bg-gray-200 pt-4 pr-12 pb-2">
     <el-form
@@ -98,6 +132,7 @@ import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
 import Axios from '../../plugins/axios'
 import AlertMessage from '../../components/AlertMessage.vue'
+import { Axis } from 'echarts'
 
 export default defineComponent({
   components: { AlertMessage },
@@ -207,7 +242,7 @@ export default defineComponent({
       student_number: string;
       student_major: string;
       student_gender: string;
-      student_image: Blob | null | string;
+      student_image?: Blob | null | string;
     }
     const tableData = ref<Form[]>([])
     const tableLoading = ref<Boolean>(false)
@@ -223,7 +258,54 @@ export default defineComponent({
     })
 
     // 编辑学生
-    const handleEdit = (index, row)  => {}
+    const dialogFormVisible = ref(false)
+    const formLabelWidth = '140px'
+    const editData = ref<Form>()
+    const dialogData = reactive<Form>({
+      student_number: '',
+      student_name: '',
+      student_gender: '',
+      student_major: ''
+    })
+    const confirmLoading = ref(false)
+    const handleEdit = (index: number, row: Form)  => {
+      dialogFormVisible.value = true
+      dialogData.student_number = row.student_number
+      dialogData.student_name = row.student_name
+      dialogData.student_gender = row.student_gender
+      dialogData.student_major = row.student_major
+    }
+    const confirmChange = async () => {
+      const formData = new FormData()
+      confirmLoading.value = true
+      formData.append('student_number', dialogData.student_number as string)
+      formData.append('student_name', dialogData.student_name as string)
+      formData.append('student_major', dialogData.student_major as string)
+      formData.append('student_gender', dialogData.student_gender as string)
+      const res = await Axios.patch('/student/student', formData)
+      confirmLoading.value = false
+      // @ts-ignore
+      if (res.success) {
+        // @ts-ignore
+        dialogFormVisible.value = false
+        tableLoading.value = true
+        successInfo.value = '学生信息修改成功!'
+        successRef.value.setDis()
+        // 刷新列表
+        const res = await Axios.get('/student/students')
+        tableLoading.value = false
+        // @ts-ignore
+        if (res.success) {
+          // @ts-ignore
+          tableData.value = res.success.result
+        }
+        // confirmLoading.value = false
+      } else {
+        errorInfo.value = '学生信息修改失败!'
+        await alertRef.value.setDis()
+        // confirmLoading.value = false
+      }
+    }
 
     // 删除学生
     const handleDelete = async (index: number, row: Form) => {
@@ -267,7 +349,13 @@ export default defineComponent({
         filterTableData,
         handleEdit,
         handleDelete,
-        tableLoading
+        tableLoading,
+        dialogFormVisible,
+        formLabelWidth,
+        editData,
+        dialogData,
+        confirmChange,
+        confirmLoading
     }
   },
 })

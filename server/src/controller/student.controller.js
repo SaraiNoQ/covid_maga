@@ -2,14 +2,16 @@ const {
     createStudent,
     deleteStudent,
     retrieveStudent,
-    getStudentAll
+    getStudentAll,
+    updateStudent
 } = require('../service/student.service')
 
 const {
     createStudentError,
     deleteStudentError,
     deleteStudentNull,
-    noQueryStudent
+    noQueryStudent,
+    updateStudentError
 } = require('../constants/err.type')
 
 class StudentController {
@@ -51,9 +53,18 @@ class StudentController {
     }
 
     async updateStu(ctx) {
-        ctx.body = {
-            code: 0,
-            message: 'waiting for build!'
+        try {
+            const { student_number, student_name, student_major, student_gender } = ctx.request.body
+            const res = await updateStudent({ student_number, student_name, student_major, student_gender })
+            if (res) {
+                ctx.body = {
+                    code: 0,
+                    message: 'update student success!'
+                }
+            }
+        } catch (error) {
+            console.error(error)
+            ctx.app.emit('error', updateStudentError, ctx)
         }
     }
     

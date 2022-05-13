@@ -149,5 +149,10 @@ module.exports = {
 		code: '30204',
 		message: 'update journey error',
 		result: ''
+	},
+	updateStudentError: {
+		code: '30205',
+		message: 'update student error',
+		result: ''
 	}
 }
