@@ -1,7 +1,8 @@
 <template>
 <div>
-  <alert-message :message="errorInfo" type="error" ref="alertRef"/>
-  <alert-message message="录 入 成 功！" type="success" ref="successRef"/>
+  <AlertMessage :message="errorInfo" type="error" ref="alertRef"/>
+  <AlertMessage :message="successInfo" type="success" ref="successRef"/>
+  <AlertMessage :message="warningInfo" type="warning" ref="warningRef"/>
   <h2 class="mt-4 text-3xl text-green-600 font-semibold">学 生 信 息 录 入</h2>
   <div class="rg-shadow mt-2 w-[75vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] mx-auto bg-gray-200 pt-4 pr-12 pb-2">
     <el-form
@@ -58,22 +59,27 @@
   </div>
 
   <div>
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="student_number" label="Number" width="180" />
-      <el-table-column prop="student_name" label="Name" width="180" />
-      <el-table-column prop="student_gender" label="Gender" />
-      <el-table-column prop="student_major" label="Major" />
-      <el-table-column prop="student_image" label="Image" />
-      <el-table-column label="Operations">
+    <el-table
+      :data="tableData"
+      style="width: 100%"
+      v-loading="tableLoading"
+    >
+      <el-table-column label="序号" type="index" width="60" align="center"/>
+      <el-table-column prop="student_number" label="学号" width="240" align="center" />
+      <el-table-column prop="student_name" label="姓名" width="240" align="center" />
+      <el-table-column prop="student_gender" label="性别" align="center" />
+      <el-table-column prop="student_major" label="专业" align="center" />
+      <el-table-column prop="student_image" label="照片" width="140" align="center" />
+      <el-table-column label="Operations" width="180" align="center">
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
-          >Edit</el-button
+          >编辑</el-button
           >
           <el-button
           size="small"
           type="danger"
           @click="handleDelete(scope.$index, scope.row)"
-          >Delete</el-button
+          >删除</el-button
           >
         </template>
       </el-table-column>
@@ -84,7 +90,7 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, reactive, ref } from 'vue'
-import { genFileId } from 'element-plus'
+import { ElMessage, ElMessageBox, genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
 import Axios from '../../plugins/axios'
@@ -127,7 +133,11 @@ export default defineComponent({
     // 调用组件
     const alertRef = ref<any>(null)
     const successRef = ref<any>(null)
-    const errorInfo = ref<string>('录 入 失 败！')
+    const errorInfo = ref<string>('')
+    const successInfo = ref<string>('')
+    const warningInfo = ref<string>('')
+    const warningRef = ref<any>(null)
+  
     const buttonLoading = ref<Boolean>(false)
     const onSubmit = async () => {
       buttonLoading.value = true
@@ -140,7 +150,16 @@ export default defineComponent({
       const res = await Axios.post('/student/create', formData)
       // @ts-ignore
       if (res.success) {
+        successInfo.value = '录 入 成 功 !'
         await successRef.value.setDis()
+        tableLoading.value = true
+        const res = await Axios.get('/student/students')
+        tableLoading.value = false
+        // @ts-ignore 
+        if (res.success) {
+          // @ts-ignore 
+          tableData.value = res.success.result
+        }
       } // @ts-ignore 
       else if (res.error.data.code === '20102') {
         errorInfo.value = '注 册 学 生 已 存 在！'
@@ -174,19 +193,45 @@ export default defineComponent({
       student_number: string;
       student_major: string;
       student_gender: string;
-      student_image: Blob | null;
+      student_image: Blob | null | string;
     }
     const tableData = ref<Form[]>([])
+    const tableLoading = ref<Boolean>(false)
     onBeforeMount(async () => {
+      tableLoading.value = true
       const res = await Axios.get('/student/students')
+      tableLoading.value = false
+      // @ts-ignore
       if (res.success) {
+        // @ts-ignore
         tableData.value = res.success.result
       }
-      
-      console.log('beforeMount', res.success.result, tableData.value);
     })
+
     const handleEdit = (index, row)  => {}
-    const handleDelete = (index, row) => {}
+
+    // 删除学生
+    const handleDelete = async (index: number, row: Form) => {
+      const res = confirm('确定删除该学生吗？')
+      if (res) {
+        const formData = new FormData()
+        formData.append('student_number', row.student_number)
+        const deleteRes = await Axios.post('/student/delete', formData)
+        // @ts-ignore
+        if (deleteRes.success) {
+          tableData.value.splice(index, 1)
+          successInfo.value = '删 除 成 功 !'
+          await successRef.value.setDis()
+        } else {
+          errorInfo.value = '删 除 失 败 !'
+          await alertRef.value.setDis()
+        }
+      } else {
+        warningInfo.value = '取 消 删 除 !'
+        await warningRef.value.setDis()
+      }
+      
+    }
     return {
         onSubmit,
         onReset,
@@ -197,11 +242,15 @@ export default defineComponent({
         rules,
         alertRef,
         successRef,
+        warningRef,
+        warningInfo,
         errorInfo,
+        successInfo,
         buttonLoading,
         tableData,
         handleEdit,
-        handleDelete
+        handleDelete,
+        tableLoading
     }
   },
 })

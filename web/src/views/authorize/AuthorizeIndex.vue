@@ -12,12 +12,12 @@
         >
             <el-table-column label="序号" type="index" width="60" align="center"/>
             <el-table-column
-            prop="date"
-            label="日期"
-            sortable
-            width="180"
-            column-key="date"
-            align="center"
+                prop="date"
+                label="日期"
+                sortable
+                width="180"
+                column-key="date"
+                align="center"
             />
             <el-table-column prop="name" label="身份号" width="150" align="center"/>
             <el-table-column prop="address" label="目的地" align="center" />
