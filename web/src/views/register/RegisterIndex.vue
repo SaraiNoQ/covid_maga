@@ -3,68 +3,91 @@
   <alert-message :message="errorInfo" type="error" ref="alertRef"/>
   <alert-message message="录 入 成 功！" type="success" ref="successRef"/>
   <h2 class="mt-4 text-3xl text-green-600 font-semibold">学 生 信 息 录 入</h2>
-    <div class="rg-shadow mt-2 w-[75vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] mx-auto bg-gray-200 pt-4 pr-12 pb-2">
-        <el-form
-          :model="form"
-          label-width="120px"
-          :rules="rules">
-          <el-form-item label="Name" prop="name">
-            <el-input v-model="form.name" />
-          </el-form-item>
-          
-          <el-form-item label="Gender" prop="gender">
-            <el-radio-group v-model="form.resource">
-              <el-radio label="male" />
-              <el-radio label="female" />
-            </el-radio-group>
-          </el-form-item>
+  <div class="rg-shadow mt-2 w-[75vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] mx-auto bg-gray-200 pt-4 pr-12 pb-2">
+    <el-form
+      :model="form"
+      label-width="120px"
+      :rules="rules">
+      <el-form-item label="Name" prop="name">
+        <el-input v-model="form.name" />
+      </el-form-item>
+      
+      <el-form-item label="Gender" prop="gender">
+        <el-radio-group v-model="form.resource">
+          <el-radio label="male" />
+          <el-radio label="female" />
+        </el-radio-group>
+      </el-form-item>
 
-          <el-form-item label="Number" prop="number">
-              <el-input v-model="form.number" />
-          </el-form-item>
+      <el-form-item label="Number" prop="number">
+          <el-input v-model="form.number" />
+      </el-form-item>
 
-          <el-form-item label="Major" prop="major">
-              <el-input v-model="form.major" />
-          </el-form-item>
+      <el-form-item label="Major" prop="major">
+          <el-input v-model="form.major" />
+      </el-form-item>
 
-          <el-form-item label="Upload">
-            <el-upload
-              class="upload-demo"
-              multiple
-              ref="upload_img"
-              action=""
-              accept=".jpg, .jpeg, .png"
-              :limit="1"
-              :auto-upload="false"
-              :on-exceed="handleExceed"
-            >
-                <template #trigger>
-                  <el-button type="primary">select file</el-button>
-                  <div class="text-red-500 ml-4 text-xs">
-                    jpg/png files with a size less than 500KB.
-                  </div>
-                </template>
-                <!-- <el-button class="ml-3" type="success" @click="submitUpload">
-                  upload to server
-                </el-button> -->
-            </el-upload>
-          </el-form-item>
+      <el-form-item label="Upload">
+        <el-upload
+          class="upload-demo"
+          multiple
+          ref="upload_img"
+          action=""
+          accept=".jpg, .jpeg, .png"
+          :limit="1"
+          :auto-upload="false"
+          :on-exceed="handleExceed"
+        >
+            <template #trigger>
+              <el-button type="primary">select file</el-button>
+              <div class="text-red-500 ml-4 text-xs">
+                jpg/png files with a size less than 500KB.
+              </div>
+            </template>
+            <!-- <el-button class="ml-3" type="success" @click="submitUpload">
+              upload to server
+            </el-button> -->
+        </el-upload>
+      </el-form-item>
 
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit" :loadong="buttonLoading">Create</el-button>
-            <el-button @click="onReset">Reset</el-button>
-          </el-form-item>
-        </el-form>
-    </div>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit" :loadong="buttonLoading">Create</el-button>
+        <el-button @click="onReset">Reset</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+
+  <div>
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="student_number" label="Number" width="180" />
+      <el-table-column prop="student_name" label="Name" width="180" />
+      <el-table-column prop="student_gender" label="Gender" />
+      <el-table-column prop="student_major" label="Major" />
+      <el-table-column prop="student_image" label="Image" />
+      <el-table-column label="Operations">
+        <template #default="scope">
+          <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
+          >Edit</el-button
+          >
+          <el-button
+          size="small"
+          type="danger"
+          @click="handleDelete(scope.$index, scope.row)"
+          >Delete</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, onBeforeMount, reactive, ref } from 'vue'
 import { genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
-import Axios from '../../plugins/axios'
 
+import Axios from '../../plugins/axios'
 import AlertMessage from '../../components/AlertMessage.vue'
 
 export default defineComponent({
@@ -145,6 +168,25 @@ export default defineComponent({
     const submitUpload = () => {
       upload_img.value!.submit()
     }
+
+    interface Form {
+      student_name: string;
+      student_number: string;
+      student_major: string;
+      student_gender: string;
+      student_image: Blob | null;
+    }
+    const tableData = ref<Form[]>([])
+    onBeforeMount(async () => {
+      const res = await Axios.get('/student/students')
+      if (res.success) {
+        tableData.value = res.success.result
+      }
+      
+      console.log('beforeMount', res.success.result, tableData.value);
+    })
+    const handleEdit = (index, row)  => {}
+    const handleDelete = (index, row) => {}
     return {
         onSubmit,
         onReset,
@@ -156,7 +198,10 @@ export default defineComponent({
         alertRef,
         successRef,
         errorInfo,
-        buttonLoading
+        buttonLoading,
+        tableData,
+        handleEdit,
+        handleDelete
     }
   },
 })
