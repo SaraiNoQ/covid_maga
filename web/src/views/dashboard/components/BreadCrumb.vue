@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { ArrowRight } from '@element-plus/icons-vue'
-import { ref, watch } from 'vue';
+import { ref, watch } from 'vue-demi';
 import { useRouter } from 'vue-router'
 
 const router = useRouter()

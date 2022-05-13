@@ -1,14 +1,17 @@
 <template>
     <div className='fixed top-0 left-0 h-screen w-16 m-0
-            flex flex-col z-50
-          bg-gray-900 text-white shadow-lg'>
+        flex flex-col z-50
+        bg-gray-900 text-white shadow-lg'
+    >
 
         <div 
-        class="sidebar-icon group fa-xl"
-        @mouseover="sendFocus($event)"
-        @mouseout="sendNoFocus($event)"
-        @click="toDashboard"
-        :class="{ denycur: isdeny }">
+            class="sidebar-icon group fa-xl"
+            id="sidebar-icon-1"
+            @mouseout="sendNoFocus($event)"
+            @mousedown="sendFocus($event)"
+            @click="toDashboard"
+            :class="{ denycur: isdeny }"
+        >
             <font-awesome-icon icon="fire"/>
             <span class="sidebar-tooltip group-hover:scale-100 z-50">工作台
                 <font-awesome-icon icon="gauge"/>

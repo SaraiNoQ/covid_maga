@@ -26,6 +26,7 @@ const routes: Array<RouteRecordRaw> = [
                 path: '/home/student',
                 name: 'Student',
                 component: () => import('@/views/register/RegisterIndex.vue')
+                // component: () => import('@/views/query/QueryIndex.vue')
             },
             {
                 path: '/home/authorize',

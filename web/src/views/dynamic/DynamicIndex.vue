@@ -21,21 +21,26 @@ const mouseOut = () => {
 </script>
 
 <template>
-  <div>
-    <World skybox="gs.jpg">
-      <Model
-        src="animeGril.fbx"
-        :scale="6"
-        toon 
-        :animations="{
-          idle: 'Idle.fbx',
-          waving: 'Waving.fbx',
-          dancing: 'Dancing.fbx'
-        }"
-        :animation="animation"
-        />
-    </World>
-    <button class="button" @click="toDancing" @mouseover="mouseOver" @mouseout="mouseOut"></button>
+  <div class="flex">
+    <div class="content"></div>
+    <div class="world">
+      <World skybox="bg.png">
+        <div class="absolute right-2 bottom-2">
+          <Model
+            src="animeGril.fbx"
+            :scale="5"
+            toon 
+            :animations="{
+              idle: 'Idle.fbx',
+              waving: 'Waving.fbx',
+              dancing: 'Dancing.fbx'
+            }"
+            :animation="animation"
+          />
+        </div>
+      </World>
+      <button class="button" @click="toDancing" @mouseover="mouseOver" @mouseout="mouseOut"></button>
+    </div>
   </div>
 </template>
 
@@ -48,5 +53,14 @@ const mouseOut = () => {
   min-width: 150px;
   min-height: 250px;
   display: block;
+}
+
+.world {
+  background-color: transparent !important;
+}
+
+.content {
+  min-width: 80vw;
+  min-height: 90vh;
 }
 </style>
