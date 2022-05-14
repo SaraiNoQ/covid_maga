@@ -117,7 +117,8 @@ export default defineComponent({
             if (res2.success) {
                     // @ts-ignore
                 const respData = res2.success.data
-                for (let i = 0; i < respData.length; i++) {
+                let index = 0
+                for (let i = 0; i < respData.length; i++, index++) {
                     try {
                         const userInfo: User = {
                             date: dayjs(respData[i].createdAt).format('YYYY-MM-DD'),
@@ -131,11 +132,13 @@ export default defineComponent({
                         tableData.value.push(userInfo)
                         // 如果record为1，就存入allow，为2，就存入deny
                         if (userInfo.record === '1') {
-                            allowArray.value.push(i)
+                            console.log('arr', allowArray);
+                            allowArray.value.push(index)
                         } else if (userInfo.record === '2') {
-                            denyArray.value.push(i)
+                            denyArray.value.push(index)
                         }
                     } catch (error) {
+                        index--
                         continue
                     }
                     
