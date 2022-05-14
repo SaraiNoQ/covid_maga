@@ -60,7 +60,7 @@ const userVertifier = async (ctx, next) => {
 	const {user_name} = ctx.request.body
 	// 数据合理
 	const res = await getUser({ user_name })
-	console.log('GET USER:')
+	// console.log('GET USER:')
 	try {
 		if (res) {
 			console.error('register info is already exited!')

@@ -4,6 +4,10 @@
   <AlertMessage :message="successInfo" type="success" ref="successRef"/>
   <AlertMessage :message="warningInfo" type="warning" ref="warningRef"/>
 
+  <!-- <el-affix position="bottom" :offset="20">
+    <el-button type="primary">Offset bottom 20px</el-button>
+  </el-affix> -->
+
   <div>
      <el-dialog v-model="dialogFormVisible" title="修改学生信息">
       <el-form :model="dialogData">
@@ -101,16 +105,22 @@
       <el-table-column label="序号" type="index" width="60" align="center"/>
       <el-table-column prop="student_number" label="学号" width="240" align="center" sortable />
       <el-table-column prop="student_name" label="姓名" width="240" align="center" />
-      <el-table-column prop="student_gender" label="性别" align="center" />
+      <el-table-column prop="student_gender" label="性别" width="180" align="center" />
       <el-table-column prop="student_major" label="专业" align="center" />
-      <el-table-column prop="student_image" label="照片" width="140" align="center" />
-      <el-table-column label="Operations" width="180" align="center">
+      <el-table-column prop="student_image" label="照片" width="180" align="center" />
+      <el-table-column label="Operations" width="240" align="center">
         <template #header>
           <el-input v-model="search" size="small" placeholder="Type to search" />
         </template>
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
           >编辑</el-button
+          >
+          <el-button
+          size="small"
+          type="primary"
+          @click="handleReset(scope.$index, scope.row)"
+          >重置</el-button
           >
           <el-button
           size="small"
@@ -198,15 +208,26 @@ export default defineComponent({
       const res = await Axios.post('/student/create', formData)
       // @ts-ignore
       if (res.success) {
-        successInfo.value = '录 入 成 功 !'
-        await successRef.value.setDis()
-        tableLoading.value = true
-        const res = await Axios.get('/student/students')
-        tableLoading.value = false
+        // 给学生注册账号
+        const formData1 = new FormData()
+        formData1.append('user_name', form.number)
+        formData1.append('password', form.number.slice(form.number.length - 6)) // 密码为学号后六位
+        formData1.append('nick_name', form.name)
+        formData1.append('is_admin', '0')
+        const resp = await Axios.post('/register', formData1)
         // @ts-ignore 
-        if (res.success) {
+        if (resp.success) {
+          successInfo.value = '录 入 成 功 !'
+          await successRef.value.setDis()
+          // 查询学生信息
+          tableLoading.value = true
+          const res = await Axios.get('/student/students')
+          tableLoading.value = false
           // @ts-ignore 
-          tableData.value = res.success.result
+          if (res.success) {
+            // @ts-ignore 
+            tableData.value = res.success.result
+          }
         }
       } // @ts-ignore 
       else if (res.error.data.code === '20102') {
@@ -327,8 +348,31 @@ export default defineComponent({
         warningInfo.value = '取 消 删 除 !'
         await warningRef.value.setDis()
       }
-      
     }
+
+    // 重置学生密码
+    const handleReset = async (index: number, row: Form) => {
+      const res = confirm('确定重置该学生密码吗？')
+      if (res) {
+        const formData = new FormData()
+        formData.append('user_name', row.student_number)
+        formData.append('new_password', row.student_number.slice(row.student_number.length - 6)) // 密码为学号后六位
+        // console.log('change password: ', row.student_number, row.student_number.slice(row.student_number.length - 6));
+        const resetRes = await Axios.post('/student/passwd', formData)
+        // @ts-ignore
+        if (resetRes.success) {
+          successInfo.value = '密 码 重 置 成 功 !'
+          await successRef.value.setDis()
+        } else {
+          errorInfo.value = '密 码 重 置 失 败 !'
+          await alertRef.value.setDis()
+        }
+      } else {
+        warningInfo.value = '取 消 密 码 重 置 !'
+        await warningRef.value.setDis()
+      }
+    }
+
     return {
         onSubmit,
         onReset,
@@ -355,7 +399,8 @@ export default defineComponent({
         editData,
         dialogData,
         confirmChange,
-        confirmLoading
+        confirmLoading,
+        handleReset
     }
   },
 })

@@ -216,7 +216,8 @@ export default defineComponent({
           localStorage.setItem('user', JSON.stringify(res.success.result.res))
           router.replace('/home')
         } else {
-          loginErrorInfo.value = 'Account OR Password ERROR!'
+          // @ts-ignore
+          loginErrorInfo.value = res.error.data.message ? res.error.data.message : 'login fail! Please check your email or password!'
           await alertRef.value.setDis()
         }
         loginDisabled.value = false

@@ -23,12 +23,17 @@ const { login,
     changeAccount,
     getNewCaptcha,
     getAccount,
-    removeDuplicate
+    removeDuplicate,
+    registStu
 } = require('../controller/user.controller')
 
 const router = new Router()
 
 router.post('/register', vertifyCaptcha, userValidator, userVertifier, cryptPassword, register)
+
+router.post('/student/register', userValidator, userVertifier, cryptPassword, registStu)
+
+router.post('/student/passwd', cryptPassword, passwd)
 
 router.post('/captcha', userValidator, userVertifier, getCaptcha)
 

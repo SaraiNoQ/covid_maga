@@ -35,6 +35,11 @@ module.exports = {
 		message: 'update password error!',
 		result: ''
 	},
+	userPermissionLow: {
+		code: '10008',
+		message: 'You have no permission to access this page!',
+		result: ''
+	},
 	TokenExpiredError: {
 		code: '10101',
 		message: 'token is pasttime!',

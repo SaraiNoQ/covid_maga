@@ -10,7 +10,8 @@ const {
 	fileUploadError,
 	infoUpdateError,
 	getUserInfoError,
-	updateAccountError
+	updateAccountError,
+	userPermissionLow
 } = require('../constants/err.type')
 const jwt = require('jsonwebtoken')
 // eslint-disable-next-line no-undef
@@ -72,6 +73,29 @@ class UserController {
 		}
 	}
 	
+	async registStu(ctx) {
+		const { user_name, password, nick_name, is_admin } = ctx.request.body
+		try {
+			// 2. crud database
+			const res = await createUser(user_name, password, nick_name, is_admin)
+			// 3. send email
+			if (res) {
+				// 4. return response
+				ctx.body = {
+					'status': 0,
+					'message': 'Create User Success!',
+					'result': {
+						'id': res.id,
+						'user_name': res.user_name
+					}
+				}
+			}
+		} catch (error) {
+			console.error('创建账户失败', error)
+			ctx.app.emit('error', userRegisterError, ctx)
+		}
+	}
+
 	async login (ctx) {
 		const {user_name} = ctx.request.body
 
@@ -79,8 +103,7 @@ class UserController {
 		try {
 			// 获取到除了password之外的属性
 			const { password, ...res } = await getUser({ user_name })
-
-			if (res) {
+			if (res.is_admin) {
 				ctx.body = {
 					code: 0,
 					message: 'login success!',
@@ -89,9 +112,12 @@ class UserController {
 						res: res
 					}
 				}
+			} else {
+				ctx.app.emit('error', userPermissionLow, ctx)
 			}
 		} catch (error) {
 			console.error('login error!', error)
+			ctx.app.emit('error', userNotExited, ctx)
 		}
 	}
 

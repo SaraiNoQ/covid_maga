@@ -5,11 +5,12 @@ class UserService {
 	// create in database
 	async createUser(user_name, password, nick_name) {
 		// 对象解构
-		// console.log('create nick_name', nick_name)
+		// console.log('create is_admin', is_admin)
 		const res = await User.create({
 			user_name,
 			password,
-			nick_name
+			nick_name,
+			is_admin: 1
 		})
 		
 		return res.dataValues
