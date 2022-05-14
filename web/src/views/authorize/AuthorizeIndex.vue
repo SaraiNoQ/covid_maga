@@ -1,7 +1,41 @@
 <template>
     <div>
-        <Alert-Message :message="alertMessage" type="error" ref="alertRef"/>
-        <Alert-Message :message="successMessage" type="success" ref="successRef"/>
+        <AlertMessage :message="alertMessage" type="error" ref="alertRef"/>
+        <AlertMessage :message="successMessage" type="success" ref="successRef"/>
+
+        <el-dialog v-model="dialogFormVisible" title="修改学生信息">
+          <el-form :model="dialogData">
+            <el-form-item label="日期" :label-width="140">
+              <el-input v-model="dialogData.date" disabled />
+            </el-form-item>
+            <el-form-item label="学号" :label-width="formLabelWidth">
+              <el-input v-model="dialogData.id" disabled />
+            </el-form-item>
+            <el-form-item label="目的地" :label-width="formLabelWidth">
+              <el-input v-model="dialogData.address" disabled/>
+            </el-form-item>
+            <el-form-item label="事由" :label-width="formLabelWidth">
+              <el-input v-model="dialogData.reason" disabled />
+            </el-form-item>
+            <el-form-item label="状态" :label-width="formLabelWidth">
+               <el-switch v-model="dialogData.record" disabled/>
+            </el-form-item>
+          </el-form>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button
+                class="dialog-footer__btn"
+                type="danger"
+                @click="denyButton"
+              >禁止</el-button>
+              <el-button
+                type="primary"
+                @click="allowButton"
+              >允许</el-button>
+            </span>
+          </template>
+        </el-dialog>
+
         <el-table
             ref="tableRef"
             row-key="date"
@@ -10,6 +44,7 @@
             :row-class-name="tableRowClassName"
             class="hover:cursor-pointer"
             v-loading="loading"
+            @row-click="handleRowClick"
         >
             <el-table-column label="序号" type="index" width="60" align="center"/>
             <el-table-column
@@ -64,19 +99,20 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, ref } from 'vue-demi'
+import { computed, defineComponent, onBeforeMount, reactive, ref } from 'vue-demi'
 
 import dayjs from 'dayjs'
 import Axios from '../../plugins/axios'
 
 interface User {
-    date: string
-    name: string
-    address: string
-    tag: string
-    reason: string
-    record: string
-    id: string
+    date: string,
+    name: string,
+    address: string,
+    tag: string,
+    reason: string,
+    record: string | boolean,
+    id: string,
+    index?: number
 }
 
 interface StuNum {
@@ -92,6 +128,7 @@ export default defineComponent({
 
         const search = ref<string>('')
 
+        // 渲染表格
         const tableData = ref<User[]>([])
         const allowArray = ref<number[]>([]);
         const denyArray = ref<number[]>([]);
@@ -147,6 +184,7 @@ export default defineComponent({
             loading.value = false
         })
 
+        // 搜索栏
         const filterTableData = computed(() =>
             tableData.value.filter(
                 (data) =>
@@ -160,12 +198,67 @@ export default defineComponent({
                 row: User
                 rowIndex: number
             }) => {
-            if (denyArray.value.includes(rowIndex)) {
-                return 'danger-row'
-            } else if (allowArray.value.includes(rowIndex)) {
-                return 'success-row'
+                row.index = rowIndex
+                if (denyArray.value.includes(rowIndex)) {
+                    return 'danger-row'
+                } else if (allowArray.value.includes(rowIndex)) {
+                    return 'success-row'
+                }
+                return ''
+        }
+
+        // click-table
+        const dialogFormVisible = ref<boolean>(false)
+        const dialogData = reactive<User>({
+            date: '',
+            id: '',
+            name: '',
+            address: '',
+            tag: '',
+            reason: '',
+            record: '',
+            index: -1
+        })
+        const formLabelWidth = '140px'
+        const handleRowClick = async (row: User, column) => {
+            dialogData.date = row.date
+            dialogData.id = row.id
+            dialogData.name = row.name
+            dialogData.address = row.address
+            dialogData.tag = row.tag
+            dialogData.reason = row.reason
+            dialogData.record = row.record === '1' ? true : false
+            dialogData.index = row.index
+
+            dialogFormVisible.value = true
+        }
+        const allowButton = async () => {
+            const fd = new FormData()
+            fd.append('journey_id', dialogData.id)
+            fd.append('record_status', '1')
+            const res = await Axios.patch('/journey/authority', fd)
+            // @ts-ignore
+            if (res.success) {
+                denyArray.value = denyArray.value.filter((e) => e !== dialogData.index)
+                allowArray.value.push(dialogData.index as number)
+                dialogData.record = true
+                successMessage.value = '修改成功!'
+                await successRef.value.setDis()
             }
-            return ''
+        }
+        const denyButton = async () => {
+            const fd = new FormData()
+            fd.append('journey_id', dialogData.id)
+            fd.append('record_status', '2')
+            const res = await Axios.patch('/journey/authority', fd)
+            // @ts-ignore
+            if (res.success) {
+                allowArray.value = allowArray.value.filter((e) => e !== dialogData.index)
+                denyArray.value.push(dialogData.index as number)
+                dialogData.record = false
+                successMessage.value = '修改成功!'
+                await successRef.value.setDis()
+            }
         }
 
         return {
@@ -179,7 +272,13 @@ export default defineComponent({
             alertMessage,
             alertRef,
             successRef,
-            loading
+            loading,
+            handleRowClick,
+            dialogFormVisible,
+            dialogData,
+            formLabelWidth,
+            allowButton,
+            denyButton
         }
     },
     methods: {
@@ -216,10 +315,26 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep(.el-table .danger-row) {
+:deep(.el-table .danger-row) {
   --el-table-tr-bg-color: var(--el-color-danger-light-9);
 }
-::v-deep(.el-table .success-row) {
+:deep(.el-table .success-row) {
   --el-table-tr-bg-color: var(--el-color-success-light-9);
+}
+
+:deep(.el-input__inner) {
+    width: 385px;
+}
+
+.dialog-footer {
+    .dialog-footer__btn {
+        margin: 0 20px;
+    }
+}
+
+:deep(.el-dialog__footer) {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center
 }
 </style>

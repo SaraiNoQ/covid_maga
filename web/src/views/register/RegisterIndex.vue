@@ -416,14 +416,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-::v-deep(.el-upload--text) {
+:deep(.el-upload--text) {
     align-items: flex-end;
     @media screen and (max-width: 830px) {
         display: block;
     }
 }
 
-::v-deep(.el-input__inner) {
+:deep(.el-input__inner) {
     width: 335px;
 }
 
