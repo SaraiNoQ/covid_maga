@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref } from 'vue-demi'
 
 export default defineComponent({
     props: ['message', 'type'],

@@ -12,7 +12,7 @@
             :rules="rules"
         >
             <el-form-item label="身 份 选 择">
-                <el-select v-model="searchForm.authValue" placeholder="please select your identity" class="option-input">
+                <el-select v-model="searchForm.authValue" placeholder="" class="option-input">
                     <el-option
                     v-for="item in options1"
                     :key="item.value"
@@ -21,7 +21,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="居 住 地 区">
-                <el-select v-model="searchForm.liveValue" placeholder="please select your zone" class="option-input">
+                <el-select v-model="searchForm.liveValue" placeholder="" class="option-input">
                     <el-option
                     v-for="item in options2"
                     :key="item.value"
@@ -30,7 +30,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="健 康 状 况">
-                <el-select v-model="searchForm.bodyValue" placeholder="please select your healthy status" class="option-input">
+                <el-select v-model="searchForm.bodyValue" placeholder="" class="option-input">
                     <el-option
                     v-for="item in options3"
                     :key="item.value"
@@ -38,17 +38,17 @@
                     :value="item.value"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="Destination">
+            <el-form-item label="目 的 地">
                 <div class="search-input">
-                    <el-input v-model="searchForm.destination" placeholder="please input your destination"></el-input>
+                    <el-input v-model="searchForm.destination" placeholder=""></el-input>
                 </div>
             </el-form-item>
-            <el-form-item label="Reason">
+            <el-form-item label="事  由">
                 <div class="search-input">
-                    <el-input v-model="searchForm.reason" placeholder="please input reason for your appliction"></el-input>
+                    <el-input v-model="searchForm.reason" placeholder=""></el-input>
                 </div>
             </el-form-item>
-            <el-form-item label="Time" class="time-input" prop="timeValue">
+            <el-form-item label="时  长" class="time-input" prop="timeValue">
                 <el-date-picker
                     v-model="searchForm.timeValue"
                     type="datetimerange"
@@ -57,36 +57,18 @@
                     end-placeholder="End date"
                     />
             </el-form-item>
-            <el-form-item label="Others">
+            <el-form-item label="其  他">
                 <el-input
                     v-model="searchForm.textareaValue"
                     :autosize="{ minRows: 3, maxRows: 6 }"
                     type="textarea"
-                    placeholder="Please input"
+                    placeholder="不超过200字"
                     class="option-input"
                 />
             </el-form-item>
         </el-form>
         <div class="flex justify-center items-center mx-auto pl-20">
             <el-button class="search-button" type="success" @click="search">提 交 打 卡</el-button>
-            <div class="w-30 font-serif tracking-normal text-base text-green-500">
-                
-                <el-input
-                    v-model="stuNum"
-                    placeholder="请输入学号"
-                ></el-input>
-            </div>
-        </div>
-    </div>
-    <div class="ml-16 mt-10"> 
-        <h2 class="text-3xl text-green-500 w-60 mb-2 ml-[-1.5rem]">Historic Cards</h2>
-        <div class="grid xl:grid-cols-2 grid-cols-1">
-            <card-list />
-            <card-list />
-            <card-list />
-            <card-list />
-            <card-list />
-            <card-list />
         </div>
     </div>
 </div>
@@ -94,8 +76,6 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue-demi'
-// @ts-ignore
-import CardList from '@/views/gather/components/CardList.vue'
 import dayjs from 'dayjs'
 
 import Axios from '../../plugins/axios'
@@ -112,8 +92,9 @@ export default defineComponent({
             bodyValue: ''
         })
 
+        // 从localstorage中获取学号
         // 后台录入时需要手动记录学号
-        const stuNum = ref<string>('')
+        const stuNum = ref<string>(JSON.parse(localStorage.getItem('student') as string).user_name)
 
         // 验证表单的prop命名必须和绑定的值相同
         const validateTime = (rule: any, value: any, callback:any) => {
@@ -185,18 +166,9 @@ export default defineComponent({
             stuNum
         }
     },
-    components: { CardList },
     methods: {
         async search() {
-            try {
-                if (this.stuNum.length !== 10) {
-                    this.errorInfo = '请输入正确学号！'
-                    return await this.alertRef.setDis()
-                }
-            } catch (error) {
-                this.errorInfo = '请输入学号！'
-                return await this.alertRef.setDis()
-            }
+            console.log('number', this.stuNum);
             
             const formData = new FormData()
             formData.append('student_id', this.stuNum)
@@ -238,6 +210,9 @@ export default defineComponent({
 
     .search-tab {
         margin: 0px 20% 0 20%;
+        @media screen and (max-width: 830px) {
+            margin: 0px 5% 0 5%;
+        }
 
         .search-input {
             width: 90%;

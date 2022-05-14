@@ -64,6 +64,16 @@ const routes: Array<RouteRecordRaw> = [
         path: '/register/vertify',
         name: 'Vertify',
         component: () => import('@/components/VertifyCode.vue')
+    },
+    {
+        path: '/login/output',
+        name: 'OutLogin',
+        component: () => import('@/views/others/LoginIndex.vue')
+    },
+    {
+        path: '/output/card',
+        name: 'MakeCard',
+        component: () => import('@/views/others/MakeCard.vue')
     }
 ]
 
@@ -73,7 +83,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-    const toPath = ['/', '/register', '/register/vertify']
+    const toPath = ['/', '/register', '/register/vertify', '/login/output', '/output/card']
     if (toPath.includes(to.path)) next()
     const token: string | null = window.localStorage.getItem('token')
     if (!token) {
