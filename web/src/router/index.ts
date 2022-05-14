@@ -18,11 +18,6 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/gather/GatherIndex.vue')
             },
             {
-                path: '/home/query',
-                name: 'Query',
-                component: () => import('@/views/query/QueryIndex.vue')
-            },
-            {
                 path: '/home/student',
                 name: 'Student',
                 component: () => import('@/views/register/RegisterIndex.vue')
@@ -83,7 +78,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-    const toPath = ['/', '/register', '/register/vertify', '/login/output', '/output/card']
+    const toPath = ['/', '/register', '/register/vertify', '/login/output']
     if (toPath.includes(to.path)) next()
     const token: string | null = window.localStorage.getItem('token')
     if (!token) {
