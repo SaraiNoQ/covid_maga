@@ -8,7 +8,8 @@
             :data="filterTableData"
             style="width: 100%"
             :row-class-name="tableRowClassName"
-            class="hover:cursor-pointer" 
+            class="hover:cursor-pointer"
+            v-loading="loading"
         >
             <el-table-column label="序号" type="index" width="60" align="center"/>
             <el-table-column
@@ -94,7 +95,9 @@ export default defineComponent({
         const tableData = ref<User[]>([])
         const allowArray = ref<number[]>([]);
         const denyArray = ref<number[]>([]);
+        const loading = ref<boolean>(false)
         onBeforeMount(async() => {
+            loading.value = true
             const res = await Axios.get('/student/numbers')
 
             // @ts-ignore
@@ -112,27 +115,33 @@ export default defineComponent({
             const res2 = await Axios.post('/journey/info', form)
             // @ts-ignore
             if (res2.success) {
-                // @ts-ignore
+                    // @ts-ignore
                 const respData = res2.success.data
                 for (let i = 0; i < respData.length; i++) {
-                    const userInfo: User = {
-                        date: dayjs(respData[i].createdAt).format('YYYY-MM-DD'),
-                        name: respData[i].student_id,
-                        address: respData[i].journey_destination,
-                        tag: respData[i].journey_category,
-                        reason: respData[i].journey_reason,
-                        id: respData[i].journey_id,
-                        record: respData[i].record_status
+                    try {
+                        const userInfo: User = {
+                            date: dayjs(respData[i].createdAt).format('YYYY-MM-DD'),
+                            name: respData[i].student_id,
+                            address: respData[i].journey_destination,
+                            tag: respData[i].journey_category,
+                            reason: respData[i].journey_reason,
+                            id: respData[i].journey_id,
+                            record: respData[i].record_status
+                        }
+                        tableData.value.push(userInfo)
+                        // 如果record为1，就存入allow，为2，就存入deny
+                        if (userInfo.record === '1') {
+                            allowArray.value.push(i)
+                        } else if (userInfo.record === '2') {
+                            denyArray.value.push(i)
+                        }
+                    } catch (error) {
+                        continue
                     }
-                    tableData.value.push(userInfo)
-                    // 如果record为1，就存入allow，为2，就存入deny
-                    if (userInfo.record === '1') {
-                        allowArray.value.push(i)
-                    } else if (userInfo.record === '2') {
-                        denyArray.value.push(i)
-                    }
+                    
                 }
             }
+            loading.value = false
         })
 
         const filterTableData = computed(() =>
@@ -166,7 +175,8 @@ export default defineComponent({
             successMessage,
             alertMessage,
             alertRef,
-            successRef
+            successRef,
+            loading
         }
     },
     methods: {
