@@ -1,6 +1,6 @@
 <template>
     <div class="fixed top-2 rounded-lg py-3 px-6 mb-3 text-lg
-      scale-0 inline-flex items-center justify-center z-50
+      scale-0 inline-flex items-center justify-center z-[5000]
       alert-message"
       :class=" { 'transition-all duration-400 transform-gpu scale-100 ease-out': display,
       'bg-red-100 text-red-700': $props.type === 'error',

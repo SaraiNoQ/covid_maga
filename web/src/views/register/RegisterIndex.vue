@@ -4,9 +4,12 @@
   <AlertMessage :message="successInfo" type="success" ref="successRef"/>
   <AlertMessage :message="warningInfo" type="warning" ref="warningRef"/>
 
-  <!-- <el-affix position="bottom" :offset="20">
-    <el-button type="primary">Offset bottom 20px</el-button>
-  </el-affix> -->
+  <div class="fixed bottom-4 right-12 w-12 h-12 z-[100]
+   text-green-400 cursor-pointer svg-style"
+    @click="inputVisible = true"
+  >
+    <font-awesome-icon icon="user-plus"/>
+  </div>
 
   <div>
      <el-dialog v-model="dialogFormVisible" title="修改学生信息">
@@ -42,59 +45,61 @@
   </div>
 
   <h2 class="my-4 text-3xl text-green-600 font-semibold">学 生 信 息 管 理</h2>
-  <div class="rg-shadow mt-2 mb-4 w-[75vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] mx-auto pt-4 pr-12 pb-2">
-    <el-form
-      :model="form"
-      label-width="120px"
-      :rules="rules">
-      <el-form-item label="Name" prop="name">
-        <el-input v-model="form.name" />
-      </el-form-item>
-      
-      <el-form-item label="Gender" prop="gender">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="male" />
-          <el-radio label="female" />
-        </el-radio-group>
-      </el-form-item>
+  <el-dialog v-model="inputVisible" title="录入学生信息">
+    <div class="mt-2 mb-4 w-[75vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] mx-auto pt-4 pr-12 pb-2">
+      <el-form
+        :model="form"
+        label-width="120px"
+        :rules="rules">
+        <el-form-item label="Name" prop="name">
+          <el-input v-model="form.name" />
+        </el-form-item>
+        
+        <el-form-item label="Gender" prop="gender">
+          <el-radio-group v-model="form.resource">
+            <el-radio label="male" />
+            <el-radio label="female" />
+          </el-radio-group>
+        </el-form-item>
 
-      <el-form-item label="Number" prop="number">
-          <el-input v-model="form.number" />
-      </el-form-item>
+        <el-form-item label="Number" prop="number">
+            <el-input v-model="form.number" />
+        </el-form-item>
 
-      <el-form-item label="Major" prop="major">
-          <el-input v-model="form.major" />
-      </el-form-item>
+        <el-form-item label="Major" prop="major">
+            <el-input v-model="form.major" />
+        </el-form-item>
 
-      <el-form-item label="Upload">
-        <el-upload
-          class="upload-demo"
-          multiple
-          ref="upload_img"
-          action=""
-          accept=".jpg, .jpeg, .png"
-          :limit="1"
-          :auto-upload="false"
-          :on-exceed="handleExceed"
-        >
-            <template #trigger>
-              <el-button type="primary">select file</el-button>
-              <div class="text-red-500 ml-4 text-xs">
-                jpg/png files with a size less than 500KB.
-              </div>
-            </template>
-            <!-- <el-button class="ml-3" type="success" @click="submitUpload">
-              upload to server
-            </el-button> -->
-        </el-upload>
-      </el-form-item>
+        <el-form-item label="Upload">
+          <el-upload
+            class="upload-demo"
+            multiple
+            ref="upload_img"
+            action=""
+            accept=".jpg, .jpeg, .png"
+            :limit="1"
+            :auto-upload="false"
+            :on-exceed="handleExceed"
+          >
+              <template #trigger>
+                <el-button type="primary">select file</el-button>
+                <div class="text-red-500 ml-4 text-xs">
+                  jpg/png files with a size less than 500KB.
+                </div>
+              </template>
+              <!-- <el-button class="ml-3" type="success" @click="submitUpload">
+                upload to server
+              </el-button> -->
+          </el-upload>
+        </el-form-item>
 
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit" :loadong="buttonLoading">Create</el-button>
-        <el-button @click="onReset">Reset</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit" :loadong="buttonLoading">Create</el-button>
+          <el-button @click="onReset">Reset</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+  </el-dialog>
 
   <div>
     <el-table
@@ -214,9 +219,10 @@ export default defineComponent({
         formData1.append('password', form.number.slice(form.number.length - 6)) // 密码为学号后六位
         formData1.append('nick_name', form.name)
         formData1.append('is_admin', '0')
-        const resp = await Axios.post('/register', formData1)
+        const resp = await Axios.post('/student/register', formData1)
         // @ts-ignore 
         if (resp.success) {
+          onReset()
           successInfo.value = '录 入 成 功 !'
           await successRef.value.setDis()
           // 查询学生信息
@@ -242,7 +248,7 @@ export default defineComponent({
       form.resource = ''
       form.major = ''
       form.number = ''
-      form.resource = 'male'
+      form.resource = ''
       upload_img.value!.clearFiles()
     }
 
@@ -373,6 +379,8 @@ export default defineComponent({
       }
     }
 
+    const inputVisible = ref(false)
+
     return {
         onSubmit,
         onReset,
@@ -400,7 +408,8 @@ export default defineComponent({
         dialogData,
         confirmChange,
         confirmLoading,
-        handleReset
+        handleReset,
+        inputVisible
     }
   },
 })
@@ -420,5 +429,12 @@ export default defineComponent({
 
 .rg-shadow {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.svg-style {
+  .svg-inline--fa {
+    height: 2.5em;
+
+  }
 }
 </style>

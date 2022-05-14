@@ -19,7 +19,8 @@ import {
     faIdCardClip,
     faQrcode,
     faCircleInfo,
-    faGauge
+    faGauge,
+    faUserPlus
 } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -42,7 +43,8 @@ library.add(faFire,
     faIdCardClip,
     faQrcode,
     faCircleInfo,
-    faGauge
+    faGauge,
+    faUserPlus
 );
 
 export default library
