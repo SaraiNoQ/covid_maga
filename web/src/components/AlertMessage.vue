@@ -32,10 +32,18 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .alert-message {
   min-width: 400px;
   width: 40%;
-  left: calc(50vw - 20%)
+  left: calc(50vw - 20%);
+  @media screen and (max-width: 400px) {
+    left: 0;
+  }
+  @media screen and (max-width: 768px) {
+    min-width: 80%;
+    max-width: 80%;
+    left: calc(50vw - 40%);
+  }
 }
 </style>
