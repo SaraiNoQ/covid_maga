@@ -1,7 +1,7 @@
 <template>
 <div>
-    <alert-message :message="errorInfo" type="error" ref="alertRef"/>
-    <alert-message :message="successInfo" type="success" ref="successRef"/>
+    <AlertMessage :message="errorInfo" type="error" ref="alertRef"/>
+    <AlertMessage :message="successInfo" type="success" ref="successRef"/>
     <h2 class="mt-4 text-3xl text-green-600 font-semibold">行 程 打 卡</h2>
     <div class="search-form mt-5 mx-0 w-[100vw] xl:w-[60vw] xl:mx-auto">
         <el-form
@@ -79,8 +79,12 @@ import { defineComponent, reactive, ref } from 'vue-demi'
 import dayjs from 'dayjs'
 
 import Axios from '../../plugins/axios'
+import AlertMessage from '../../components/AlertMessage.vue'
 
 export default defineComponent({
+    components: {
+        AlertMessage
+    },
     setup() {
         const searchForm = reactive({
             reason: '',
@@ -97,7 +101,7 @@ export default defineComponent({
         const stuNum = ref<string>(JSON.parse(localStorage.getItem('student') as string).user_name)
 
         // 验证表单的prop命名必须和绑定的值相同
-        const validateTime = (rule: any, value: any, callback:any) => {
+        const validateTime = (_rule: any, value: any, callback:any) => {
             const startTime: string = dayjs(new Date()).format('YYYY-MM-DD')
             const endTime: string = dayjs(value[1]).format('YYYY-MM-DD')
             // console.log(startTime, endTime, dayjs(startTime).diff(endTime, 'day'))
