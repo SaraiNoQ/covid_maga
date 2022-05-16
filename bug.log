@@ -1,0 +1,5 @@
+2022-05-16
+1. authorize界面: <bug>移除日期排序功能；提供创建请求的时间的项，时间改成区间。
+2. 行程打卡界面: 完善身份管理。
+3. 学生信息界面: <bug>删除按钮不能同时删除user表。
+4. dashboard: <todo>Calendar组件，<todo>TimeList组件。
