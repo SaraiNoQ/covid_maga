@@ -63,6 +63,10 @@
 // const startTime: string = dayjs(new Date()).format('YYYY-MM-DD')
 // const endTime: string = dayjs().format('YYYY-MM-DD')
 
-const path = require('path')
+// const path = require('path')
 
-console.log(path.join(__dirname, '../static'))
+// console.log(path.join(__dirname, '../static'))
+
+const a = 'sa'
+const b = 'sa'
+console.log(a === b)

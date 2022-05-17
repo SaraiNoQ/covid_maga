@@ -3,6 +3,7 @@ const { createJourney, getJourney, updateById } = require('../service/journey.se
 const { createJourneyError, noQueryStudent, updateJourneyError } = require('../constants/err.type')
 
 class JourneyController {
+    // 创建行程
     async createJourney(ctx) {
         console.log('createJourney')
         const {
@@ -43,6 +44,7 @@ class JourneyController {
 
     }
 
+    // 获取行程
     async getJourney(ctx) {
         // student_id 为一个数组
         const { student_id } = ctx.request.body
@@ -70,6 +72,7 @@ class JourneyController {
         }
     }
 
+    // 管理员批改
     async changeAuth(ctx) {
         const { journey_id, record_status } = ctx.request.body
         try {
