@@ -3,5 +3,5 @@
 </template>
 
 <script lang="ts" setup>
-const tset = 'test'
+const tset = '2';
 </script>
