@@ -6,3 +6,4 @@
 5. 管理员在线管理: <table>记录当前登陆的用户，此时修改表会向登陆用户发送消息。
 6. 消息功能: <todo>接受当前消息并实时展示。
 7. keep-alive: <fix>keep-alive用法。
+8. 完善项目: 文档，配置规范。(eslint  commitlint)
