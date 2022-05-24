@@ -2,7 +2,15 @@ const path = require('path')
 // 删除文件
 const fs = require('fs')
 // 获取请求，调用service操作model层方法
-const { createUser, getUser, updateById, updateImage, updateInfo, updateAccount } = require('../service/user.service')
+const {
+	createUser,
+	getUser,
+	updateById,
+	updateImage,
+	updateInfo,
+	updateAccount,
+	deleteAccount
+} = require('../service/user.service')
 const {
 	userRegisterError,
 	userNotExited,
@@ -11,7 +19,9 @@ const {
 	infoUpdateError,
 	getUserInfoError,
 	updateAccountError,
-	userPermissionLow
+	userPermissionLow,
+	deleteUserError,
+	deleteNotFound
 } = require('../constants/err.type')
 const jwt = require('jsonwebtoken')
 // eslint-disable-next-line no-undef
@@ -22,6 +32,7 @@ const nodemailer = require('../app/nodemailer')
 
 
 class UserController {
+	// 获取验证码
 	async getCaptcha(ctx) {
 		const { user_name } = ctx.request.body
 		console.log('captcha', user_name)
@@ -41,6 +52,7 @@ class UserController {
 		}
 	}
 	
+	// 验证验证码，注册用户
 	async register(ctx) {
 		// 1. get request
 		const { user_name, password, nick_name, captcha } = ctx.request.body
@@ -73,6 +85,7 @@ class UserController {
 		}
 	}
 	
+	// 注册用户
 	async registStu(ctx) {
 		const { user_name, password, nick_name, is_admin } = ctx.request.body
 		try {
@@ -96,6 +109,7 @@ class UserController {
 		}
 	}
 
+	// 登陆功能
 	async login (ctx) {
 		const {user_name} = ctx.request.body
 
@@ -121,6 +135,7 @@ class UserController {
 		}
 	}
 
+	// 修改密码
 	async passwd(ctx) {
 		const { user_name, new_password } = ctx.request.body
 		try {
@@ -146,6 +161,7 @@ class UserController {
 		}
 	}
 
+	// 用户验证
 	async verify(ctx) {
 		const { user_name } = ctx.state.user
 		try {
@@ -160,6 +176,7 @@ class UserController {
 		}
 	}
 	
+	// 上传图片
 	async uploadImage(ctx, next) {
 		// 判断文件格式是否正确，只支持png,jpg,jpeg,gif
 		const { user_image } = ctx.request.files
@@ -176,6 +193,7 @@ class UserController {
 		}
 	}
 
+	// 删除原有照片
 	async removeDuplicate(ctx, next) {
 		const { user_name } = ctx.request.body
 		// console.log({  user_name }, filePath)
@@ -197,6 +215,7 @@ class UserController {
 		await next()
 	}
 
+	// 图片保存
 	async saveToDB(ctx) {
 		const { user_name } = ctx.request.body
 		const { filePath } = ctx.state
@@ -213,6 +232,7 @@ class UserController {
 		}
 	}
 
+	// 更新用户信息
 	async uploadInfo(ctx) {
 		const { nick_name, user_info, user_name } = ctx.request.body
 		try {
@@ -231,6 +251,7 @@ class UserController {
 		}
 	}
 
+	// 获取用户信息
 	async getInformation(ctx) {
 		const { user_name } = ctx.request.query
 		try {
@@ -248,6 +269,7 @@ class UserController {
 		}
 	}
 
+	// 修改绑定邮箱
 	async changeAccount(ctx) {
 		const { user_name, new_account, captcha } = ctx.request.body
 		const result = await redisHelper.getString(new_account)
@@ -271,6 +293,7 @@ class UserController {
 		}
 	}
 
+	// 获取验证码
 	async getNewCaptcha(ctx) {
 		const { new_account } = ctx.request.body
 		// console.log('captcha', new_account)
@@ -312,6 +335,26 @@ class UserController {
 		} catch (error) {
 			console.error(error)
 			ctx.app.emit('error', getUserInfoError, ctx)
+		}
+	}
+
+	// 删除用户
+	async delAccount(ctx) {
+		const { user_name } = ctx.request.body
+		try {
+			const res = await deleteAccount({ user_name })
+			if (res) {
+				ctx.body = {
+					code: 0,
+					message: 'delete account success!',
+					result: res
+				}
+			} else {
+				ctx.app.emit('error', deleteNotFound, ctx)
+			}
+		} catch (error) {
+			console.error(error)
+			ctx.app.emit('error', deleteUserError, ctx)
 		}
 	}
 }

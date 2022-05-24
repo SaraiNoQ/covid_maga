@@ -17,7 +17,8 @@ app
 			// 上传云端后，将后端文件放在/home/ftpuser/www/下，将该属性改为../../../images
 			uploadDir: path.join(__dirname, '../../static/images'),
 			keepExtensions: true
-		}
+		},
+		strict: false
 	}))
 	.use(static(path.join(__dirname, '../../static')))
 	.use(parameter(app))

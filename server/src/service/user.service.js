@@ -59,12 +59,14 @@ class UserService {
 		return res
 	}
 
+	// update user's image
 	async updateImage({ user_name }, filePath) {
 		const whereOpt = { user_name }
 		const res = await User.update({ user_image: filePath }, { where: whereOpt })
 		return res
 	}
 
+	// update user's info
 	async updateInfo({ user_info, nick_name, user_name }) {
 		const whereUpdate = {}
 		nick_name && Object.assign(whereUpdate, { nick_name })
@@ -76,8 +78,17 @@ class UserService {
 		return res
 	}
 
+	// update user's account email
 	async updateAccount({ user_name, new_account }) {
 		const res = await User.update({ user_account: new_account }, {
+			where: { user_name }
+		})
+		return res
+	}
+
+	// delete in database
+	async deleteAccount({ user_name }) {
+		const res = await User.destroy({
 			where: { user_name }
 		})
 		return res

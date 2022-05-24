@@ -40,6 +40,16 @@ module.exports = {
 		message: 'You have no permission to access this page!',
 		result: ''
 	},
+	deleteUserError: {
+		code: '10009',
+		message: 'delete user error!',
+		result: ''
+	},
+	deleteNotFound: {
+		code: '10010',
+		message: 'delete user not found!',
+		result: ''
+	},
 	TokenExpiredError: {
 		code: '10101',
 		message: 'token is pasttime!',

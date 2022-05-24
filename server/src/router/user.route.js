@@ -24,7 +24,8 @@ const { login,
     getNewCaptcha,
     getAccount,
     removeDuplicate,
-    registStu
+    registStu,
+    delAccount
 } = require('../controller/user.controller')
 
 const router = new Router()
@@ -57,5 +58,7 @@ router.patch('/account', authToken, userNameValidate, newAccountValidate, vertif
 router.get('/account', getAccount)
 
 router.post('/new/captcha', newAccountValidate, getNewCaptcha)
+
+router.delete('/account', userNameValidate, delAccount)
 
 module.exports = router
