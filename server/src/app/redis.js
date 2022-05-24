@@ -2,7 +2,7 @@ const redis = require('redis')
 const config = {
 	url: '82.157.232.71',
 	port: 6379,
-	password: 'kingredis'
+	password: 'y0%ez8dnw#UgktByDdL3ctIgSnYZL4g4OedjdZ_Kv7hlWk%l7C2gehREMqBzxUDJ'
 }
 
 const client = redis.createClient(config.port, config.url) // 实例redis对象
