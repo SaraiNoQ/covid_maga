@@ -1,6 +1,13 @@
+const dayjs = require('dayjs')
 const { createJourney, getJourney, updateById } = require('../service/journey.service')
 
-const { createJourneyError, noQueryStudent, updateJourneyError } = require('../constants/err.type')
+const {
+    createJourneyError,
+    noQueryStudent,
+    updateJourneyError,
+    retrieveJourneyError,
+    retrieveNotFound
+} = require('../constants/err.type')
 
 class JourneyController {
     // 创建行程
@@ -86,6 +93,35 @@ class JourneyController {
         } catch (error) {
             console.error(error)
             ctx.app.emit('error', updateJourneyError, ctx)
+        }
+    }
+
+    // 获取行程记录
+    async getRecord(ctx) {
+        const { student_id } = ctx.request.body
+        try {
+            const res = await getJourney({ student_id })
+            if (res) {
+                const currentTime = new Date()
+                console.log('time', dayjs(res.createAt).format('YYYY-MM-DD'))
+                const day = dayjs(dayjs(res.createdAt).format('YYYY-MM-DD')).diff(dayjs(dayjs(currentTime).format('YYYY-MM-DD')), 'days')
+                console.log('time', dayjs(currentTime).format('YYYY-MM-DD'), res.createAt, day)
+
+                if (1 >= day && day >= -1) {
+                    ctx.body = {
+                        code: 0,
+                        message: 'retrieve journey record success!',
+                        data: res
+                    }
+                } else {
+                    ctx.app.emit('error', retrieveNotFound, ctx)
+                }
+            } else {
+                ctx.app.emit('error', retrieveNotFound, ctx)
+            }
+        } catch (error) {
+            console.error(error)
+            ctx.app.emit('error', retrieveJourneyError, ctx)
         }
     }
 }

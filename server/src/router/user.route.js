@@ -59,6 +59,6 @@ router.get('/account', getAccount)
 
 router.post('/new/captcha', newAccountValidate, getNewCaptcha)
 
-router.delete('/account', userNameValidate, delAccount)
+router.post('/account/delete', userNameValidate, delAccount)
 
 module.exports = router

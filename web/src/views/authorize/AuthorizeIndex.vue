@@ -175,7 +175,7 @@ export default defineComponent({
                             reason: respData[i].journey_reason,
                             id: respData[i].journey_id,
                             record: respData[i].record_status,
-                            createAt: dayjs(respData[i].createdAt).format('YYYY-MM-DD HH:mm:ss')
+                            createAt: dayjs(respData[i].createAt).format('YYYY-MM-DD HH:mm:ss')
                         }
                         tableData.value.push(userInfo)
                         console.log('record', userInfo);

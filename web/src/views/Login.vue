@@ -142,9 +142,13 @@
                   class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
                   @click="submitLogin()"
                   :class="{'cursor-not-allowed': loginDisabled}"
+                  v-if="!isLoading"
                 >
                   Login
                 </button>
+                <div v-else class="spinner-border animate-spin inline-block w-8 h-8 my-1 border-4 rounded-full" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
                 <p class="text-sm font-semibold mt-2 pt-1 mb-0">
                   Don't have an account?
                   <a
@@ -180,8 +184,8 @@ export default defineComponent({
       const store = useStore()
 
       const state = reactive({
-          email: '',
-          password: ''
+        email: '',
+        password: ''
       })
       // 使用computed使得validation组件获得动态响应的值
       const rules = computed(() => {
@@ -197,15 +201,17 @@ export default defineComponent({
       const loginErrorInfo = ref<string>('login fail! Please check your email or password.')
       // @ts-ignore
       const loginDisabled = ref<Boolean>(false)
+      // 加载动画
+      const isLoading = ref<Boolean>(false)
       const clickLogin = async () => {
         if (loginDisabled.value) { return }
         
+        isLoading.value = true
         loginDisabled.value = true
         const formData = new FormData()
         formData.append('user_name', state.email)
         formData.append('password', state.password)
         const res = await Axios.post('/login', formData)
-        // console.log('loging', res)
         // @ts-ignore
         if (res.success) {
           // 设置token和个人信息
@@ -218,6 +224,7 @@ export default defineComponent({
         } else {
           // @ts-ignore
           loginErrorInfo.value = res.error.data.message ? res.error.data.message : 'login fail! Please check your email or password!'
+          isLoading.value = false
           await alertRef.value.setDis()
         }
         loginDisabled.value = false
@@ -234,7 +241,8 @@ export default defineComponent({
         window.location.href = 'https://github.com/SaraiNoQ/covid_maga'
       }
 
-      return {state,
+      return {
+        state,
         v$,
         alertRef,
         successRef,
@@ -242,7 +250,8 @@ export default defineComponent({
         gotoRegister,
         loginErrorInfo,
         loginDisabled,
-        connectGithub
+        connectGithub,
+        isLoading
       }
     },
     methods: {

@@ -169,5 +169,20 @@ module.exports = {
 		code: '30205',
 		message: 'update student error',
 		result: ''
+	},
+	noStudentNumber: {
+		code: '30206',
+		message: 'no query student',
+		result: ''
+	},
+	retrieveJourneyError: {
+		code: '30102',
+		message: 'retrieve journey error',
+		result: ''
+	},
+	retrieveNotFound: {
+		code: '30103',
+		message: 'retrieve outcome is null',
+		result: ''
 	}
 }

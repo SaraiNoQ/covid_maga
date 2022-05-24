@@ -69,13 +69,16 @@
         </el-form>
         <div class="flex justify-center items-center mx-auto pl-20">
             <el-button class="search-button" type="success" @click="search">提 交 打 卡</el-button>
-        </div>
+            <div class="w-30 font-serif tracking-normal text-base text-green-500">
+                    <p>{{isMake ? '今日已打卡' : '今日未打卡'}}</p>
+                </div>
+            </div>
     </div>
 </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue-demi'
+import { defineComponent, onBeforeMount, reactive, ref } from 'vue-demi'
 import dayjs from 'dayjs'
 
 import Axios from '../../plugins/axios'
@@ -122,6 +125,17 @@ export default defineComponent({
         const errorInfo = ref<string>('打 卡 失 败！')
         const successInfo = ref<string>('打 卡 成 功！')
 
+        const isMake = ref<Boolean>(false)
+        onBeforeMount(async () => {
+            const fd = new FormData()
+            fd.append('student_id', stuNum.value)
+            const res = await Axios.post('/journey/record', fd)
+            // @ts-ignore
+            if (res.success) {
+                isMake.value = true
+            }
+        })
+
         return {
             searchForm,
             options1: [
@@ -167,13 +181,12 @@ export default defineComponent({
             errorInfo,
             successInfo,
             rules,
-            stuNum
+            stuNum,
+            isMake
         }
     },
     methods: {
         async search() {
-            console.log('number', this.stuNum);
-            
             const formData = new FormData()
             formData.append('student_id', this.stuNum)
             formData.append('journey_category', this.searchForm.authValue)

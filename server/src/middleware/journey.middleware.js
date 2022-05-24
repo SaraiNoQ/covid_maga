@@ -1,5 +1,5 @@
 const { getJourney, updateJourney } = require('../service/journey.service')
-const { journeyFormatError } = require('../constants/err.type')
+const { journeyFormatError, noStudentNumber } = require('../constants/err.type')
 
 const dayjs = require('dayjs')
 
@@ -56,8 +56,19 @@ const idValidate = async (ctx, next) => {
     await next()
 }
 
+// 判断是否有student_id
+const stuNumValidate = async (ctx, next) => {
+    const { student_id } = ctx.request.body
+    if (!student_id) {
+        ctx.app.emit('error', noStudentNumber, ctx)
+        return
+    }
+    await next()
+}
+
 module.exports = {
     journeyValidator,
     journeyVertified,
-    idValidate
+    idValidate,
+    stuNumValidate
 }

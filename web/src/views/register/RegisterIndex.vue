@@ -341,8 +341,13 @@ export default defineComponent({
         const formData = new FormData()
         formData.append('student_number', row.student_number)
         const deleteRes = await Axios.post('/student/delete', formData)
+
+        const fd = new FormData()
+        fd.append('user_name', row.student_number)
+        const deleteUser = await Axios.post('/account/delete', fd)
+
         // @ts-ignore
-        if (deleteRes.success) {
+        if (deleteRes.success && deleteUser.success) {
           tableData.value.splice(index, 1)
           successInfo.value = '删 除 成 功 !'
           await successRef.value.setDis()

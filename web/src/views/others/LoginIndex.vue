@@ -5,7 +5,7 @@
             <div class="m-5">
               <div class="block p-6 rounded-lg shadow-lg bg-white w-[80vw] max-w-md">
                 <form>
-                  <div class="form-group mb-6 block md:flex">
+                  <div class="form-group mb-6 block md:flex" @keyup.enter="login">
                     <label for="exampleInputEmail2" class="form-label inline-block mb-2 w-12 my-auto ml-2 mr-6 text-gray-700">账 号</label>
                     <input type="email" class="form-control
                       block
@@ -73,7 +73,11 @@
                     duration-150
                     ease-in-out"
                     @click.prevent="login"
+                    v-if="!isLoading"
                     >登  陆</button>
+                    <div v-else class="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
                 </form>
               </div>
             </div>
@@ -93,6 +97,8 @@ import AlertMessage from '../../components/AlertMessage.vue'
 const router = useRouter()
 const store = useStore()
 
+const isLoading = ref<Boolean>(false)
+
 interface LoginState {
   username: string
   password: string
@@ -105,7 +111,7 @@ const loginForm = reactive<LoginState>({
 const errorRef = ref<any>(null)
 const errorInfo = ref<string>('')
 const login = async () => {
-    console.log(loginForm);
+    isLoading.value = true
     const formData = new FormData()
     formData.append('user_name', loginForm.username)
     formData.append('password', loginForm.password)
@@ -122,6 +128,7 @@ const login = async () => {
     } else {
         // @ts-ignore
         errorInfo.value = res.error.data.message ? res.error.data.message : 'login fail! Please check your email or password!'
+        isLoading.value = false
         await errorRef.value.setDis()
     }
 }

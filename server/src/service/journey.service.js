@@ -7,7 +7,7 @@ class JourneyService {
     async createJourney(student_id,journey_category, live_zone, healthy_status, journey_destination, journey_reason, journey_start_time,journey_end_time,journey_info) {
         const journey_id = uuidv4().replace(/-/g, '')
         // console.log('uuidv4', journey_id)
-        const createAt = dayjs(new Date()).format('YYYY-MM-DD')
+        const createAt = dayjs(new Date()).format('YYYY-MM-DD hh:mm:ss')
         const res = await Journey.create({
             student_id,
             journey_id,
@@ -47,7 +47,7 @@ class JourneyService {
                     'journey_start_time',
                     'journey_end_time',
                     'journey_info',
-                    'createdAt'
+                    'createAt'
                 ],
                 where: whereOpt,
                 order: [
@@ -72,7 +72,7 @@ class JourneyService {
         healthy_status && Object.assign(updateOpt, { healthy_status })
         journey_start_time && Object.assign(updateOpt, { journey_start_time })
         journey_end_time && Object.assign(updateOpt, { journey_end_time })
-        const createAt = dayjs(new Date()).format('YYYY-MM-DD')
+        const createAt = dayjs(new Date()).format('YYYY-MM-DD hh:mm:ss')
 
         try {
             const res = Journey.update({
