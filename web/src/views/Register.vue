@@ -2,7 +2,8 @@
     <div>
         <!-- alert -->
         <alert-message :message="regist.fail" type="error" ref="errorRef"/>
-        <!-- <alert-message :message="regist.success" type="success" ref="successRef"/> -->
+
+        <!-- 注册界面 -->
         <section class="h-full gradient-form bg-gray-200 md:h-screen">
           <div class="container py-12 px-6 h-full mx-auto">
             <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
@@ -165,13 +166,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, getCurrentInstance, reactive, ref } from 'vue'
+import { computed, defineComponent, getCurrentInstance, reactive, ref } from 'vue-demi'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
 import useValidate from '@vuelidate/core'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 
+import Axios from '../plugins/axios'
 import AlertMessage from '../components/AlertMessage.vue'
 export default defineComponent({
     components: { AlertMessage },
@@ -182,7 +184,7 @@ export default defineComponent({
         const errorRef = ref<any>(null)
         const successRef = ref<any>(null)
         const regist = reactive({
-            fail: 'Register Failed!',
+            fail: '注 册 失 败 !',
             success: ''
         })
 
@@ -218,7 +220,7 @@ export default defineComponent({
         }
         
         // @ts-ignore
-        const { proxy } = getCurrentInstance()
+        // const { proxy } = getCurrentInstance()
         const register = async () => {
             const formData = new FormData()
             
@@ -226,8 +228,8 @@ export default defineComponent({
             formData.append('user_name', state.account)
             formData.append('password', state.password)
             // @ts-ignore
-            const res = await proxy.$axios.post('/captcha', formData)
-            // console.log('register:', res.success ? res.success : res.error);
+            const res = await Axios.post('/captcha', formData)
+            // @ts-ignore
             if (res.success) {
                 store.commit('setRegister', {
                     nick_name: state.nickName,
@@ -236,6 +238,7 @@ export default defineComponent({
                 })
                 router.push('/register/vertify')
             } else {
+                // @ts-ignore
                 registFail(res.error)
             }
             

@@ -10,12 +10,18 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '/home/dashboard',
                 name: 'Dashboard',
-                component: () => import('@/views/dashboard/DashIndex.vue')
+                component: () => import('@/views/dashboard/DashIndex.vue'),
+                meta: {
+                    keepAlive: true
+                }
             },
             {
                 path: '/home/gather',
                 name: 'Gather',
-                component: () => import('@/views/gather/GatherIndex.vue')
+                component: () => import('@/views/gather/GatherIndex.vue'),
+                meta: {
+                    keepAlive: true
+                }
             },
             {
                 path: '/home/student',
@@ -26,22 +32,31 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '/home/authorize',
                 name: 'Authorize',
-                component: () => import('@/views/authorize/AuthorizeIndex.vue')
+                component: () => import('@/views/authorize/AuthorizeIndex.vue'),
             },
             {
                 path: '/home/statistics',
                 name: 'Statistics',
-                component: () => import('@/views/statistics/StatisticsIndex.vue')
+                component: () => import('@/views/statistics/StatisticsIndex.vue'),
+                meta: {
+                    keepAlive: true
+                }
             },
             {
                 path: '/home/settings',
                 name: 'Settings',
-                component: () => import('@/views/setting/SettingIndex.vue')
+                component: () => import('@/views/setting/SettingIndex.vue'),
+                meta: {
+                    keepAlive: true
+                }
             },
             {
                 path: '/home/dynamic',
                 name: 'Dynamic',
-                component: () => import('@/views/dynamic/DynamicIndex.vue')
+                component: () => import('@/views/dynamic/DynamicIndex.vue'),
+                meta: {
+                    keepAlive: true
+                }
             }
         ]
     },

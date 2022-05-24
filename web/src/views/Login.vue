@@ -1,10 +1,10 @@
 <template>
-<div>
-  <!-- alert -->
+  <div>
+    <!-- 弹框提示 -->
     <alert-message :message="loginErrorInfo" type="error" ref="alertRef"/>
     <alert-message message="Login success! Please waiting..." type="success" ref="successRef"/>
 
-    <!-- dialog -->
+    <!-- 忘记密码，已拆分成组件 -->
     <!-- <el-dialog v-model="dialogTableVisible" title="Reset Your Account">
       <template #footer>
         <span class="dialog-footer">
@@ -16,8 +16,8 @@
       </template>
     </el-dialog> -->
 
+    <!-- 登陆界面 -->
     <section class="h-screen">
-      
       <div class="px-6 h-full text-gray-800">
         <div
           class="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6"
@@ -163,7 +163,7 @@
         </div>
       </div>
     </section>
-</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -180,6 +180,7 @@ import ForgetPassword from '../components/ForgetPassword.vue'
 export default defineComponent({
     components: { AlertMessage, ForgetPassword },
     setup() {
+      // 注册vue-router和vuex
       const router = useRouter()
       const store = useStore()
 
@@ -194,6 +195,7 @@ export default defineComponent({
           password: { required, minLength: minLength(6) }
         }
       })
+      // 使用useValidate创建validation实例,负责验证输入格式是否正确
       const v$ = useValidate(rules, state)
 
       const alertRef = ref<any>(null)
@@ -203,6 +205,7 @@ export default defineComponent({
       const loginDisabled = ref<Boolean>(false)
       // 加载动画
       const isLoading = ref<Boolean>(false)
+      // 登陆方法
       const clickLogin = async () => {
         if (loginDisabled.value) { return }
         
@@ -233,14 +236,17 @@ export default defineComponent({
       //   alertRef.value.setDis()
       // }
 
+      // 跳转到注册页面
       const gotoRegister = () => {
         router.push('/register')
       }
       
+      // 跳转到项目的github地址
       const connectGithub = () => {
         window.location.href = 'https://github.com/SaraiNoQ/covid_maga'
       }
 
+      // 暴露给外部
       return {
         state,
         v$,
@@ -254,6 +260,7 @@ export default defineComponent({
         isLoading
       }
     },
+    // 提供给子组件使用的方法
     methods: {
       submitLogin () {
         this.v$.$validate()
