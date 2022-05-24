@@ -699,4 +699,191 @@ const submitChangeAccount = async() => {
 :deep(.el-form-item) {
     margin-bottom: 15px;
 }
+
+// .user-info {
+//     // mx-auto mt-6 bg-white rounded-lg w-[90%] md:w-3/5 lg:w-1/2 box-border
+//     margin: 24px auto 0;
+//     background-color: #fff;
+//     border-radius: 8px;
+//     width: 90%;
+//     @media (min-width: 768px) {
+//         width: 60%;
+//     }
+//     @media (min-width: 1024px) {
+//         width: 50%;
+//     }
+//     box-sizing: border-box;
+
+//     .detail-info {
+//         // py-5 px-6 items-center border-y-[0.01rem]
+//         padding: 20px 24px;
+//         align-items: center;
+//         border-left-width: 0.16px;
+//         border-right-width: 0.16px;
+
+//         .user-setting {
+//             font-size: 20px;
+//             line-height: 28px;
+//             text-align: left;
+//             font-weight: 700;
+//         }
+//         .avatar-setting {
+//             margin-top: 4px;
+//             font-size: 14px;
+//             line-height: 20px;
+//             text-align: left;
+//             --tw-text-opacity: 1;
+//             color: rgb(107 114 128 / var(--tw-text-opacity));
+//         }
+
+//         .detail-setting {
+//             padding: 20px 24px;
+//             align-items: center;
+//             border-left-width: 0.16px;
+
+//             .nick-info {
+//                 margin-top: 24px;
+//                 margin-right: 24px;
+//                 margin-left: -30px;
+//                 @media (min-width: 768px) {
+//                     margin-left: 0px;
+//                 }
+
+//                 .form-setting {
+//                     position: relative;
+//                     margin-top: 8px;
+//                     text-align: left;
+
+//                      .tip {
+//                         font-size: 12px;
+//                         line-height: 16px;
+//                         vertical-align: top;
+//                         --tw-text-opacity: 1;
+//                         color: rgb(156 163 175 / var(--tw-text-opacity));
+//                     }
+
+//                     .form {
+//                         position: absolute;
+//                         right: 0px;
+//                         top: 0px;
+
+//                         .btn-gray {
+//                             border-width: 1px;
+//                             --tw-border-opacity: 1;
+//                             border-color: rgb(54 57 63 / var(--tw-border-opacity));
+//                             border-radius: 8px;
+//                             height: 20px;
+//                             padding: 0px 8px;
+//                             font-size: 12px;
+//                             line-height: 16px;
+//                             min-width: min-content;
+//                             margin-left: 8px;
+//                             --tw-text-opacity: 1;
+//                             color: rgb(54 57 63 / var(--tw-text-opacity));
+//                         }
+
+//                         .btn-orange {
+//                             border-width: 1px;
+//                             --tw-border-opacity: 1;
+//                             border-color: rgb(251 146 60 / var(--tw-border-opacity));
+//                             border-radius: 8px;
+//                             height: 20px;
+//                             padding: 0px 8px;
+//                             font-size: 12px;
+//                             line-height: 16px;
+//                             min-width: min-content;
+//                             margin-left: 8px;
+//                             --tw-text-opacity: 1;
+//                             color: rgb(251 146 60 / var(--tw-text-opacity));
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+
+//         .pass-setting {
+//             padding: 20px 24px;
+//             align-items: center;
+//             border-left-width: 0.16px;
+
+//             .fisrt-psd {
+//                 display: flex;
+//                 align-items: center;
+//                 justify-content: center;
+//             }
+
+//             .psd {
+//                 text-align: left;
+//                 font-size: 16px;
+//                 line-height: 24px;
+//             }
+
+//             .not-set {
+//                 margin-top: 4px;
+//                 text-align: left;
+//                 --tw-text-opacity: 1;
+//                 color: rgb(107 114 128 / var(--tw-text-opacity));
+//                 font-size: 14px;
+//                 line-height: 20px;
+//             }
+
+//             .ml4 {
+//                 margin-left: 4px;
+
+//                 .btn-blue {
+//                     height: auto;
+//                     --tw-text-opacity: 1;
+//                     color: rgb(37 99 235 / var(--tw-text-opacity));
+//                     background-color: transparent;
+//                     font-size: 14px;
+//                     line-height: 20px;
+//                     cursor: pointer;
+//                     text-align: center;
+//                     width: 40px;
+//                 }
+//             }
+
+//             .reset-form-input {
+//                 width: 65%;
+//                 @media (min-width: 1024px) {
+//                     width: 60%;
+//                 }
+//             }
+
+//             .reset-form-tip {
+//                 margin-left: 12px;
+//                 --tw-text-opacity: 1;
+//                 color: rgb(156 163 175 / var(--tw-text-opacity));
+//             }
+
+//             .submit-btn {
+//                 position: relative;
+//                 height: 40px;
+//                 width: 100%;
+
+//                 .btn {
+//                     position: absolute;
+//                     display: inline-block;
+//                     padding: 10px 24px;
+//                     --tw-bg-opacity: 1;
+//                     background-color: rgb(37 99 235 / var(--tw-bg-opacity));
+//                     --tw-text-opacity: 1;
+//                     color: rgb(255 255 255 / var(--tw-text-opacity));
+//                     font-weight: 500;
+//                     font-size: 14px;
+//                     line-height: 20px;
+//                     line-height: 1.25;
+//                     text-transform: uppercase;
+//                     border-radius: 4px;
+//                     --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+//                     --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+//                     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+//                     transition: all 0.2s ease-in-out;
+//                     &:hover {
+//                         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow-colored);
+//                     }
+//             }
+//         }
+//     }
+// }
 </style>

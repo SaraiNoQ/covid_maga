@@ -48,21 +48,27 @@
         >
             <el-table-column label="序号" type="index" width="60" align="center"/>
             <el-table-column
+                prop="createAt"
+                label="申请时间"
+                width="160"
+                column-key="date"
+                align="center"
+            />
+            <el-table-column
                 prop="date"
-                label="日期"
-                sortable
-                width="180"
+                label="请假时长"
+                width="200"
                 column-key="date"
                 align="center"
             />
             <el-table-column prop="name" label="身份号" width="150" align="center"/>
-            <el-table-column prop="address" label="目的地" align="center" />
-            <el-table-column prop="reason" label="事由" width="290" align="center" />
+            <el-table-column prop="address" label="目的地" align="center" width="250" />
+            <el-table-column prop="reason" label="事由" align="center" />
 
             <el-table-column
                 prop="tag"
                 label="身份"
-                width="90"
+                width="80"
                 align="center"
             >
                 <template #default="scope">
@@ -112,7 +118,8 @@ interface User {
     reason: string,
     record: string | boolean,
     id: string,
-    index?: number
+    index?: number,
+    createAt?: string,
 }
 
 interface StuNum {
@@ -150,23 +157,29 @@ export default defineComponent({
                 form.student_id.push(e.student_number)
             })
             const res2 = await Axios.post('/journey/info', form)
+            
             // @ts-ignore
             if (res2.success) {
-                    // @ts-ignore
+                // @ts-ignore
                 const respData = res2.success.data
+                console.log('data', respData)
+                
                 let index = 0
                 for (let i = 0; i < respData.length; i++, index++) {
                     try {
                         const userInfo: User = {
-                            date: dayjs(respData[i].createdAt).format('YYYY-MM-DD'),
+                            date: `${dayjs(respData[i].journey_start_time).format('YYYY-MM-DD')} -- ${dayjs(respData[i].journey_end_time).format('YYYY-MM-DD')} `,
                             name: respData[i].student_id,
                             address: respData[i].journey_destination,
                             tag: respData[i].journey_category,
                             reason: respData[i].journey_reason,
                             id: respData[i].journey_id,
-                            record: respData[i].record_status
+                            record: respData[i].record_status,
+                            createAt: dayjs(respData[i].createdAt).format('YYYY-MM-DD HH:mm:ss')
                         }
                         tableData.value.push(userInfo)
+                        console.log('record', userInfo);
+                        
                         // 如果record为1，就存入allow，为2，就存入deny
                         if (userInfo.record === '1') {
                             console.log('arr', allowArray);
@@ -217,7 +230,8 @@ export default defineComponent({
             tag: '',
             reason: '',
             record: '',
-            index: -1
+            index: -1,
+            createAt: ''
         })
         const formLabelWidth = '140px'
         const handleRowClick = async (row: User, column) => {

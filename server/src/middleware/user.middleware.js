@@ -12,7 +12,6 @@ const { userAlreadyExited,
 	invalidToken
 } = require('../constants/err.type')
 const redisHelper = require('../app/redis')
-const { emit } = require('process')
 
 // 验证注册信息是否合法
 const userValidator = async (ctx, next) => {
