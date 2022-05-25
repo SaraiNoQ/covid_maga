@@ -1,6 +1,7 @@
 <template>
     <div>
         <AlertMessage :message="errorInfo" type="error" ref="errorRef"/>
+        
         <div class="flex justify-center items-center mt-[15vh]">
             <div class="m-5">
               <div class="block p-6 rounded-lg shadow-lg bg-white w-[80vw] max-w-md">
@@ -51,8 +52,11 @@
                         id="exampleCheck2">
                       <label class="form-check-label inline-block text-gray-800 text-sm" for="exampleCheck2">记住我</label>
                     </div>
-                    <a href="#!"
-                      class="text-sm text-blue-600 hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out">忘记密码?</a>
+                    <button type="button" @click="forgetPasswd"
+                      class="text-sm text-blue-600 hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out"
+                      data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    >忘记密码?</button>
+
                   </div>
                   <button type="submit" class="
                     w-full
@@ -131,5 +135,9 @@ const login = async () => {
         isLoading.value = false
         await errorRef.value.setDis()
     }
+}
+
+const forgetPasswd = () => {
+  console.log('forget password')
 }
 </script>
