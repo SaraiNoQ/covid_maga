@@ -165,11 +165,12 @@ class UserController {
 	async verify(ctx) {
 		const { user_name } = ctx.state.user
 		try {
-			await getUser({ user_name })
+			const { password, ...res } = await getUser({ user_name })
 			console.log('verified')
 			ctx.body = {
 				code: 0,
-				message: 'verified!'
+				message: 'verified!',
+				res: res
 			}
 		} catch (error) {
 			console.error('verify user error')

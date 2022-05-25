@@ -127,6 +127,9 @@
                     type="checkbox"
                     class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                     id="exampleCheck2"
+                    :v-model="state.rememberMe"
+                    @click="changeRememberMe"
+                    :checked="state.rememberMe"
                   />
                   <label class="form-check-label inline-block text-gray-800" for="exampleCheck2"
                     >Remember me</label
@@ -167,7 +170,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive, ref } from 'vue'
+import { defineComponent, computed, reactive, ref, onBeforeMount, triggerRef } from 'vue-demi'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import useValidate from '@vuelidate/core'
@@ -180,14 +183,44 @@ import ForgetPassword from '../components/ForgetPassword.vue'
 export default defineComponent({
     components: { AlertMessage, ForgetPassword },
     setup() {
+      onBeforeMount(async () => {
+        const token = localStorage.getItem('token')
+        if (token) {
+          const fd = new FormData()
+          fd.append('token', token)
+          const res = await Axios.post('/token', fd)
+          // @ts-ignore
+          if (res.success) {
+            // localStorage中设置user
+            // @ts-ignore
+            localStorage.setItem('user', JSON.stringify(res.success.res))
+            router.replace('/home')
+          }
+        } else {
+          const account = localStorage.getItem('user_name')
+          const password = localStorage.getItem('password')
+          const remember = localStorage.getItem('remember') === 'true'
+          if (account && password) {
+            state.email = account
+            state.password = password
+            state.rememberMe = remember
+          }
+        }
+      })
       // 注册vue-router和vuex
       const router = useRouter()
       const store = useStore()
 
       const state = reactive({
         email: '',
-        password: ''
+        password: '',
+        rememberMe: false,
       })
+      // 修改记住我
+      const changeRememberMe = () => {
+        state.rememberMe = !state.rememberMe
+      }  
+
       // 使用computed使得validation组件获得动态响应的值
       const rules = computed(() => {
         return {
@@ -217,6 +250,20 @@ export default defineComponent({
         const res = await Axios.post('/login', formData)
         // @ts-ignore
         if (res.success) {
+          // remember me
+          if (state.rememberMe) {
+            localStorage.setItem('user_name', state.email)
+            localStorage.setItem('password', state.password)
+            localStorage.setItem('remember', 'true')
+          } else {
+            try {
+              localStorage.removeItem('user_name')
+              localStorage.removeItem('password')
+              localStorage.removeItem('remember')
+            } catch (error) {
+              console.log(error)
+            }
+          }
           // 设置token和个人信息
           // @ts-ignore
           store.commit('setToken', res.success.result.token)
@@ -257,7 +304,8 @@ export default defineComponent({
         loginErrorInfo,
         loginDisabled,
         connectGithub,
-        isLoading
+        isLoading,
+        changeRememberMe
       }
     },
     // 提供给子组件使用的方法
