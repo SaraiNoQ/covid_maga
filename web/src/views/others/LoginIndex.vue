@@ -49,7 +49,11 @@
                     <div class="form-group form-check">
                       <input type="checkbox"
                         class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                        id="exampleCheck2">
+                        id="exampleCheck2"
+                        :v-model="rememberMe"
+                        @click="changeRememberMe"
+                        :checked="rememberMe"
+                      >
                       <label class="form-check-label inline-block text-gray-800 text-sm" for="exampleCheck2">记住我</label>
                     </div>
                     <button type="button" @click="forgetPasswd"
@@ -91,7 +95,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue-demi"
+import { onBeforeMount, reactive, ref } from "vue-demi"
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import Axios from '../../plugins/axios'
@@ -114,6 +118,10 @@ const loginForm = reactive<LoginState>({
 })
 const errorRef = ref<any>(null)
 const errorInfo = ref<string>('')
+const rememberMe = ref<Boolean>(false)
+const changeRememberMe = () => {
+  rememberMe.value = !rememberMe.value
+}
 const login = async () => {
     isLoading.value = true
     const formData = new FormData()
@@ -122,12 +130,25 @@ const login = async () => {
     const res = await Axios.post('/normal/login', formData)
     // @ts-ignore
     if (res.success) {
-        // @ts-ignore
-        const rs = res.success.result
-        // 设置token和个人信息
-        store.commit('setToken', rs.token)
-        // logout时要删掉
-        localStorage.setItem('student', JSON.stringify(rs.res))
+      if (rememberMe.value) {
+        localStorage.setItem('user_name_output', loginForm.username)
+        localStorage.setItem('password_output', loginForm.password)
+        localStorage.setItem('remember_output', 'true')
+      } else {
+        try {
+          localStorage.removeItem('user_name_output')
+          localStorage.removeItem('password_output')
+          localStorage.removeItem('remember_output')
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      // @ts-ignore
+      const rs = res.success.result
+      // 设置token和个人信息
+      store.commit('setStuToken', rs.token)
+      // logout时要删掉
+      localStorage.setItem('student', JSON.stringify(rs.res))
         router.replace('/output/card')
     } else {
         // @ts-ignore
@@ -140,4 +161,29 @@ const login = async () => {
 const forgetPasswd = () => {
   console.log('forget password')
 }
+
+onBeforeMount(async () => {
+  const token = localStorage.getItem('token_output')
+  if (token) {
+    const fd = new FormData()
+    fd.append('token', token)
+    const res = await Axios.post('/token', fd)
+    // @ts-ignore
+    if (res.success) {
+      // localStorage中设置student
+      // @ts-ignore
+      localStorage.setItem('student', JSON.stringify(res.success.res))
+      router.replace('/output/card')
+    }
+  } else {
+    const account = localStorage.getItem('user_name_output')
+    const password = localStorage.getItem('password_output')
+    const remember = localStorage.getItem('remember_output') === 'true'
+    if (account && password) {
+      loginForm.username = account
+      loginForm.password = password
+      rememberMe.value = remember
+    }
+  }
+})
 </script>

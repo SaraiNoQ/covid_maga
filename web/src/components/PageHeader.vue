@@ -81,7 +81,7 @@ const emits = defineEmits([
 const handleCommand = async (command: string | number | object) => {
     if (command === 'logout') {
         setTimeout(() => {
-            store.commit('removeToken')
+            store.commit('removeStuToken')
             localStorage.removeItem('student')
             router.replace('/login/output')
         }, 1000)

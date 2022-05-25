@@ -95,7 +95,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     const toPath = ['/', '/register', '/register/vertify', '/login/output']
     if (toPath.includes(to.path)) next()
-    const token: string | null = window.localStorage.getItem('token')
+    const token: string | null = window.localStorage.getItem('token') || window.localStorage.getItem('token_output')
     if (!token) {
         return next('/')
     }
