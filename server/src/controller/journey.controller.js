@@ -103,11 +103,12 @@ class JourneyController {
             const res = await getJourney({ student_id })
             if (res) {
                 const currentTime = new Date()
-                console.log('time', dayjs(res.createAt).format('YYYY-MM-DD'))
-                const day = dayjs(dayjs(res.createdAt).format('YYYY-MM-DD')).diff(dayjs(dayjs(currentTime).format('YYYY-MM-DD')), 'days')
-                console.log('time', dayjs(currentTime).format('YYYY-MM-DD'), res.createAt, day)
+                // console.log('time', res.createAt)
+                // const day = dayjs(dayjs(res.createdAt).format('YYYY-MM-DD')).diff(dayjs(dayjs(currentTime).format('YYYY-MM-DD')), 'days')
+                const day = dayjs(res.createAt).diff(dayjs(currentTime), 'days')
+                // console.log('time', dayjs(currentTime), dayjs(res.createAt), day)
 
-                if (1 >= day && day >= -1) {
+                if (day === 0) {
                     ctx.body = {
                         code: 0,
                         message: 'retrieve journey record success!',
