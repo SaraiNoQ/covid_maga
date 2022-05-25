@@ -25,6 +25,7 @@
             <h2 class="text-3xl text-green-600 w-60 mb-4 ml-[-5rem]">Latest</h2>
             <time-line></time-line>
         </div>
+        <PageFooter />
     </div>
     
 </template>
@@ -40,6 +41,7 @@ import DataCard from './components/DaraCard.vue'
 import UserLogo from '../../components/UserLogo.vue'
 // @ts-ignore
 import Calendar from '../../components/Calendar.vue'
+import PageFooter from '../../components/PageFooter.vue'
 export default defineComponent({
     setup() {
         const store = useStore();
@@ -113,7 +115,7 @@ export default defineComponent({
             chartData
         };
     },
-    components: { DataCard, TimeLine, UserLogo, Calendar },
+    components: { DataCard, TimeLine, UserLogo, Calendar, PageFooter },
     beforeUnmount() {
         window.onresize = null;
         // @ts-ignore

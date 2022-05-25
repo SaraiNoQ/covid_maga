@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class="w-17">
+    <div class="w-[68px]">
         <SideBar/>
     </div>
     <div class="absolute
@@ -38,7 +38,7 @@
             </div>
         </div> -->
         <router-view></router-view>
-    </div> 
+    </div>
 </div>
 </template>
 

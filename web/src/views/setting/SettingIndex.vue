@@ -249,8 +249,9 @@
                     </div>
                 </div>
             </div>
-            
         </div>
+
+        <PageFooter />
     </div>
 </template>
 
@@ -263,6 +264,7 @@ import type { UploadProps, UploadRawFile } from 'element-plus'
 
 import Axios from '../../plugins/axios'
 import AlertMessage from '../../components/AlertMessage.vue'
+import PageFooter from '../../components/PageFooter.vue'
 import httpAPI from '../../plugins/port'
 const store = useStore()
 const router = useRouter()

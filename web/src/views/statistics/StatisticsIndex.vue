@@ -10,14 +10,21 @@
             <div id="chart5" class="mx-4 mt-5 bg-white"></div>
             <div id="chart6" class="mx-4 mt-5 bg-white"></div>
         </div>
+
+        <PageFooter />
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue';
+import { defineComponent, onMounted } from 'vue-demi';
 import * as echarts from 'echarts';
 
+import PageFooter from '../../components/PageFooter.vue'
+
 export default defineComponent({
+    components: {
+        PageFooter
+    },
     setup() {
         onMounted(() => {
             // @ts-ignore
