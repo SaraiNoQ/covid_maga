@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 import './index.css'
 import './plugins/icons'
+import 'tw-elements'
 
 import svgIcon from './components/svgIcon.vue'
 

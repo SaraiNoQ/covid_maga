@@ -32,6 +32,7 @@ declare module 'vue' {
     ForgetPassword: typeof import('./src/components/ForgetPassword.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     PageFooter: typeof import('./src/components/PageFooter.vue')['default']
+    PageHeader: typeof import('./src/components/PageHeader.vue')['default']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
     SvgIcon: typeof import('./src/components/svgIcon.vue')['default']
     UserLogo: typeof import('./src/components/UserLogo.vue')['default']

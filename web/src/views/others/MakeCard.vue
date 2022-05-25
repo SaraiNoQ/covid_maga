@@ -2,6 +2,7 @@
 <div>
     <AlertMessage :message="errorInfo" type="error" ref="alertRef"/>
     <AlertMessage :message="successInfo" type="success" ref="successRef"/>
+    <PageHeader />
     <h2 class="mt-4 text-3xl text-green-600 font-semibold">行 程 打 卡</h2>
     <div class="search-form mt-5 mx-0 w-[100vw] xl:w-[60vw] xl:mx-auto">
         <el-form
@@ -83,10 +84,12 @@ import dayjs from 'dayjs'
 
 import Axios from '../../plugins/axios'
 import AlertMessage from '../../components/AlertMessage.vue'
+import PageHeader from '../../components/PageHeader.vue'
 
 export default defineComponent({
     components: {
-        AlertMessage
+        AlertMessage,
+        PageHeader,
     },
     setup() {
         const searchForm = reactive({
