@@ -2,7 +2,7 @@
 <div>
     <AlertMessage :message="errorInfo" type="error" ref="alertRef"/>
     <AlertMessage :message="successInfo" type="success" ref="successRef"/>
-    <PageHeader />
+    <PageHeader @setAlert="setAlert" />
     <h2 class="mt-4 text-3xl text-green-600 font-semibold">行 程 打 卡</h2>
     <div class="search-form mt-5 mx-0 w-[100vw] xl:w-[60vw] xl:mx-auto">
         <el-form
@@ -12,7 +12,7 @@
             class="search-tab"
             :rules="rules"
         >
-            <el-form-item label="身 份 选 择">
+            <!-- <el-form-item label="身 份 选 择">
                 <el-select v-model="searchForm.authValue" placeholder="" class="option-input">
                     <el-option
                     v-for="item in options1"
@@ -20,7 +20,7 @@
                     :label="item.label"
                     :value="item.value"></el-option>
                 </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="居 住 地 区">
                 <el-select v-model="searchForm.liveValue" placeholder="" class="option-input">
                     <el-option
@@ -139,6 +139,11 @@ export default defineComponent({
             }
         })
 
+        const setAlert = async (e: string) => {
+            successInfo.value = e
+            await successRef.value.setDis()
+        }
+
         return {
             searchForm,
             options1: [
@@ -185,14 +190,15 @@ export default defineComponent({
             successInfo,
             rules,
             stuNum,
-            isMake
+            isMake,
+            setAlert
         }
     },
     methods: {
         async search() {
             const formData = new FormData()
             formData.append('student_id', this.stuNum)
-            formData.append('journey_category', this.searchForm.authValue)
+            formData.append('journey_category', 'student')
             formData.append('live_zone', this.searchForm.liveValue)
             formData.append('healthy_status', this.searchForm.bodyValue)
             formData.append('journey_destination', this.searchForm.destination)
@@ -211,6 +217,7 @@ export default defineComponent({
                 else if (res.success.message === 'update journey success!') {
                     this.successInfo = '更 新 成 功！'
                     await this.successRef.setDis()
+                    this.$router.go(0)
                 }
             } catch (error) {
                 // @ts-ignore

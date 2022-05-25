@@ -12,6 +12,7 @@
                 aria-controls="navbarSupportedContentY"
                 aria-expanded="false"
                 aria-label="Toggle navigation"
+                @click="clickHeader"
               >
                 <svg
                   aria-hidden="true"
@@ -32,21 +33,67 @@
             <div class="navbar-collapse collapse grow items-center" id="navbarSupportedContentY">
               <ul class="navbar-nav mr-auto lg:flex lg:flex-row">
                 <li class="nav-item">
-                  <a class="nav-link block pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out" href="#!" data-mdb-ripple="true" data-mdb-ripple-color="light">Home</a>
+                  <a class="nav-link block pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out" href="#!" data-mdb-ripple="true" data-mdb-ripple-color="light">首页</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <a class="nav-link block pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out" href="#!" data-mdb-ripple="true" data-mdb-ripple-color="light">Features</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link block pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out" href="#!" data-mdb-ripple="true" data-mdb-ripple-color="light">Pricing</a>
-                </li>
+                </li> -->
                 <li class="nav-item mb-2 lg:mb-0">
-                  <a class="nav-link block pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out" href="#!" data-mdb-ripple="true" data-mdb-ripple-color="light">About</a>
+                  <a class="nav-link block pr-2 lg:px-2 py-2 text-gray-600 hover:text-gray-700 focus:text-gray-700 transition duration-150 ease-in-out" href="#!" data-mdb-ripple="true" data-mdb-ripple-color="light">关于</a>
                 </li>
               </ul>
             </div>
+            <div class="hover:cursor-pointer mr-4" v-if="displayIcon">
+                <el-dropdown trigger="click" @command="handleCommand">
+                  <span class="flex items-center">
+                    <p class="mr-2">{{ userName }}</p>
+                    <el-avatar :size="40"> user </el-avatar>
+                  </span>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item command="user">User</el-dropdown-item>
+                      <el-dropdown-item divided command="logout">Log out</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </div>
           </div>
         </nav>
         <!-- Navbar -->
     </div>
 </template>
+
+<script lang="ts" setup>
+import { ref, defineEmits } from 'vue-demi'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+const router = useRouter()
+const store = useStore()
+
+const userName: string = (JSON.parse(localStorage.getItem('student') as string)).nick_name
+
+const emits = defineEmits([
+  'setAlert'
+])
+const handleCommand = async (command: string | number | object) => {
+    if (command === 'logout') {
+        setTimeout(() => {
+            store.commit('removeToken')
+            localStorage.removeItem('student')
+            router.replace('/login/output')
+        }, 1000)
+        emits('setAlert', '正 在 登 出...')
+    }
+    if (command === 'user') {
+        console.log('user')
+    }
+}
+
+const displayIcon = ref(true)
+const clickHeader = () => {
+    displayIcon.value = !displayIcon.value
+}
+</script>
