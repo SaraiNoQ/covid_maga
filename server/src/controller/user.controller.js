@@ -4,6 +4,7 @@ const fs = require('fs')
 // 获取请求，调用service操作model层方法
 const {
 	createUser,
+	createStu,
 	getUser,
 	updateById,
 	updateImage,
@@ -87,10 +88,10 @@ class UserController {
 	
 	// 注册用户
 	async registStu(ctx) {
-		const { user_name, password, nick_name, is_admin } = ctx.request.body
+		const { user_name, password, nick_name } = ctx.request.body
 		try {
 			// 2. crud database
-			const res = await createUser(user_name, password, nick_name, is_admin)
+			const res = await createStu(user_name, password, nick_name)
 			// 3. send email
 			if (res) {
 				// 4. return response
@@ -111,7 +112,7 @@ class UserController {
 
 	// 登陆功能
 	async login (ctx) {
-		const {user_name} = ctx.request.body
+		const { user_name } = ctx.request.body
 
 		// 获取用户信息（在token的payload中，记录id，user_name，is_admin）
 		try {
@@ -128,6 +129,28 @@ class UserController {
 				}
 			} else {
 				ctx.app.emit('error', userPermissionLow, ctx)
+			}
+		} catch (error) {
+			console.error('login error!', error)
+			ctx.app.emit('error', userNotExited, ctx)
+		}
+	}
+
+	// 非管理员登陆
+	async normallyLogin(ctx) {
+		const { user_name } = ctx.request.body
+		try {
+			// 获取到除了password之外的属性
+			const { password, ...res } = await getUser({ user_name })
+			if (res) {
+				ctx.body = {
+					code: 0,
+					message: 'login success!',
+					result: {
+						token: jwt.sign(res, JWT_SECRET, { expiresIn: '2h' }),
+						res: res
+					}
+				}
 			}
 		} catch (error) {
 			console.error('login error!', error)

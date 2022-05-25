@@ -218,7 +218,8 @@ export default defineComponent({
         formData1.append('user_name', form.number)
         formData1.append('password', form.number.slice(form.number.length - 6)) // 密码为学号后六位
         formData1.append('nick_name', form.name)
-        formData1.append('is_admin', '0')
+        // const a = 0
+        // formData1.append('is_admin', a.toString())
         const resp = await Axios.post('/student/register', formData1)
         // @ts-ignore 
         if (resp.success) {

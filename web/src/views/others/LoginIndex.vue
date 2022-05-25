@@ -119,7 +119,7 @@ const login = async () => {
     const formData = new FormData()
     formData.append('user_name', loginForm.username)
     formData.append('password', loginForm.password)
-    const res = await Axios.post('/login', formData)
+    const res = await Axios.post('/normal/login', formData)
     // @ts-ignore
     if (res.success) {
         // @ts-ignore

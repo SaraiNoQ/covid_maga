@@ -16,6 +16,17 @@ class UserService {
 		return res.dataValues
 	}
 
+	async createStu(user_name, password, nick_name) {
+		const res = await User.create({
+			user_name,
+			password,
+			nick_name,
+			is_admin: 0
+		})
+		
+		return res.dataValues
+	}
+
 	// retrieve in database
 	async getUserInfo({id, user_name, password, is_admin, nick_name}) {
 		const whereOpt = {}

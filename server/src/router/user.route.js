@@ -25,7 +25,8 @@ const { login,
     getAccount,
     removeDuplicate,
     registStu,
-    delAccount
+    delAccount,
+    normallyLogin
 } = require('../controller/user.controller')
 
 const router = new Router()
@@ -39,6 +40,8 @@ router.post('/student/passwd', cryptPassword, passwd)
 router.post('/captcha', userValidator, userVertifier, getCaptcha)
 
 router.post('/login', userValidator, vertifyLogin, login)
+
+router.post('/normal/login', userValidator, vertifyLogin, normallyLogin)
 
 router.post('/passwd', userValidator, vertifyLogin, cryptPassword, passwd)
 
