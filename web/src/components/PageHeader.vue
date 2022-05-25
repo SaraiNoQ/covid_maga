@@ -76,7 +76,8 @@ const store = useStore()
 const userName: string = (JSON.parse(localStorage.getItem('student') as string)).nick_name
 
 const emits = defineEmits([
-  'setAlert'
+  'setAlert',
+  'setWarning'
 ])
 const handleCommand = async (command: string | number | object) => {
     if (command === 'logout') {
@@ -88,7 +89,7 @@ const handleCommand = async (command: string | number | object) => {
         emits('setAlert', '正 在 登 出...')
     }
     if (command === 'user') {
-        console.log('user')
+        emits('setWarning', '该 功 能 还 在 开 发 中，敬 请 期 待！')
     }
 }
 

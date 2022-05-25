@@ -2,7 +2,9 @@
 <div>
     <AlertMessage :message="errorInfo" type="error" ref="alertRef"/>
     <AlertMessage :message="successInfo" type="success" ref="successRef"/>
-    <PageHeader @setAlert="setAlert" />
+    <AlertMessage :message="warningInfo" type="warning" ref="warningRef"/>
+
+    <PageHeader @setAlert="setAlert" @setWarning="setWarning" />
     <h2 class="mt-4 text-3xl text-green-600 font-semibold">行 程 打 卡</h2>
     <div class="search-form mt-5 mx-0 w-[100vw] xl:w-[60vw] xl:mx-auto">
         <el-form
@@ -125,8 +127,10 @@ export default defineComponent({
 
         const alertRef = ref<any>(null)
         const successRef = ref<any>(null)
+        const warningRef = ref<any>(null)
         const errorInfo = ref<string>('打 卡 失 败！')
         const successInfo = ref<string>('打 卡 成 功！')
+        const warningInfo = ref<string>('')
 
         const isMake = ref<Boolean>(false)
         onBeforeMount(async () => {
@@ -142,6 +146,10 @@ export default defineComponent({
         const setAlert = async (e: string) => {
             successInfo.value = e
             await successRef.value.setDis()
+        }
+        const setWarning = async (e: string) => {
+            warningInfo.value = e
+            await warningRef.value.setDis()
         }
 
         return {
@@ -191,7 +199,10 @@ export default defineComponent({
             rules,
             stuNum,
             isMake,
-            setAlert
+            setAlert,
+            warningRef,
+            warningInfo,
+            setWarning
         }
     },
     methods: {
