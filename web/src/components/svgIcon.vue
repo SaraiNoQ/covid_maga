@@ -1,11 +1,14 @@
- <template>
-  <svg :class="svgClass" v-bind="$attrs" :style="{color: color}">
+<template>
+  <svg
+    :class="svgClass"
+    v-bind="$attrs"
+    :style="{color: color}">
     <use :xlink:href="iconName"/>
   </svg>
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed } from "vue";
+import { defineProps, computed } from "vue-demi";
 
 const props = defineProps({
   name: {
@@ -20,7 +23,6 @@ const props = defineProps({
 
 const iconName = computed(()=>`#icon-${props.name}`);
 const svgClass = computed(()=> {
-  // console.log(props.name, 'props.name');
   if (props.name) {
         return `svg-icon icon-${props.name}`
       }
